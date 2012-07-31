@@ -27,5 +27,6 @@ git+https://github.com/aljosa/django-tinymce.git
 git+https://github.com/GoodCloud/django-ajax-uploader.git
 pylibmc==1.2.2
 django-pylibmc-sasl==0.2.4
+django-social-auth
 
 
