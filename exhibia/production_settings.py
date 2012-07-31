@@ -2,7 +2,8 @@ import os
 from common_settings import *
 import dj_database_url
 
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+DATABASES = {'default': dj_database_url.config(default='postgres://rlvwccsmhg:MIeA6Waiu1qShR48nNQx@ec2-107-21-206-166.compute-1.amazonaws.com/rlvwccsmhg')}
+
 
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '')
 os.environ['MEMCACHE_USERNAME'] = os.environ.get('MEMCACHIER_USERNAME', '')
@@ -21,4 +22,4 @@ CACHES = {
     },
 }
 
-SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com:4000'
+SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
