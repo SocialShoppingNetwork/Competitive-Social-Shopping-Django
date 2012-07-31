@@ -1,32 +1,13 @@
 # project.txt is a pip requirements file which describes the distributions
 # required by your project to run.
 
---requirement=base.txt
+--requirement=requirements_local.txt
 
 # Put project-specific requirements here.
 # See http://pip-installer.org/requirement-format.html for more information.
 
 psycopg2
-gdata
-python-cjson
-gunicorn
-django-annoying
-simplejson
-south
-ipython
-easy_thumbnails
-python-memcached
-oauth2
-django-countries
 dj-database-url
-pil
-git+https://github.com/pythonforfacebook/facebook-sdk.git
-git+https://github.com/aidanlister/django-facebook.git
-git+https://github.com/maraujop/django-crispy-forms.git
-git+https://github.com/aljosa/django-tinymce.git
-git+https://github.com/GoodCloud/django-ajax-uploader.git
 pylibmc==1.2.2
 django-pylibmc-sasl==0.2.4
-django-social-auth
-
 

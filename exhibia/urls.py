@@ -39,7 +39,7 @@ urlpatterns = patterns("",
     
     url(r"^items/", include("auctions.urls")),
 
-    url(r"^testimonials/", include("testimonials.urls")),
+    #url(r"^testimonials/", include("testimonials.urls")),
     url(r"^matic/", include("matic.urls")),
 
     #u url(r'', include('social_auth.urls')),
