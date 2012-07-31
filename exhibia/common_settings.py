@@ -89,8 +89,6 @@ GOOGLE_OAUTH2_CLIENT_ID = '33411447270.apps.googleusercontent.com'
 GOOGLE_OAUTH2_CLIENT_SECRET = '2M0KMp0uMUfdjX0XbtORhQ-i'
 
 #FACEBOOK_AUTH_EXTRA_ARGUMENTS = {'display': 'popup'}
-from social_auth.backends.pipeline.social import associate_user
-
 
 SOCIAL_AUTH_CREATE_USERS = True
 #SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
