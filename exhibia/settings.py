@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Django settings for basic pinax project.
-
+import os
 import os.path
 import posixpath
 import pinax
@@ -30,15 +30,7 @@ ADMINS = [
 ]
 
 MANAGERS = ADMINS
-""""default": {
-    "ENGINE": "django.db.backends.postgresql_psycopg2", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
-    "NAME": "exhibia",                       # Or path to database file if using sqlite3.
-    "USER": "postgres",                             # Not used with sqlite3.
-    "PASSWORD": "dontbeevil",                         # Not used with sqlite3.
-    "HOST": "127.0.0.1",                             # Set to empty string for localhost. Not used with sqlite3.
-    "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
-},
-"""
+
 DATABASES = {
     'default': {
             "ENGINE": "django.db.backends.sqlite3", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
@@ -48,13 +40,6 @@ DATABASES = {
             "HOST": "",                             # Set to empty string for localhost. Not used with sqlite3.
             "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
     },
-#    'bt03': {
-#        'NAME': 'bt03',
-#        'ENGINE': 'django.db.backends.mysql',
-#        "HOST": "127.0.0.1",
-#        'USER': 'root',
-#        'PASSWORD': ''
-#    }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -254,16 +239,14 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': ['localhost:11211'],
-        'TIMEOUT': 60,
-        'KEY_PREFIX': 'bidstick'
-    }
-}
-from django.core.cache.backends.memcached import MemcachedCache
-try:
-    from local_settings import *
-except ImportError:
-    pass
+on_heroku = 'HEROKU' in os.environ
+if on_heroku:
+    try:
+        from production_settings import *
+    except ImportError:
+        pass
+else:
+    try:
+        from local_settings import *
+    except ImportError:
+        pass

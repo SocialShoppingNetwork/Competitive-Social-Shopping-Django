@@ -18,6 +18,7 @@ python-memcached
 oauth2
 django-countries
 pil
+django-social-auth
 git+https://github.com/pythonforfacebook/facebook-sdk.git
 git+https://github.com/aidanlister/django-facebook.git
 git+https://github.com/maraujop/django-crispy-forms.git
