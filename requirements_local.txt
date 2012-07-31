@@ -17,7 +17,6 @@ easy_thumbnails
 python-memcached
 oauth2
 django-countries
-dj-database-url
 pil
 git+https://github.com/pythonforfacebook/facebook-sdk.git
 git+https://github.com/aidanlister/django-facebook.git
