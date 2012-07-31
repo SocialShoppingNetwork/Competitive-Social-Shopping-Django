@@ -1,0 +1,79 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Auctions Won" %}</h1>
+<div>
+	<h2>{{ a }}</h2>
+
+<!-- TODO CLEAN THIS SHIT -->
+	<form action="" method="post">
+        {% csrf_token %}
+		<div class="act-details">
+			<div class="act-row">
+				<div class="act-label">{% trans "Bid Ended:" %}</div>
+				<div class="act-info">{{ a.end_dt }}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">{% trans "Winning Bid:" %}</div>
+				<div class="act-info">${{ a.current_price }}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">{% trans "Shipping Cost:" %}</div>
+				<div class="act-info">${{ a.item.shipping_fee }}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">{% trans "Final Price:" %}</div>
+				<div class="act-info">${{ a.total_price }}</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<div><a href="{% url member_info %}?next={% url auction_won auction_id=a.id %}">Enter shipping info</a></div>
+
+		<div class="act-details">
+
+			<div class="act-row">
+				<div class="act-label">{% trans "Address:" %}</div>
+				<div class="act-info">{{ member.get_title_display }} {{ shipping.first_name }}  {{ shipping.last_name }}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">&nbsp;</div>
+				<div class="act-info">{{ shipping.address1 }}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">&nbsp;</div>
+				<div class="act-info">{% if shipping.address2 %}{{ shipping.address2 }} {% endif %}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">&nbsp;</div>
+				<div class="act-info">{{ shipping.city }}, {{ shipping.state }} {{ shipping.zip_code }}</div>
+				<div class="clear"></div>
+			</div>
+			<div class="act-row">
+				<div class="act-label">&nbsp;</div>
+				<div class="act-info">{{ shipping.phone }}</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<div> <input type="submit" value="Confirm your Name and Address"/> </div>
+		<input type="hidden" name="confirm" value="yes">
+	</form>
+</div>
+
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

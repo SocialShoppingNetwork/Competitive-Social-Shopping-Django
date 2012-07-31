@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load ifsetting_tag %}
+<h1>{% trans "Buy more credits" %}</h1>
+    <ul>
+    {% for package in packages %}
+        <li><a class="package" data-packageid="{{ package.code }}">{{ package.name }}  - ${{ package.price|floatformat:"-2" }}</a></li>
+    {% endfor %}
+    </ul>
+<div style="display:none">
+    {% for f in forms %}
+        {{f}}
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.package').click(function(event){
+            event.stopPropagation();
+            package_id = $(this).attr('data-packageid');
+            $("#paynow-"+package_id).submit();
+        });
+    });
+</script>

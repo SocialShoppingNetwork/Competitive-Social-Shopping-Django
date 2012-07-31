@@ -1,0 +1,326 @@
+import settings
+
+from time import time
+from random import randint
+from datetime import datetime
+
+from django.db import models
+from django.db.models import F
+from django.core.validators import RegexValidator
+
+from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
+
+from utils import full_url
+from auctions.constants import *
+
+AUCTION_WAITING = 'w'
+AUCTION_PROCESSING = 'p'
+AUCTION_PAUSE = 's'
+AUCTION_JUST_ENDED = 'e'
+AUCTION_FINISHED = 'f'
+AUCTION_WAITING_PAYMENT = 'm'
+AUCTION_PAID = 'd'
+AUCTION_COMPLETED = 'c'
+
+AUCTION_STATUS = (
+    (AUCTION_WAITING_PLEDGE, "Waiting pledge"),
+    (AUCTION_SHOWCASE, "Showcase"),
+    (AUCTION_PAUSE, "Pause"),
+    (AUCTION_JUST_ENDED, "Just Ended"),
+
+    (AUCTION_FINISHED, "Finished"),
+
+    (AUCTION_FINISHED_NO_PLEDGED, "Finished without pledged the price"),
+
+    (AUCTION_WAITING_PAYMENT, "Waiting Payment"), #NEW
+    (AUCTION_PAID, "Paid"),
+    (AUCTION_COMPLETED, "Completed"),
+)
+
+BID_TYPE_CHOICES = (
+    ("n", "Normal"),
+    ("m", "bid-o-matic"),
+)
+
+class AuctionManager(models.Manager):
+    def waiting_pledge(self):
+        return self.get_query_set().filter(status=AUCTION_WAITING_PLEDGE)
+
+    def time_over(self):
+        return self.waiting_pledge().filter(deadline_time__lte=time())
+
+    def showcase(self):
+        return self.get_query_set().filter(status=AUCTION_SHOWCASE)
+
+    def about_to_start(self):
+        pass
+
+    def public(self):
+        return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, AUCTION_JUST_ENDED, AUCTION_WAITING_PLEDGE])
+
+    def live(self):
+        return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, AUCTION_JUST_ENDED])
+        #return self.get_query_set().filter(status__in=['w', 'p', 's', 'e'])
+    #def live(self):
+    #    return self.get_query_set().filter(status__in=['w', 'p', 's', 'e'])
+
+    #def running(self):
+    #    return self.filter(status='p')
+
+    def paused(self):
+        return self.get_query_set().filter(status='p')
+
+    #def waiting(self):
+    #    return self.get_query_set().filter(status='w')
+
+    def finished(self):
+        return self.get_query_set().filter(status=AUCTION_FINISHED)
+
+
+    def just_ended(self):
+        return self.get_query_set().filter(status=AUCTION_JUST_ENDED)
+
+    def expired(self):
+        return self.just_ended().filter(ended_unixtime__lte=time()-settings.MAX_TIME_HOMEPAGE)
+
+    def about_end(self):
+            return self.running().filter(last_unixtime__lte=time()-F('bidding_time'))
+
+    def finish_expired(self):
+        self.expired().update(status='f')
+        
+    def create_from_item(self, item):
+        auction = Auction.objects.create(item=item, bidding_time=item.bidding_time, deadline_time=time()+item.pledge_time)
+        item.amount -= 1
+        item.save()
+        return auction
+
+class AuctionItemManager(models.Manager):
+    def kick_off(self):
+        items = self.get_query_set().exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True), amount__gt=0)
+        i = randint(0, items.count()-1) #TODO check this
+        item = items[i]
+        return item
+        #return Auction.objects.create_from_item(item)
+
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=250, unique=True)
+    def __unicode__(self):
+        return self.name
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=250, unique=True)
+    def __unicode__(self):
+        return self.name
+
+from tinymce import models as tinymce_models
+
+class AuctionItem(models.Model):
+    code = models.CharField(max_length=15,
+                            primary_key=True,
+                            db_index=True,
+                            validators=[RegexValidator('^[a-zA-Z0-9-]+$')],
+                            help_text="""This field is used to identify p, make sure its value is UNIQUE,\
+                            it is NOT allowed to modify after the first time you add it.\
+                            Only letters, numbers or hyphens are valid""")
+
+    name = models.CharField(max_length=150)
+    slug_name = models.CharField(max_length=200, unique=True)
+    price = models.FloatField()
+    amount = models.SmallIntegerField()
+    brand = models.ForeignKey(Brand, blank=True, null=True)
+    category = models.ForeignKey(Category, blank=True, null=True)
+
+    pledge_time = models.PositiveIntegerField(default=settings.PLEDGE_TIME)
+
+    showcase_time = models.PositiveIntegerField(default=3600)
+
+    bidding_time = models.SmallIntegerField(default=120)
+    shipping_fee = models.FloatField()
+    description = tinymce_models.HTMLField(blank='', null=True)
+
+    notes = models.TextField(default='', blank=True, null=True)
+    last_modified = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    objects = AuctionItemManager()
+    image = models.OneToOneField('auctions.AuctionItemImages', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('auction_item', [self.slug_name])
+
+    def get_full_url(self):
+        return full_url(self.get_absolute_url())
+
+    def get_full_image_url(self):
+        image = self.default_image
+        if image:
+            return image.get_full_url()
+        return ''
+
+    @property
+    def default_image(self):
+        return self.image
+        #try:
+        #    image = self.images.filter(is_default=True)[0]
+        #    return image
+        #except:
+        #    return None
+
+class Auction(models.Model):
+    item = models.ForeignKey(AuctionItem, related_name='auctions', db_index=True)
+    status = models.CharField(max_length=1, default=AUCTION_WAITING_PLEDGE, choices=AUCTION_STATUS, db_index=True)
+    amount_pleged = models.PositiveIntegerField(default=0)
+    backers = models.PositiveIntegerField(default=0)
+    current_offer = models.FloatField(default=0.0)
+    pledge_time =  models.PositiveIntegerField(default=43200)
+
+    deadline_time = models.FloatField(db_index=True)
+
+    bidding_time = models.PositiveSmallIntegerField()
+    last_bidder = models.CharField(max_length=30, default='', db_index=True)
+    last_bidder_member = models.ForeignKey('profiles.Member', blank=True, null=True)
+    last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True, null=True) #Todo remove this field
+    last_unixtime = models.FloatField(null=True, blank=True, db_index=True)
+    ended_unixtime = models.FloatField(blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    objects = AuctionManager()
+    
+    def __unicode__(self):
+        return self.item.name
+
+    @property
+    def time_to_go(self):
+        if self.status != AUCTION_WAITING_PLEDGE:
+            return -1
+        return self.deadline_time - time()
+
+    def pledge(self, member, amount):
+        self.amount_pleged += amount
+        if not AuctionPlegde.objects.filter(auction=self, member=member).exists():
+            self.backers += 1
+        AuctionPlegde.objects.create(auction=self, member=member, amount=amount)
+        self.save()
+
+    @property
+    def is_processing(self):
+        return self.status == AUCTION_SHOWCASE
+
+    @property
+    def is_waiting_pledge(self):
+        return self.status == AUCTION_WAITING_PLEDGE
+
+    @property
+    def is_paused(self):
+        return self.status == AUCTION_PAUSE
+
+    @property
+    def is_running(self):
+        return self.is_processing or self.is_paused
+
+    @property
+    def funded(self):
+        """returns the percent funded"""
+        return self.amount_pleged * 100 / self.item.price
+
+    @property
+    def time_left(self):
+        if not self.last_unixtime:
+            return self.bidding_time
+        return int(self.last_unixtime + self.bidding_time - time())
+        #t = self.last_unixtime + self.bidding_time - time()
+        return int(round(t+0.49))
+
+    def end_dt(self):
+        return datetime.fromtimestamp(int(self.last_unixtime))
+
+    def end(self):
+        self.status = AUCTION_JUST_ENDED
+        self.ended_unixtime = time()
+        self.save()
+
+    def pause(self):
+        self.status = AUCTION_PAUSE
+        self.save()
+
+    def resume(self):
+        if self.current_offer == 0.0:
+            self.status = AUCTION_WAITING_PLEDGE
+        else:
+            self.status = AUCTION_SHOWCASE
+        self.save()
+    
+    def bid_by(self, bidder, bot=False):
+        if self.status in ['f','m','d','c','e']:
+            raise AuctionExpired
+        
+        username = bidder.user.username if not bot else bidder.username
+        if not bot and bidder.credits <= 0:
+            raise NotEnoughCredits
+        
+        if self.last_bidder == username:
+            #TODO check this only raise without conditions, no win require, no conditions
+            raise AlreadyHighestBid
+        
+        #if self.status == "w":
+        #    raise AuctionIsNotReadyYet
+
+        # Paused Auction Will still accept bid
+        #elif self.status == "s":
+        #    raise AuctionPaused
+        
+        bid_type = 'n' if not bot else 'm'
+        price = self.current_offer + settings.PRICE_INTERVAL
+        unixtime = time()
+        if self.status == 'w':
+            self.status = 'p'
+        if not bot:
+            b = AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
+        self.last_bidder = username
+        if not bot:
+            self.last_bidder_member = bidder
+        self.last_bid_type = bid_type
+        self.last_unixtime = time()
+        self.current_offer = price
+        self.save()
+
+    def total_price(self):
+        return self.current_offer + self.item.shipping_fee
+
+class AuctionBid(models.Model):
+    auction = models.ForeignKey(Auction)
+    bidder = models.ForeignKey('profiles.Member')
+    price = models.FloatField()
+    unixtime = models.FloatField()
+    created = models.DateTimeField(auto_now_add=True)
+    #def __unicode__(self):
+    #rrrr    #return '%s - %s ' %(self.auction, self.bidder)
+
+
+class AuctionItemImages(models.Model):
+    item = models.ForeignKey(AuctionItem, related_name="images")
+    img = models.ImageField(help_text="default image 120px height 200px width recommended", upload_to="items")
+    is_default = models.BooleanField(default=False)
+
+    def get_full_url(self):
+        return full_url(self.img.url)
+
+    def save(self, *args, **kwargs):
+        super(AuctionItemImages, self).save(*args, **kwargs)
+        if self.is_default:
+            self.item.image = self
+            self.item.save()
+
+class AuctionPlegde(models.Model):
+    auction = models.ForeignKey(Auction)
+    member = models.ForeignKey('profiles.Member')
+    amount = models.PositiveIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    def __unicode__(self):
+        return '%s %s' % (self.auction, self.member)

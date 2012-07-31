@@ -1,0 +1,100 @@
+.video-rec {
+    border:1px solid #dedede;
+    padding: 1px;
+}
+
+.video-rec-control {
+    background-color:#f5f5f5;
+    width: 100%;
+}
+
+.video-rec-control .record-start .icon {
+    background: url("images/record-disabled-icon.png") no-repeat
+}
+
+.video-rec-control .record-stop .icon {
+    background: url("images/record-icon.png") no-repeat
+}
+
+.video-rec-control .stop .icon {
+    background: url("images/stop-icon.png") no-repeat
+}
+
+.video-rec-control .play_video-on .icon {
+    background: url("images/video-icon.png") no-repeat
+}
+
+.video-rec-control .play_video-off .icon {
+    background: url("images/webcam-icon.png") no-repeat
+}
+
+.video-rec-control .play_pause-pause .icon {
+    background: url("images/pause-icon.png") no-repeat
+}
+
+.video-rec-control .play_pause-play .icon {
+    background: url("images/play-icon.png") no-repeat
+}
+
+.video-rec-button {
+    margin-top: 0;
+    margin-right: 2px;
+    background-color:#f5f5f5;
+    border: 1px solid #dedede;
+    cursor: pointer;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+}
+
+.video-rec-button:hover {
+    background-color:#c8c8c8;
+}
+
+.video-rec-button .icon {
+    display: block;
+    margin-top: 1px;
+    margin-left: 1px;
+    width: 24px;
+    height: 24px;
+}
+
+.video-rec-control .volume:hover {
+    background-color:#f5f5f5;
+    border:1px solid #dedede;
+}
+
+.video-rec-control .volume {
+    width: 180px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.video-rec-control .volume .volume-slider {
+    width: 80px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 10px;
+    float: left;
+}
+
+.video-rec-control .volume .volume-slider .ui-widget-header {
+    background: url("images/volume.png") repeat-x scroll 50% 50% #a0a0a0;
+}
+
+.video-rec-control .volume .volume-slider .ui-state-focus,
+.video-rec-control .volume .volume-slider .ui-state-hover,
+.video-rec-control .volume .volume-slider .ui-state-active {
+    background: url("images/volume-hover.png") repeat-x scroll 50% 50% #a0a0a0;
+    border-color:#a0a0a0;
+}
+
+.video-rec-control .volume .volume-amount {
+    margin-top: 3px;
+    float: left;
+}
+
+.video-rec-control .volume .volume-amount-value {
+    color:#a0a0a0;
+    font-weight:bold;
+}

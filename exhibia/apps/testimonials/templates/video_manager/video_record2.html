@@ -1,0 +1,37 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/video_record/video_record.css" />
+<style>
+    .auth_form-dialog .ui-dialog-titlebar {
+        display: NONE;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    <div class="placeholder"></div>
+    <div class="videos" id="videos"></div>
+{% endblock %}
+{% block extra_body %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/AC_OETags.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/swfobject.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/video_record2.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.swfobject.1-1-1.min.js"></script>
+    <script type="text/javascript">
+        var video_id = "{{ video_id }}";
+        var auction_id = "{{ auction.id }}";
+        $(function() {
+            var video_rec = VideoRecord2({id: "video-"+video_id,
+                                        container: ".videos",
+                                        swf_url: '{{ STATIC_URL }}swf/',
+                                        rtmp_server: '{{ rtmp_server }}',
+                                        width: 330,
+                                        height: 280,
+                                        publish: video_id,
+                                        });
+        });
+    </script>
+{% endblock %}

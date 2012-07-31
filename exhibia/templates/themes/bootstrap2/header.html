@@ -1,0 +1,20 @@
+{% if user.is_authenticated %}
+    Hello, {{ request.user.username }} - {{ request.user.first_name }} | {{ member.credits }}
+{% else %}
+    <a href="" id="sign-in">Sign in</a> {{ request.user.username }}
+{% endif %}
+
+<div class="page-header">
+  <div class="pagination">
+<ul>
+<li class="arrow"><a href="#">&lt;</a></li>
+<li><a href="#">Apple</a></li>
+<li><a href="#">TV & Entertaiment</a></li>
+  <li><a href="#">Clothing</a></li>
+  <li><a href="#">Accessories</a></li>
+  <li><a href="#">Gadgets</a></li>
+  <li><a href="#">Other stuff</a></li>
+  <li class="arrow"><a href="#">&gt;</a></li>
+</ul>
+</div>
+</div>

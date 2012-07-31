@@ -1,0 +1,55 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Associate Accounts" %}{% endblock %}
+
+{% block body_class %}associate_accounts{% endblock %}
+
+{% block body %}
+<div>
+  <h3>User data:</h3>
+  <table>
+    <tr class="odd"><th>Id:</th> <td>{{ user.id }}</td></tr>
+    <tr class="even"><th>Username:</th> <td>{{ user.username }}</td></tr>
+    <tr class="odd"><th>Email:</th> <td>{{ user.email|default:"Not provided" }}</td></tr>
+    <tr class="even"><th>First name:</th> <td>{{ user.first_name|default:"Not provided" }}</td></tr>
+    <tr class="odd"><th>Last name:</th> <td>{{ user.last_name|default:"Not provided" }}</td></tr>
+    <tr class="even"><th>Last login backend:</th> <td>{{ last_login }}</td></tr>
+  </table>
+</div>
+
+<div>
+{% if accounts %}
+  {% if disconnect_error %}<span class="error">{{ disconnect_error }}</span>{% endif %}
+  <h3>Disconnect accounts</h3>
+  <ul>
+  {% for account in accounts %}
+    <li>
+        <span class="disconnect"><a href={% url socialauth_disconnect_individual account.provider account.id %}>{{ account.provider|title }} (ID {{ account.id }})</a></span>
+    </li>
+  {% endfor %}
+  </ul>
+{% endif %}
+  {% if error %}<span class="error">{% trans 'Account already in use.' %}</span>{% endif %}
+
+  <h3>Associate new <a href="http://oauth.net/" title="OAuth">OAuth</a> credentials:</h3>
+  <ul>
+  {% for name, backend in backends.oauth %}
+    <li><a rel="nofollow" href="{% url socialauth_associate_begin name %}">{{ name|title }}</a></li>
+  {% endfor %}
+  </ul>
+
+  <h3>Associate new <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-10" title="OAuth2">OAuth2</a> credentials:</h3>
+  <ul>
+  {% for name, backend in backends.oauth2 %}
+    <li><a rel="nofollow" href="{% url socialauth_associate_begin name %}">{{ name|title }}</a></li>
+  {% endfor %}
+  </ul>
+</div>
+
+<div>
+  <a rel="nofollow" class="logout" href="/logout/">Logout</a>
+</div>
+{% endblock %}

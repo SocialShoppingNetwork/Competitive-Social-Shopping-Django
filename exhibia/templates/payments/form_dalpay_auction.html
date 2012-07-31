@@ -1,0 +1,23 @@
+{% load media %}
+<form method="post" action="{{ gateway.get_url }}" id="paynow-{{package.code}}">
+    <input type="hidden" value="{{ object.contract_id }}" name="mer_id">
+    <input type="hidden" value="02" name="pageid">
+
+    <input type="hidden" value="1" name="num_items">
+    <input type="hidden" value="{{ object }}" name="item1_desc">
+    <input type="hidden" value="{{ object.price }}" name="item1_price">
+    <input type="hidden" value="1" name="item1_qty">
+
+    <input type="hidden" value="{{ member }}" name="user1"> <!-- username -->
+    <input type="hidden" value="{{ object.pk }}" name="user2"> <!-- package id -->
+
+    <input type="hidden" name="cust_name" value="{{ member.first_name }} {{ member.last_name }}" />
+    <input type="hidden" name="cust_email" value="{{ member.user.email }}" />
+    <input type="hidden" name="cust_address1" value="{{ member.address1 }}" />
+    <input type="hidden" name="cust_city" value="{{ member.city }}" />
+    <input type="hidden" name="cust_state" value="{{ member.state }}" />
+    <input type="hidden" name="cust_zip" value="{{ member.zip_code }}" />
+    <input type="hidden" name="cust_country_code" value="{{ member.country }}"/>
+    
+    <input alt="Buy now" src="{% media_url %}/img/proceedtocheckout.gif" type="image"/>
+</form>

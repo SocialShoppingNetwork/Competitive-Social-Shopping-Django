@@ -1,0 +1,59 @@
+{% load i18n %}
+<div class="auth_form">
+    {% if is_ajax %}<input type="hidden" class="action" value="">{% endif %}
+    <form method="POST" action="{% url send_video %}">
+        {% csrf_token %}
+        <input type="hidden" name="video_id" value="{{ video_id }}">
+        <table>
+        {{form}}
+        <tr><td><input class="cancel" type="button" value="cancel" /><input class="send" type="button" value="send" /></td><td></td></tr>
+        </table>
+    </form>
+</div>
+<script>
+     $('.auth_form .cancel').click(function() {
+        var parent = $(this).parents('.auth_form');
+         {% if is_ajax %}
+         parent.find('.action').val('cancel');
+         parent.dialog('close');
+         return false;
+         {% endif %}
+     });
+     $('.auth_form .send').click(function() {
+        var parent = $(this).parents('.auth_form');
+         {% if is_ajax %}
+         parent.find('form').block({message: '<h1>sending<h1>'});
+         parent.find('.action').val('sent');
+         $.ajax({
+              type: 'POST',
+              url: '{%  url send_video %}',
+              data: parent.find('form').serialize(),
+              dataType: 'json',
+              success: function(response) {
+                  parent.find('form').unblock();
+                  if (response.success) {
+                      parent.dialog('close');
+                  } else {
+                      parent.find('.errorlist').remove();
+                      if(response.error_type == 'form') {
+                      for (var error in response.errors) {
+                          $('<ul>').addClass('errorlist')
+                                   .append($('<li>').text(response.errors[error][0]))
+                                   .insertBefore(parent.find('[name="'+error+'"]'));
+                      }
+                      } else {
+                          alert(response.errors);
+                      }
+                  }
+              },
+              error: function(response) {
+                  parent.find('form').unblock();
+              }
+            });
+
+         {% else %}
+             parent.find('form').submit();
+         {% endif %}
+         return false;
+     });
+</script>

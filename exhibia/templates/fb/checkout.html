@@ -1,0 +1,22 @@
+{% extends 'fb/base.html' %}
+{% block body %}
+    <div class="row items" style="width: auto;min-width: 760px;margin-top: 10px;">
+
+    </div>
+{% endblock %}
+{% block extra_body %}
+    <script>
+        $(document).ready(function() {
+            $('.scrollingtext').bind('marquee', function() {
+                var ob = $(this);
+                var tw = ob.width();
+                var ww = ob.parent().width();
+                ob.css({ right: -tw });
+                ob.animate({ right: ww }, 30000, 'linear', function() {
+                    ob.trigger('marquee');
+                });
+            }).trigger('marquee');
+            
+        });
+    </script>
+{% endblock %}

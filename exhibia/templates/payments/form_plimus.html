@@ -1,0 +1,37 @@
+<form action="{{ gateway.get_url }}" method="post" id="paynow-{{package.code}}" target="_blank"/>
+    <input type="hidden" name="contractId" value="{{ object.contract_id }}" />
+    <input type="hidden" name="productName" value="{{ object }}" />
+    <!--<input type="hidden" name="currency" value="{{ gateway.merchant.currency }}" />-->
+    <input type="hidden" name="currency" value="{{ object.currency }}"
+    <input type="hidden" name="quantity" value="1" />
+    <!-- <input type="hidden" name="overridePrice" value="{{ object.total }}" />-->
+
+    <input type="hidden" name="custom1" value="{{ object }}" />
+    <input type="hidden" name="custom2" value="{{ object.pk }}" />
+    <input type="hidden" name="custom3" value="{{ member }}" />
+
+    <input type="hidden" name="title" value="{{ member.title }}" />
+    <input type="hidden" name="firstName" value="{{ member.first_name }}" />
+    <input type="hidden" name="lastName" value="{{ member.last_name }}" />
+    <input type="hidden" name="email" value="{{ member.user.email }}" />
+    <input type="hidden" name="verifyEmail" value="{{ member.user.email }}" />
+    <input type="hidden" name="address1" value="{{ member.address1 }}" />
+    <input type="hidden" name="address2" value="{{ member.address2 }}" />
+    <input type="hidden" name="city" value="{{ member.city }}" />
+    <input type="hidden" name="state" value="{{ member.state }}" />
+    <input type="hidden" name="zipCode" value="{{ member.zip_code }}" />
+    <input type="hidden" name="country" value="{{ member.country }}" />
+    <input type="hidden" name="workPhone" value="{{ member.phone }}" />
+
+    {% comment %}
+        <input alt="Buy now" src="{% media_url %}/img/proceedtocheckout.gif" type="image"/>
+    {% endcomment %}
+    <input type="submit" value="Checkout">
+
+
+    {% if object.total_encrypted %}
+        <input type="hidden" name="bCur" value="{{ gateway.merchant.currency }}" />
+        <input type="hidden" name="overridePrice" value="{{ object.total }}" />
+        <input type="hidden" name="opp" value="{{ object.total_encrypted }}" />
+    {% endif %}
+</form>

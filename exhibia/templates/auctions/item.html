@@ -1,0 +1,137 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+{% load social %}
+{% load facebook %}
+{% block head_title %}{% trans "auction" %}{% endblock %}
+{% block extra_head %}
+
+    <!-- START Google plus one-->
+    <!-- Update your html tag to include the itemscope and itemtype attributes -->
+    <html itemscope itemtype="http://schema.org/Product">
+    <!-- Add the following three tags inside head -->
+    <meta itemprop="name" content="{{ item.name }}">
+    <meta itemprop="description" content="This would be a description of the content your users are sharing">
+    <meta itemprop="image" content="{{ item.get_full_image_url }}">
+    <!-- END Google Plus one -->
+
+    <!-- START Facebook like -->
+    <meta property="og:image" content="{{ item.get_full_image_url }}"/>
+    <meta property="og:url" content="{{ item.get_full_url }}"/>
+    <!-- end Facebook Like -->
+
+    <meta name="id" content="{{ item.code }}" />
+    {% facebook_init %}
+        FB.Event.subscribe("edge.create", function(href, widget) {
+            item_code = $('meta[name=id]')  .attr("content");
+            $.post('{% url reward_like_item %}',
+                    {'item_code':"{{ item.code }}"},
+                    function(data){
+                        if (data == 'OK'){
+                            alert('OK');
+                        }else{
+                            switch(data['error']){
+                                case 'ALREADY_LIKE':
+                                    alert('ALREADY_LIKE'); break;
+                                case 'LIKE_LIMIT':
+                                    alert('LIKE_LIMIT'); break;
+                            }
+                        }
+            });
+
+        });
+    {% endfacebook %}
+{% endblock %}
+{% comment %}{% block body_class %}item{% endblock %} {% endcomment %}
+
+{% block right_after_body %}
+
+{% endblock %}
+
+{% block body %}
+	<div class="news">
+    	BID ON
+    </div>
+    {% with auction as a %}
+    <section id="auction_item" class="auction_item">
+		<div id="description_box">
+			<h1>{{ item.name }}</h1>
+			<h4>Retail price: $50 - Save 98%</h4> <hr />
+			<div class="bid_box">
+				<div class="col">
+					<div class="timer" id="timer_{{ a.id }}">--:--:--</div>
+					<div class="bid-price">$<span id="current_price_{{ a.id }}">{{ a.current_price }}</span></div>
+					<h5 id="last_bidder_{{ a.id }}">{{ a.last_bidder|default:"Be the first" }}</h5>
+				</div>
+				<div class="bid" data-auctionid="{{ a.id }}">BID</div>
+			</div>
+		</div>
+
+        {%  ifcanlike item facebook %}
+            <p>{% facebook_like_item item %}</p>
+        {% endifcanlike %}
+
+        {%  ifcanlike item google %}
+            <p>{% google_plus_one_item item "google_plus_item_callback" "bubble" "standard" %}</p>
+        {% endifcanlike %}
+
+        <section id="item_description">
+        	<img src="{{ thumbnail item.default_image.img 200x200 }}" alt="product" />
+                	<h1>This is some title</h1>
+            <p>{{ item.description|safe }}</p>
+        </section>
+        <hr />
+    </section>
+    {% endwith %}
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        var socket = null;
+        $(document).ready(function(){
+            socket = io.connect('http://{{ SOCKETIO_SERVER }}');
+            socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+            });
+            function update(){
+                socket.emit('update', {'id':{{ auction.id }} });
+            }
+            setInterval(update, 1000);
+            socket.on('update', function (data) {
+                console.log(data);
+                auctions = $.parseJSON(data['auctions']);
+                a = new Auctions(auctions);
+                a.update_ui(auctions);
+            });
+            $('.bid').click(function(){
+                auction_id = $(this).attr('data-auctionid');
+                $.post('/bid/ajax/' + auction_id + '/', function(data){
+                    console.log(data);
+                });
+            });
+        });
+
+        function google_plus_item_callback(){
+            item_code = $('meta[name=id]').attr("content");
+            $.post('{% url reward_like_item %}?google',
+                    {'item_code':"{{ item.code }}"},
+                    function(data){
+                        if (data == 'OK'){
+                            alert('OK');
+                        }else{
+                            switch(data['error']){
+                                case 'ALREADY_LIKE':
+                                    alert('ALREADY_LIKE'); break;
+                                case 'LIKE_LIMIT':
+                                    alert('LIKE_LIMIT'); break;
+                            }
+                        }
+                    }
+            );
+        };
+    </script>
+	<script src="{{ STATIC_URL }}js/item.js" type="text/javascript"></script>
+    {% facebook_load %}
+{% endblock %}

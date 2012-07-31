@@ -1,0 +1,143 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/admin.css"/>
+    <script src="{{ STATIC_URL }}js/admin.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}/js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+    <script type="text/javascript">
+        var socket = null;
+        $(document).ready(function(){
+            function update(){
+                $.post("/matic/status/", {}, function(data){
+                    data = $.parseJSON(data);
+                    auctions = data['auctions']
+                    a = new Auctions(auctions);
+                    a.update_ui(auctions);
+                });
+            }
+            setInterval(update, 1000);
+            $('.bid').click(function(event){
+                event.preventDefault();
+                auction_id = $(this).attr('data-auctionid');
+                $.post('/bid/ajax/' + auction_id + '/', function(data){
+                    switch(data['error']){
+                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                        case 'NOT_ENOUGH_CREDITS': $.colorbox({href:"/buycredits/"}); break;
+                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                    }
+                    // TODO conditional to update bids
+                    update_bids();
+                });
+            });
+            $(".auction_bidding_time").live("click", function(event){
+                auction_id = $(event.target).attr('rel');
+                time = prompt("bidding time", $(event.target).text());
+                $.post("/matic/change/time/" + auction_id + "/" + time + "/", function(data){});
+            });
+            $(".matic_win").live("click", function(event){
+                event.preventDefault();
+                auction_id = $(event.target).attr('rel');
+                $.post("/matic/change/win/" + auction_id + "/", function(data){
+                   console.log(data);
+                });
+            });
+
+            $(".matic_bids_left").live("click", function(event){
+                event.preventDefault();
+                bids_left = prompt("bids", $(event.target).text());
+                auction_id = $(event.target).attr('rel');
+                if (bids_left != null){
+                    $.post("/matic/change/bidsleft/" + auction_id + "/" + bids_left + "/", function(data){});
+                }
+            });
+
+            $(".auction_status").live("click", function(event){
+                event.preventDefault();
+                auction_id = $(event.target).attr('rel');
+                $.post("/matic/change/status/" + auction_id + "/", function(data){
+                   console.log(data);
+                });
+            });
+
+            $(".auction_bid").live("click", function(event){
+               event.preventDefault();
+                auction_id = $(event.target).attr('rel');
+                $.post("/matic/bid/" + auction_id + "/", function(data){});
+            });
+
+            $("#pause_all").click(function(event){
+                $.post("{% url matic_pause_all %}", {}, function(data){
+                });
+            });
+
+            $("#resume_all").click(function(event){
+                $.post("{% url matic_resume_all %}", {}, function(data){
+                });
+            });
+
+       });
+    </script>
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <a href="#" id="pause_all">Pause All</a>
+    <a href="#" id="resume_all">Resume All</a>
+<div class="module">
+        <table summary="Auctions running">
+        <caption><a href=""class="section">Auctions</a></caption>
+        <thead>
+            <tr>
+                <th></th>
+                <th>timer</th>
+                <th>ticktime</th>
+                <th>bidder</th>
+                <th>price</th>
+
+                <th>bids_left</th>
+                <th>userbid</th>
+                <th>win</th>
+                <th>running</th>
+                <th>&nbsp</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+        {% for auction in auctions %}
+        <tr>
+            <th scope="row"><a href="{% url auction_item auction.item.name|slugify %}">{{ auction.item.name }}</a></th>
+            <td id="timer_{{ auction.id }}"></td>
+            <td id="bidding_time_{{ auction.id }}" class="auction_bidding_time" rel="{{ auction.id }}"></td>
+            <td id="last_bidder_{{ auction.id }}"></td>
+            <td>$<span id="current_price_{{ auction.id }}"></span></td>
+            <!-- matic -->
+            <td id="bids_left_{{ auction.id }}" rel="{{ auction.id }}" class="matic_bids_left"></td>
+            <td id="usersbid_{{ auction.id }}"></td>
+            <td>
+                <input type="checkbox" rel="{{ auction.id }}" id="win_{{ auction.id }}" class="matic_win"/>
+            </td>
+
+            <td>
+                <!--<a href="" class="running">&nbsp</a>-->
+                <input type="checkbox" rel="{{ auction.id }}" id="status_{{ auction.id }}" class="auction_status"/>
+            </td>
+            <td> <a href="#" rel="{{ auction.id }}" class="auction_bid">bid</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+</div>
+</div>
+{% endblock %}
+

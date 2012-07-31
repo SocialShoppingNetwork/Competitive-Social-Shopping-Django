@@ -1,0 +1,63 @@
+{% load i18n %}
+{% if messages %}
+    <ul id="messages">
+        {% for message in messages %}
+        <li id="message_{{ forloop.counter }}"{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            <a href="#"><small>{% trans "clear" %}</small></a>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+
+
+
+<div class="row item">
+        <div class="span9">
+			<h1>{{ item.name }}</h1><hr/>
+            <h3 class="productDescriptionSource">Product Description</h3>
+     		<div class="productDescriptionWrapper">
+                 {{ item.description|safe }}
+     		</div>
+
+		  {% comment %}<strong>Paired for Perfection</strong><br><br>
+		  <p>Breaking free from the normal constraints of a device through constant innovation, the ASUS Eee Pad Transformer Prime is the perfect example of what a tablet should be. The feature that gives the Eee Pad Transformer Prime its name, the mobile docking station, gives a whole new meaning to the term Paired for Perfection.</p>
+		  <p>The new Eee Pad Transformer Prime is mind-blowingly slim and light weight and with a beautiful metallic spun finished design. In fact, it is the slimmest tablet on the market yet, only 0.33" thin and 1.29lbs light. You can easily carry it with you no matter where you go.</p>
+		  <img src="http://g-ecx.images-amazon.com/images/G/01/electronics/asus/TF201-B1_image003_S.jpg" alt="Paired for Perfection " width="450" height="450" hspace="10" vspace="10" align="right">
+		  <h2><span style="font-weight: bold;">Key Features</span></h2>
+		  <ul>
+			<li><strong>10.1-inch WXGA Super IPS+ capacitive pressure-sensing multi touch display made with Corning<sup>�</sup> Gorilla<sup>�</sup> Glass </strong>for brilliant HD entertainment and intuitive navigation. 178� viewing angle (1280 x 800)</li>
+			<li><strong>Ultra-slim and light (.33" thin and 1.29lbs light) </strong>with metallic spun finish design </li> <li><strong>Powered by NVIDIA<sup>�</sup> Tegra<sup>�</sup> 3 Quad-core CPU </strong>for excellent multitasking, 1080p HD video output playback and 3D games for SUPERB performance (<a href="#productivity">Learn more</a>)</li>
+			<li><strong>1.2MP front camera and 8MP auto-focus rear camera </strong>with flash, back-illuminated CMOS sensor, and large aperture design to clearly capture every moment. (<a href="#sound">Learn more</a>)</li>
+			<li><strong>Android<sup>�</sup> 3.2 Honeycomb (Upgradable to Android� 4.0 Ice Cream Sandwich) OS </strong>with Adobe<sup>�</sup> Flash<sup>�</sup> support and over 500,000 downloadable applications on the Android <sup>�</sup> Market.<sup>1</sup> (<a href="#expandability">Learn more</a>)</li>
+			<li><strong>Optional Docking station with Full QWERTY keyboard </strong>adds additional 6 hours of battery life, to instantly turn the Eee Pad Transformer Prime into PC mode with up to 18 hours of battery life.<sup>2</sup></li>
+		</ul>
+
+	      <h3 class="productDescriptionSource">Product Description</h3>
+		  <div class="productDescriptionWrapper">
+            {{ item.description|safe }}
+		 </div>
+        {% endcomment %}
+
+		</div>
+		<div class="span3">
+          <div class="well">
+			<h1>{{ a.funded|floatformat:0 }}</h1>
+			<h5>FUNDED OF GOAL OF ${{ item.price|floatformat:0 }}</h5>
+			<h1>{{ a.backers }}</h1>
+			<h5>BACKERS</h5>
+			<h1>{{ a.time_to_go|floatformat:0 }}-</h1>
+			<h5>TIME LEFT</h5><br/>
+
+		   <h3>Fund this</h3><br/>
+			<a href="#" class="btn btn-extrabig">$10<h6>10 BIDS</h6></a>
+			<a href="#" class="btn btn-info btn-extrabig">$20<h6 style="color:white">20 BIDS</h6></a>
+			<a href="#" class="btn btn-success btn-extrabig">$50<h6 style="color:white">50 BIDS</h6></a>
+			<a href="#" class="btn btn-warning btn-extrabig">$100<h6 style="color:white">100 BIDS</h6></a>
+			<a href="#" class="btn btn-inverse btn-extrabig">$500<h6 style="color:white">500 BIDS</h6></a>
+			<a href="#" class="btn btn-danger btn-extrabig">$1000<h6 style="color:white">1000 BIDS</h6></a>
+			</div>
+        </div>
+</div>

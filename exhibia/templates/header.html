@@ -1,0 +1,25 @@
+<header>
+    <a href="/"><div id="logo"></div></a>
+    <ul id="menu">
+      	<li>Auctions</li>
+        <li>How it works</li>
+        <li>Guarantee</li>
+        <li>Winners</li>
+        <li><a href="{% url auctions_won %}">Products won</li>
+    </ul>
+    <div id="login-box">
+	{% if user.is_authenticated %}
+		<ul>
+			<li>Welcome back, <strong>{{ user }}</strong></li>
+			<li>You have <span id="member_bids">{{ member.credits }}</span> bids</li>
+			<!--<li><a href="{% url buycredits %}">Get more bids</a></li>-->
+            <li><a href="{% url acct_logout %}">Log out</a></li>
+		</ul>
+	{% else %}
+    	{% comment %}<a href="{% url socialauth_begin backend='facebook' %}" class="facebook"></a>
+		<a href="{% url socialauth_begin backend='twitter' %}" class="twitter"></a>
+		<a href="{% url socialauth_begin backend='google-oauth2' %}" class="google"></a>
+	    {% endcomment %}
+	{% endif %}
+    </div>
+</header>

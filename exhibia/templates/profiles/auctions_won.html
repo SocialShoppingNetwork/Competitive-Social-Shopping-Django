@@ -1,0 +1,72 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+    <div id="left_news" class="">
+        {% if auctions_won %}
+            <div class="member">
+                <h2 class="title">{% trans "Auctions Won - Click on each  item won  to confirm your shipping address:" %}</h2>
+                <ul>
+                {% for a in auctions_won %}
+                    <li>{{ a.end_dt }} - ${{ a.current_price }} - <a href="{% url auction_won a.id %}">{{ a }}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if auctionorders_unpaid %}
+            <div class="member">
+                <h2 class="title">{% trans "Auctions  to pay - Click on each item link to complete payment" %}</h2>
+                <ul>
+                    {% for order in auctionorders_unpaid %}
+                      <li>{{ order.auction.end_dt }} - ${{ order.total }} - <a href="{% url order_pay order.id %}" title="pay it now">{{ order.auction.item.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if auctionorders_paid %}
+            <div class="member">
+                <h2 class="title">{% trans "Paid auctions in process:" %}</h2>
+                <ul>
+                    {% for order in auctionorders_paid %}
+                        <li>{{ order.dt }} - ${{ order.total }} - <b>{{ order }}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% comment %}
+        {% if member.buyitnow_orders %}
+            <div class="member">
+                <h2 class="title">{% trans "Buy it Now Orders" %}</h2>
+                <ul>
+                    {% for order in member.buyitnow_orders %}
+                       <li>{{ order.end_dt }} - {{ currency_symbol }} {{ order.total }} - <a href="{% url buyitnow_order order.pk %}">{{ order }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% endcomment %}
+
+        {% if auctionorders_history %}
+            <div class="member">
+                <h2 class="title">{% trans "Auctions Shipped:" %}</h2>
+                <ul>
+                    {% for order in auctionorders_history %}
+                        <li>{{ order.dt }} - ${{ order.total }} - <b>{{ order }}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block extra_body %}
+{% endblock %}

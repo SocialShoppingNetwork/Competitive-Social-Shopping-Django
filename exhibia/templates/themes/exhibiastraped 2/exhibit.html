@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="./css/bootstrap.css" rel="stylesheet">
+	<link href="./css/exhibia.css" rel="stylesheet">
+    <style type="text/css">
+      .container {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="./css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons 
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">-->
+  </head>
+
+  <body>
+	<div class="alert alert-info">
+		<a class="close" data-dismiss="alert">×</a>
+		A new item just got funded, click here to get it
+	</div>
+  
+  
+	<div class="navbar">
+	  <div class="navbar-inner">
+		<div class="container">
+			<div class="navbar-search">
+				<div class="logo">exhibia</div>
+			</div>
+			<form class="navbar-search pull-left">
+			  <input type="text" class="search-query" placeholder="Search">
+			</form>
+		</div>
+	  </div>
+	</div>
+	
+    <div class="container">
+      <div class="page-header">
+        <div class="pagination">
+		  <ul>
+			<li class="arrow"><a href="#">&lt;</a></li>
+   	<li><a href="#">Apple</a></li>
+		<li><a href="#">Entertaiment</a></li>
+        <li><a href="#">Clothing</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Gadgets</a></li>
+        <li><a href="#">Other stuff</a></li>
+        <li class="arrow"><a href="#">&gt;</a></li>
+		  </ul>
+		</div>
+      </div>
+	
+	<ul class="breadcrumb">
+	  <li>
+		<a href="#">Home</a> <span class="divider">/</span>
+	  </li>
+	  <li>
+		<a href="#">Funding</a> <span class="divider">/</span>
+	  </li>
+	  <li class="active">
+		<a href="#">Tech</a>
+	  </li>
+	</ul>
+		
+	
+      <!-- Example row of columns -->
+      <div class="row items">
+        <div class="span3">
+          <h2>Nikon D3100 DSLR Camera with 16GB</h2>
+          <img src="products/item1.jpg" /><hr/>
+		  <h1>00:00:00</h1>
+		  <h5>USERNAME</h5><hr/>
+          <p><a class="btn btn-large" href="#">BID</a></p>
+        </div>
+        <div class="span3">
+          <h2>Kindel Fire 16GB 3G International version</h2>
+          <img src="products/item2.jpg" /><hr/>
+		  <h1>00:00:00</h1>
+		  <h5>USERNAME</h5><hr/>
+          <p><a class="btn btn-large" href="#">BID</a></p>
+        </div>
+        <div class="span3">
+          <h2>LG Infinia 47LW6500 47-Inch Cinema3D 1080p HDTV</h2>
+          <img src="products/item3.jpg" /><hr/>
+		  <h1>00:00:00</h1>
+		  <h5>USERNAME</h5><hr/>
+          <p><a class="btn btn-large" href="#">BID</a></p>
+        </div>
+		<div class="span3">
+          <h2>Asus Transformer Prime TF201 Mobile Docking - Amethyst Gray</h2>
+          <img src="products/item4.jpg" /><hr/>
+		  <h1>00:00:00</h1>
+		  <h5>USERNAME</h5><hr/>
+          <p><a class="btn btn-large" href="#">BID</a></p>
+        </div>
+    </div>
+      <hr>
+	<div class="navbar navbar-fixed-bottom">
+	  <div class="navbar-inner">
+		<div class="container">
+			<ul class="nav">
+				<li class="fb-login"><a href="#">Link your Facebook account</a></li>
+				<li class="tw-login"><a href="#">Link your Twitter account</a></li>
+				<li class="gp-login"><a href="#">Link your Google+ account</a></li>
+			</ul>
+			<ul class="nav navchat">
+			  <li class="active chat">
+				<a id="chat-toggle" href="#">Chat</a>
+				<div class="chat-box">
+					<div class="container">
+						<ul class="unstyled">
+							<li>
+								<div class="avatar"><span class="ico g"></span></div>
+								<div><strong>Bidder1:</strong> Hey</div>
+							</li>
+							<li>
+								<div class="avatar"><span class="ico t"></span></div>
+								<div><strong>Bidder2:</strong> Bidder1 dont bid on my item</div>
+							</li>
+							<li>
+								<div class="avatar"><span class="ico f"></span></div>
+								<div><strong>Bidder3:</strong> How does this work</div>
+							</li>
+						</ul>
+						<div class="type">
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-comment"></i></span>
+								<input type="text" class="span2" place-holder="Type here..">
+							</div>
+						</div>
+					</div>
+				</div>
+			  </li>
+			</ul>
+		</div>
+	  </div>
+	</div>
+	
+      <footer>
+		<div class="row">
+			<div class="span2"><p>&copy; Company 2012</p></div>
+			<div class="span2">
+				<ul class="nav nav-tabs nav-stacked">
+					<li><a href="#">About Us</a></li>
+					<li><a href="#">FAQ's</a></li>
+					<li><a href="#">Contact Us</a></li>
+					<li><a href="#">Privacy Policy</a></li>
+					
+				</ul>
+			</div>
+			<div class="span2">
+				<ul class="nav nav-tabs nav-stacked">
+					<li><a href="#" title="">How it works? (FAQ)</a></li>
+					<li><a href="#" title="">Bidding</a></li>
+					<li><a href="#" title="">Shipment &amp; Delivery</a></li>
+					<li><a href="#" title="">Returns &amp; Warranties</a></li>
+				</ul>
+			</div>
+			<div class="span3">
+				<ul class="nav nav-tabs nav-stacked">
+					<li><a href="#" title="">Payment Methods &amp; Security</a></li>
+					<li><a href="#" title="">Technical Information</a></li>
+					<li><a href="#">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./js/jquery.js"></script>
+    <script src="./js/bootstrap.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#chat-toggle').click(function() {
+				$(this).parent('li').toggleClass('active');
+				return false;
+			});
+		});
+	</script>
+  </body>
+</html>

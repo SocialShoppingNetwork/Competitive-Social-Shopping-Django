@@ -1,0 +1,23 @@
+<form method="post" action="{{ gateway.get_url }}" id="paynow_form" target="_blank" >
+    {{ object.contract_id }}
+    <input type="hidden" value="{{ gateway.contract_id }}" name="mer_id">
+    <input type="hidden" value="01" name="pageid">
+
+    <input type="hidden" value="1" name="num_items">
+    <input type="hidden" value="Object name" name="item1_desc" id="paynow_item_desc">
+    <input type="hidden" value="10" name="item1_price" id="paynow_item_price">
+    <input type="hidden" value="1" name="item1_qty">
+
+    <input type="hidden" name="cust_name" value="{{ member.user.first_name }} {{ member.last_name }}" />
+    <input type="hidden" name="cust_email" value="{{ member.user.email }}" />
+    <input type="hidden" name="cust_address1" value="{{ member.address1 }}" />
+    <input type="hidden" name="cust_city" value="{{ member.city }}" />
+    <input type="hidden" name="cust_state" value="{{ member.state }}" />
+    <input type="hidden" name="cust_zip" value="{{ member.zip_code }}" />
+    <input type="hidden" name="cust_country_code" value="{{ member.country }}" /> <!--TODO-->
+
+    <!-- Custom fields -->
+    <input type="hidden" value="{{ member }}" name="user1"> <!-- username -->
+    <input type="hidden" value="algo" name="user2" id='paynow_custom_field2'> <!-- package id -->
+    <!-- End Custom fields -->
+</form>

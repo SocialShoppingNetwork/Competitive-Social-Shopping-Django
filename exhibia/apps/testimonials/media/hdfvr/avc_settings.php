@@ -1,0 +1,2 @@
+showMenu=true&streamName=&maxRecordingTime=120&chmodStreams=&radiusCorner=4&connectionstring=rtmp%3A%2F%2Fndevs.com%2Fhdfvr%2F_definst_&userId=&disableAudio=false&snapshotEnable=true&padding=2&loopbackMic=false&overlayPath=fullStar.png&snapshotSec=5&menuColor=3355443&hideSaveButton=0&recordAgain=true&autoPlay=false&onSaveSuccessURL=&showFps=true&outgoingBuffer=60&useUserId=true&languagefile=translations%2Fen.xml&minRecordTime=15&playbackBuffer=1&countdownTimer=true&backgroundColor=10027008&streamPrefix=&deleteUnsavedFlv=false&qualityurl=&overlayPosition=tr
+

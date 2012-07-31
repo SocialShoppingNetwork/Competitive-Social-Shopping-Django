@@ -1,0 +1,11 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% block extra_head %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.blockUI.js"></script>
+{% endblock %}
+{% block body %}
+
+    {% include "video_manager/youtube_auth_form.html" %}
+
+{% endblock %}

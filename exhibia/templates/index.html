@@ -1,0 +1,104 @@
+    {% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+    <div class="row items">
+        {% for auction in showcase %}
+            {% include "auctions/showcase_box.html" %}
+        {% endfor %}
+        {% for auction in auctions %}
+            {% include "auctions/auction_box.html" %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        var socket = null;
+        $(document).ready(function(){
+
+            socket = io.connect('http://{{ SOCKETIO_SERVER }}');
+            socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+            });
+            function update(){
+                console.log('update');
+                socket.emit('update');
+            }
+            function update2(){
+                $.post('{% url auctions_info %}',
+                    function(x){
+                        y = $.parseJSON(x);
+                        i = new Items(y);
+                        i.update_ui();
+
+                    }
+                );
+
+            }
+            setInterval(update2, 10000);
+
+            setInterval(update, 1000);
+
+            socket.on('update', function(data){
+                console.log(data);
+                //auctions = $.parseJSON(data['auctions'])
+                //a = new Auctions(auctions);
+                //a.update_ui(auctions);
+            });
+
+
+            $('.bid-btn').click(function(event){
+                event.preventDefault();
+                auction_id = $(this).attr('data-auctionid');
+                $.post('/bid/ajax/' + auction_id + '/', function(data){
+                    switch(data['error']){
+                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                        case 'NOT_ENOUGH_CREDITS': $.colorbox({href:"/buycredits/"}); break;
+                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                    }
+                    // TODO conditional to update bids
+                    //update_bids();
+                });
+            });
+
+            /*
+            $('.fund-btn').click(function(event){
+                url = "{% url auction_pledge 0 %}";
+                event.preventDefault();
+                item_id = $($(event.target).parents()[1]).attr('data-id');
+                url = url.replace('0', item_id);
+                window.location.replace(url);
+                return
+                amount = prompt("Enter a value", 5);
+
+                $.post('/items/fund/' + item_id + '/', {'amount':amount}, function(data){
+                    console.log(data);
+                    window.location.reload();
+                });
+                return;
+
+                $.post('/bid/ajax/' + auction_id + '/', function(data){
+                    switch(data['error']){
+                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                        case 'NOT_ENOUGH_CREDITS': $.colorbox({href:"/buycredits/"}); break;
+                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                    }
+                    // TODO conditional to update bids
+                    update_bids();
+                });
+            });*/
+        });
+    </script>
+{% endblock %}

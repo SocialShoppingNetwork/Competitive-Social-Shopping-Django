@@ -1,0 +1,42 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% block extra_head %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/video_record/video_record.css" />
+<style>
+    .auth_form-dialog .ui-dialog-titlebar {
+        display: NONE;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    <div class="placeholder"></div>
+    <div class="videos" id="videos"></div>
+{% endblock %}
+{% block extra_body %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/AC_OETags.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/swfobject.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/video_record.js"></script>
+    <script type="text/javascript">
+        var video_id = "{{ video_id }}";
+        $(function() {
+            var video_rec = VideoRecord({id: "video-"+video_id,
+                                        container: ".videos",
+                                        swf_url: '{{ STATIC_URL }}swf/',
+                                        rtmp_server: '{{ rtmp_server }}',
+                                        width: 500,
+                                        height: 400,
+                                        flashVars: '',
+                                        publish: video_id,
+                                        publish_fn: function(app, fn) {
+                                            $.post("{% url send_testimonial %}", { video_id: "{{ video_id }}", },
+                                               function(data) {
+                                                 alert("Data Loaded: " + data);
+                                               }
+                                            );
+                                        }});
+        });
+    </script>
+{% endblock %}

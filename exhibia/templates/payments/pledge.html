@@ -1,0 +1,39 @@
+{% extends "site_base.html" %}
+{% load thumbnail %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Buy more credits" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+    It's up to you.
+    Any amount of $5 or more.
+    <img src="{% thumbnail auction.item.image.img 80x80 %}">
+    <p>-------------</p>
+    <form action="{% url auction_fund auction.id %}" method="post">
+        <input type="submit" value="pledge"/>
+        {% crispy form %}
+        {% for package in packages %}
+            <p><input type="radio" name="package" data-value="{{ package.price }}" value="{{ package.code }}" /> {{ package.name }} - {{ package.description }}</p>
+        {% endfor %}
+    </form>
+
+    Reward selection
+    To change your reward, make a new selection below.
+    
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('input[name=package]').click(function(event){
+                console.log(event.target);
+                $('#id_amount').val($(event.target).attr('data-value'));
+            });
+        });
+    </script>
+{% endblock %}

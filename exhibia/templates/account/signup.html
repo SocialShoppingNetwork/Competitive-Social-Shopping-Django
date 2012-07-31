@@ -1,0 +1,144 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load uni_form_tags %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/login/social-buttons.css" />
+{% endblock %}
+{% block body %}
+    <h1>{% trans "Sign Up" %}</h1>
+    
+    {% if user.is_authenticated %}
+        <p>{% trans "You are already logged in." %}</p>
+    {% else %}
+        <p>{% trans "Already have an account?" %} <a href="{% url acct_login %}">{% trans "Log In" %}</a>!</p>
+        <p class="signup-register"><span>{% trans "Register using" %}:</span>
+            <a class="register-by register-by-facebook" href="#{% url socialauth_begin backend='facebook' %}" rel="facebook"></a>
+            <a class="register-by register-by-twitter" href="#{% url socialauth_begin backend='twitter' %}"rel="twitter"></a>
+            <a class="register-by register-by-google-oauth2" href="#{% url socialauth_begin backend='google-oauth2' %}" rel="google-oauth2"></a>
+            <a class="register-by-django" href="#">{% trans "username/password" %}</a>
+        </p>
+        <div class="cleared"></div>
+        <form class="signup uniForm" id="signup_form" method="post" action="{% url acct_signup %}" autocapitalize="off">
+            {% csrf_token %}
+            <fieldset class="inlineLabels">
+                {{ form|as_uni_form }}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <input type="hidden" id="id_{{ uid_confirmed_name }}" name="{{ uid_confirmed_name }}" value="{{ uid }}" />
+                <div class="signup-btns form_block">
+                    <input class="signup-btn signup-btn-app" type="button" value="{% trans "Sign Up &raquo;" %}"/>
+                    <a class="signup-btn signup-btn-facebook" href="#" title="{% trans "Sign Up With Facebook &raquo;" %}"></a>
+                    <a class="signup-btn signup-btn-twitter" href="#" title="{% trans "Sign Up With Twitter &raquo;" %}"></a>
+                    <a class="signup-btn signup-btn-google-oauth2" href="#" title="{% trans "Sign Up With Google &raquo;" %}"></a>
+                </div>
+            </fieldset>
+        </form>
+
+        {% url terms as terms_url %}
+        {% url privacy as privacy_url %}
+        <p>{% blocktrans %}By clicking "Sign Up", you are indicating that you have read and agree to the <a href="{{ terms_url }}">Terms of Use</a> and <a href="{{ privacy_url }}">Privacy Policy</a>.{% endblocktrans %}</p>
+        
+        <p>{% blocktrans %}If you have any trouble creating your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</p>
+        
+    {% endif %}
+{% endblock %}
+
+{% block extra_body %}
+    <script src="{{ STATIC_URL }}js/layout/jquery.blockUI.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var register_using_window = null;
+        var selected_backend = null;
+        var update_fields = null;
+        var block_msg = '<img style="float:left;margin: 10px 5px 10px 5px;" ';
+            block_msg += 'src="{{ STATIC_URL }}images/ajax-loader.gif" ';
+            block_msg += 'alt="Processing..."'+'/'+'><span style="float: left;margin: 10px 2px 10px 0;">Loading...</span>';
+        var block_css = {'background-color':'#F2F2F2', border:'None', width: '200px;'};
+
+        var new_mode = function(backend) {
+            $('.error').removeClass('error');
+            $('.errorField').hide();
+            if(register_using_window) {
+                register_using_window.close();
+            }
+
+            if(selected_backend != backend) {
+                $('#id_username').val('');
+                $('#id_social_username').val('');
+                $('#div_id_password1').val('');
+                $('#div_id_password2').val('');
+                $('#div_id_email').val('');
+                $('#id_{{ uid_confirmed_name }}').val('');
+            }
+        };
+
+        var set_backend = function(backend) {
+            $('.signup-btn').hide();
+            $('#id_social_username').parent().hide();
+            $('#div_id_password1').hide();
+            $('#div_id_password2').hide();
+            $('#div_id_email').hide();
+            if (backend){
+                $('.signup-btn-'+backend).show();
+                $('#id_backend').val(backend);
+            }
+            else {
+                $('.signup-btn-app').show();
+                $('#id_backend').val('');
+                $('#id_social_username').parent().hide();
+                $('#div_id_password1').show();
+                $('#div_id_password2').show();
+                $('#div_id_email').show();
+            }
+        };
+        $(function(){
+            if ($('#id_backend').val())
+                selected_backend = $('#id_backend').val();
+            $('.signup-btn').hide();
+            set_backend(selected_backend);
+            $("#id_username").focus();
+            $('#id_social_username').attr('readOnly', true);
+            $('#id_social_username').parent().hide();
+            $(".register-by").live('click', function() {
+                var self = $(this);
+                var backend = self.attr('rel');
+                new_mode(backend);
+                set_backend(backend);
+                var url = self.attr('href').replace('#', '');
+                register_using_window = window.open(url,"register_using_window","width=700,height=580,toolbar=0");
+                register_using_window.focus();
+                return false;
+            });
+
+            $(".register-by-django").live('click', function() {
+                new_mode(null);
+                selected_backend = null;
+                set_backend(null);
+                $('#id_{{ uid_confirmed_name }}').val('');
+                return false;
+            });
+
+            update_fields = function(fields) {
+                $('#id_username').val(fields.username);
+                $('#id_social_username').val(fields.username);
+                $('#id_email').val(fields.email);
+                $('#id_{{ uid_confirmed_name }}').val(fields.uid);
+                selected_backend = fields.backend;
+                set_backend(selected_backend);
+            };
+
+            $('.signup-btn').click(function() {
+                if (selected_backend &&
+                   (!$('#id_{{ uid_confirmed_name }}').val() || selected_backend != $('#id_backend').val())) {
+                    alert('{% trans "Social account is required" %}');
+                    return false;
+                }
+                $('#signup_form').submit();
+            });
+
+        });
+    </script>
+{% endblock %}

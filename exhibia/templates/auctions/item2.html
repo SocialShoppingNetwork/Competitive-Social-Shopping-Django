@@ -1,0 +1,186 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+{% load social %}
+{% load facebook %}
+{% block head_title %}{% trans "auction" %}{% endblock %}
+{% block extra_head %}
+
+    <!-- START Google plus one-->
+    <!-- Update your html tag to include the itemscope and itemtype attributes -->
+    <html itemscope itemtype="http://schema.org/Product">
+    <!-- Add the following three tags inside head -->
+    <meta itemprop="name" content="{{ item.name }}">
+    <meta itemprop="description" content="This would be a description of the content your users are sharing">
+    <meta itemprop="image" content="{{ item.get_full_image_url }}">
+    <!-- END Google Plus one -->
+
+    <!-- START Facebook like -->
+    <meta property="og:image" content="{{ item.get_full_image_url }}"/>
+    <meta property="og:url" content="{{ item.get_full_url }}"/>
+    <!-- end Facebook Like -->
+
+    <meta name="id" content="{{ item.code }}" />
+    {% facebook_init %}
+        FB.Event.subscribe("edge.create", function(href, widget) {
+            item_code = $('meta[name=id]')  .attr("content");
+            $.post('{% url reward_like_item %}',
+                    {'item_code':"{{ item.code }}"},
+                    function(data){
+                        if (data == 'OK'){
+                            alert('OK');
+                        }else{
+                            switch(data['error']){
+                                case 'ALREADY_LIKE':
+                                    alert('ALREADY_LIKE'); break;
+                                case 'LIKE_LIMIT':
+                                    alert('LIKE_LIMIT'); break;
+                            }
+                        }
+            });
+
+        });
+    {% endfacebook %}
+{% endblock %}
+
+{% block right_after_body %}
+
+{% endblock %}
+
+{% block body %}
+        <div class="row item">
+                <div class="span9">
+        			<h1>{{ item.name }}</h1><hr/>
+                    <p><img src="{{ item.default_image.img.url }}"></p>
+                    {%  ifcanlike item facebook %}
+                        <p>{% facebook_like_item item %}</p>
+                    {% endifcanlike %}
+
+                    {%  ifcanlike item google %}
+                        <p>{% google_plus_one_item item "google_plus_item_callback" "bubble" "standard" %}</p>
+                    {% endifcanlike %}
+
+                    <h3 class="productDescriptionSource">Product Description</h3>
+             		<div class="productDescriptionWrapper">
+                         {{ item.description|safe }}
+             		</div>
+
+        		  {% comment %}<strong>Paired for Perfection</strong><br><br>
+        		  <p>Breaking free from the normal constraints of a device through constant innovation, the ASUS Eee Pad Transformer Prime is the perfect example of what a tablet should be. The feature that gives the Eee Pad Transformer Prime its name, the mobile docking station, gives a whole new meaning to the term Paired for Perfection.</p>
+        		  <p>The new Eee Pad Transformer Prime is mind-blowingly slim and light weight and with a beautiful metallic spun finished design. In fact, it is the slimmest tablet on the market yet, only 0.33" thin and 1.29lbs light. You can easily carry it with you no matter where you go.</p>
+        		  <img src="http://g-ecx.images-amazon.com/images/G/01/electronics/asus/TF201-B1_image003_S.jpg" alt="Paired for Perfection " width="450" height="450" hspace="10" vspace="10" align="right">
+        		  <h2><span style="font-weight: bold;">Key Features</span></h2>
+        		  <ul>
+        			<li><strong>10.1-inch WXGA Super IPS+ capacitive pressure-sensing multi touch display made with Corning<sup>�</sup> Gorilla<sup>�</sup> Glass </strong>for brilliant HD entertainment and intuitive navigation. 178� viewing angle (1280 x 800)</li>
+        			<li><strong>Ultra-slim and light (.33" thin and 1.29lbs light) </strong>with metallic spun finish design </li> <li><strong>Powered by NVIDIA<sup>�</sup> Tegra<sup>�</sup> 3 Quad-core CPU </strong>for excellent multitasking, 1080p HD video output playback and 3D games for SUPERB performance (<a href="#productivity">Learn more</a>)</li>
+        			<li><strong>1.2MP front camera and 8MP auto-focus rear camera </strong>with flash, back-illuminated CMOS sensor, and large aperture design to clearly capture every moment. (<a href="#sound">Learn more</a>)</li>
+        			<li><strong>Android<sup>�</sup> 3.2 Honeycomb (Upgradable to Android� 4.0 Ice Cream Sandwich) OS </strong>with Adobe<sup>�</sup> Flash<sup>�</sup> support and over 500,000 downloadable applications on the Android <sup>�</sup> Market.<sup>1</sup> (<a href="#expandability">Learn more</a>)</li>
+        			<li><strong>Optional Docking station with Full QWERTY keyboard </strong>adds additional 6 hours of battery life, to instantly turn the Eee Pad Transformer Prime into PC mode with up to 18 hours of battery life.<sup>2</sup></li>
+        		</ul>
+
+        	      <h3 class="productDescriptionSource">Product Description</h3>
+        		  <div class="productDescriptionWrapper">
+                    {{ item.description|safe }}
+        		 </div>
+                {% endcomment %}
+        		</div>
+
+        		<div class="span3" data-id="{{ auction.id }}">
+                {% if auction.is_running %}
+                    {% with auction as a %}
+                    <div class="well">
+                      <h1 style="text-align: center" id="timer_{{ a.id }}">00:00:00</h1><h6 style="text-align: center" id="bidding_time_{{ a.id }}">Tick time: 30 seconds</h3><hr />
+                      <h3 style="text-align: center"><div class="avatar next-to"><img src="img/avatar-twitter.png" /></div><span id="last_bidder_{{ a.id }}">Bidder2</span></h3>
+                      <hr /><br/><br/>
+                      <h1 class="fund-big bid-btn" data-auctionid="{{ a.id }}">BID</h1>
+                    </div>
+                    {% endwith %}
+                {% endif %}
+
+                  {% if auction %}
+                  <div class="well">
+                      {% with auction as a %}
+                        <h1>{{ a.funded|floatformat:0 }}%</h1>
+                        <h5>FUNDED OF GOAL OF ${{ item.price|floatformat:0 }}</h5>
+                        <h1>{{ a.backers }}</h1>
+                        <h5>BACKERS</h5>
+                        {% if not auction.is_running %}
+                            <h1>{{ a.time_to_go|floatformat:0 }}</h1>
+                            <h5>TIME LEFT</h5><br/>
+                        {% endif %}
+                      {% endwith %}
+
+        		   <h3>Fund this</h3><br/>
+        			<a href="#" class="btn btn-extrabig">$10<h6>10 BIDS</h6></a>
+        			<a href="#" class="btn btn-info btn-extrabig">$20<h6 style="color:white">20 BIDS</h6></a>
+        			<a href="#" class="btn btn-success btn-extrabig">$50<h6 style="color:white">50 BIDS</h6></a>
+        			<a href="#" class="btn btn-warning btn-extrabig">$100<h6 style="color:white">100 BIDS</h6></a>
+        			<a href="#" class="btn btn-inverse btn-extrabig">$500<h6 style="color:white">500 BIDS</h6></a>
+        			<a href="#" class="btn btn-danger btn-extrabig">$1000<h6 style="color:white">1000 BIDS</h6></a>
+        			</div>
+                  {% endif %}
+                </div>
+        </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $('.btn-extrabig').click(function(event){
+            event.preventDefault();
+            item_id = "{{ auction.id }}";
+            amount = prompt("Enter a value", 5);
+            $.post('/items/fund/' + item_id + '/', {'amount':amount}, function(data){
+                window.location.reload();
+            });
+        });
+        var socket = null;
+        $(document).ready(function(){
+            {% if auction and auction.is_running %}
+            socket = io.connect('http://{{ SOCKETIO_SERVER }}');
+            socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+            });
+            function update(){
+                socket.emit('update', {'id':{{ auction.id }} });
+            }
+            setInterval(update, 1000);
+            socket.on('update', function (data) {
+                console.log(data);
+                auctions = $.parseJSON(data['auctions']);
+                a = new Auctions(auctions);
+                a.update_ui(auctions);
+            });
+            {% endif %}
+
+            $('.bid-btn').click(function(){
+                auction_id = $(this).attr('data-auctionid');
+                $.post('/bid/ajax/' + auction_id + '/', function(data){
+                    console.log(data);
+                });
+            });
+        });
+
+        function google_plus_item_callback(){
+            item_code = $('meta[name=id]').attr("content");
+            $.post('{% url reward_like_item %}?google',
+                    {'item_code':"{{ item.code }}"},
+                    function(data){
+                        if (data == 'OK'){
+                            alert('OK');
+                        }else{
+                            switch(data['error']){
+                                case 'ALREADY_LIKE':
+                                    alert('ALREADY_LIKE'); break;
+                                case 'LIKE_LIMIT':
+                                    alert('LIKE_LIMIT'); break;
+                            }
+                        }
+                    }
+            );
+        };
+    </script>
+	<script src="{{ STATIC_URL }}js/item.js" type="text/javascript"></script>
+    {% facebook_load %}
+{% endblock %}

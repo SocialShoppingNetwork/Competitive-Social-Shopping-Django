@@ -1,0 +1,68 @@
+<div class="modal hide" id="fundModal" style="width: 580px;">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h3>Fund item</h3>
+    </div>
+        <div class="backitm" style="">
+            <form class="form-horizontal" id="fund_form">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" style="font-size: 30px;margin-top: 15px;" for="uptou">Up to you</label>
+                        <div class="controls">
+                            <input type="text" style="padidng: 7px;height: 57px;font-size: 30px;" class="input" id="uptou" placeholder="minimum $1">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="optionsCheckbox"><h3>Select package</h3></label>
+                        <div style="clear: both"></div>
+                        <div class="controls" style="float: left; width: 85px;margin-left: 0px;">
+                            <label class="radio">
+                                <div class="btn btn-extrabig" style="">$10<h6>10 BIDS</h6></div>
+                                <input type="radio" style="position: absolute" id="optionsCheckbox" name="option5" value="10">
+                            </label>
+                        </div>
+                        <div class="controls" style="float: left; width: 85px;margin-left: -2px;">
+                            <label class="radio">
+                                <div class="btn btn-info btn-extrabig">$20<h6 style="color:white">20 BIDS</h6></div>
+                                <input type="radio" style="position: absolute" id="optionsCheckbox" name="option5" value="20">
+                            </label>
+                        </div>
+                        <div class="controls" style="float: left; width: 85px;margin-left: 0px;">
+                            <label class="radio">
+                                <div class="btn btn-success btn-extrabig">$50<h6 style="color:white">50 BIDS</h6></div>
+                                <input type="radio" style="position: absolute" id="optionsCheckbox" name="option5" value="50">
+                            </label>
+                        </div>
+                        <div class="controls" style="float: left; width: 85px;margin-left: 0px;">
+                            <label class="radio">
+                                <div class="btn btn-warning btn-extrabig">$100<h6 style="color:white">100 BIDS</h6></div>
+                                <input type="radio" style="position: absolute" id="optionsCheckbox" name="option5" value="100">
+                            </label>
+                        </div>
+                        <div class="controls" style="float: left; width: 85px;margin-left: 0px;">
+                            <label class="radio">
+                                <div class="btn btn-inverse btn-extrabig">$500<h6 style="color:white">500 BIDS</h6></div>
+                                <input type="radio" style="position: absolute" id="optionsCheckbox" name="option5" value="500">
+                            </label>
+                        </div>
+                        <div class="controls" style="float: left; width: 85px;margin-left: 0px;">
+                            <label class="radio">
+                                <div class="btn btn-danger btn-extrabig">$1000<h6 style="color:white">100 BIDS</h6></div>
+                                <input type="radio" style="position: absolute" id="optionsCheckbox" name="option5" value="1000">
+                            </label>
+                        </div>
+                    </div>
+                    <hr>	<div class="control-group">
+                    <div class="controls">
+                        <img style="margin-left: -80px;" src="{{ STATIC_URL }}img/credit_cards_1.png" />
+                    </div>
+                </div>
+                    <div class="form-actions">
+                        <a href="back_item.html"><button type="submit" class="btn btn-primary" id="fund_item">Fund this item</button></a>
+                        <a href="#" data-dismiss="modal" class="btn">Cancel</a></div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
