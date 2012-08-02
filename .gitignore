@@ -1,3 +1,4 @@
 *.pyc
 *.idea
-
+site_media
+site_media/*

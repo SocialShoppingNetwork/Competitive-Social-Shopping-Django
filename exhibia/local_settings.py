@@ -20,4 +20,5 @@ CACHES = {
     }
 }
 
+SOCKETIO_SERVER = '%s:4000' % (SITE_NAME)
 

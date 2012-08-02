@@ -63,6 +63,7 @@ urlpatterns = patterns("",
     (r'^tinymce/', include('tinymce.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'},  name='logout'),
     url(r'', include('social_auth.urls')),
+    url("", include('django_socketio.urls')),
 )
 
 

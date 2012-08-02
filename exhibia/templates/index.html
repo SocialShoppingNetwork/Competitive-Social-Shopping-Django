@@ -1,104 +1,258 @@
-    {% extends "site_base.html" %}
-
-{% load i18n %}
-{% load ifsetting_tag %}
-
-{% block head_title %}{% trans "Welcome" %}{% endblock %}
-
-{% block body_class %}home{% endblock %}
-
+{% extends 'site_base.html' %}
 {% block body %}
-    <div class="row items">
-        {% for auction in showcase %}
-            {% include "auctions/showcase_box.html" %}
-        {% endfor %}
-        {% for auction in auctions %}
-            {% include "auctions/auction_box.html" %}
-        {% endfor %}
+    <div id="items_container" class="row items" style="width: auto;min-width: 760px;margin-top: 10px;">
+        {% include 'auctions/auctions.html' %}
     </div>
+    <div class="navbar navbar-fixed-bottom fbbar" style="width: 760px;display: none;">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav share">
+                    <li class="fb-login" style="width: 130px;"><a href="#" style="margin-left: -13px;"><img src="{{ STATIC_URL }}img/like.png" /> Get 3 Bids</a></li>
+                    <li class="tw-login" style="width: 137px;"><a href="#" style="margin-left: -13px;"><img src="{{ STATIC_URL }}img/tweet.png" /> Get 3 Bids</a></li>
+                    <li class="gp-login" style="width: 117px;"><a href="#" style="margin-left: -23px;"><img src="{{ STATIC_URL }}img/plus.png" /> Get 3 Bids</a></li>
+                </ul>
+                <ul class="nav woitms" style="margin-left: -30px;">
+                    <li class="bids-lft">Bids Left:<span>24</span></li>
+                    <li class="won-itms"><a href="#myModal" data-toggle="modal" href="#myModal" >Won Items<span>4</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
-
 {% block extra_body %}
-    <script type="text/javascript">
-        var socket = null;
-        $(document).ready(function(){
-
-            socket = io.connect('http://{{ SOCKETIO_SERVER }}');
-            socket.on('news', function (data) {
-                console.log(data);
-                socket.emit('my other event', { my: 'data' });
-            });
-            function update(){
-                console.log('update');
-                socket.emit('update');
-            }
-            function update2(){
-                $.post('{% url auctions_info %}',
-                    function(x){
-                        y = $.parseJSON(x);
-                        i = new Items(y);
-                        i.update_ui();
-
-                    }
-                );
-
-            }
-            setInterval(update2, 10000);
-
-            setInterval(update, 1000);
-
-            socket.on('update', function(data){
-                console.log(data);
-                //auctions = $.parseJSON(data['auctions'])
-                //a = new Auctions(auctions);
-                //a.update_ui(auctions);
-            });
-
-
-            $('.bid-btn').click(function(event){
-                event.preventDefault();
-                auction_id = $(this).attr('data-auctionid');
-                $.post('/bid/ajax/' + auction_id + '/', function(data){
-                    switch(data['error']){
-                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
-                        case 'NOT_ENOUGH_CREDITS': $.colorbox({href:"/buycredits/"}); break;
-                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
-                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
-                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
-                    }
-                    // TODO conditional to update bids
-                    //update_bids();
-                });
-            });
-
-            /*
-            $('.fund-btn').click(function(event){
-                url = "{% url auction_pledge 0 %}";
-                event.preventDefault();
-                item_id = $($(event.target).parents()[1]).attr('data-id');
-                url = url.replace('0', item_id);
-                window.location.replace(url);
-                return
-                amount = prompt("Enter a value", 5);
-
-                $.post('/items/fund/' + item_id + '/', {'amount':amount}, function(data){
-                    console.log(data);
-                    window.location.reload();
-                });
-                return;
-
-                $.post('/bid/ajax/' + auction_id + '/', function(data){
-                    switch(data['error']){
-                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
-                        case 'NOT_ENOUGH_CREDITS': $.colorbox({href:"/buycredits/"}); break;
-                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
-                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
-                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
-                    }
-                    // TODO conditional to update bids
-                    update_bids();
-                });
-            });*/
+    <script>
+    $(document).ready(function() {
+        socket = io.connect('http://{{ SOCKETIO_SERVER }}');
+        //socket.connect();
+        socket.on('news', function (data) {
+            //console.log(data);
+            //socket.emit('my other event', { my: 'data' });
         });
+        function update_auctions(){
+            socket.emit('update');
+        }
+        function update_all_items(){
+            //  updates items waiting plegde
+            $.post('{% url auctions_info %}', function(data){
+                data = $.parseJSON(data);
+                $.exhibia['items']= new Items(data);
+                update_items_ui(data);
+                //console.log('ADD_REMOVE');
+                add_remove_auctions();
+            });
+        }
+        setInterval(update_all_items, 10000);
+
+        setInterval(update_auctions, 1000);
+
+        socket.on('update', function(data){
+            //  updates auctions running
+            auctions = $.parseJSON(data['auctions']);
+            $.exhibia['auctions'] = new Auctions(auctions);
+            update_auctions_ui(auctions);
+        });
+
+        $('.scrollingtext').bind('marquee', function() {
+            var ob = $(this);
+            var tw = ob.width();
+            var ww = ob.parent().width();
+            ob.css({ right: -tw });
+            ob.animate({ right: ww }, 30000, 'linear', function() {
+                ob.trigger('marquee');
+            });
+        }).trigger('marquee');
+
+        // Custom sorting plugin
+        (function($) {
+            $.fn.sorted = function(customOptions) {
+                var options = {
+                    reversed: false,
+                    by: function(a) { return a.text(); }
+                };
+                $.extend(options, customOptions);
+                $data = $(this);
+                arr = $data.get();
+                arr.sort(function(a, b) {
+                    var valA = options.by($(a));
+                    var valB = options.by($(b));
+                    if (options.reversed) {
+                        return (valA < valB) ? 1 : (valA > valB) ? -1 : 0;
+                    } else {
+                        return (valA < valB) ? -1 : (valA > valB) ? 1 : 0;
+                    }
+                });
+                return $(arr);
+            };
+        })(jQuery);
+
+        // DOMContentLoaded
+        $(function() {
+
+            // bind radiobuttons in the form
+            var $filterType = $('#filter input[name="type"]');
+            var $filterSort = $('#filter input[name="sort"]');
+
+            // get the first collection
+            var $applications = $('#applications');
+
+            // clone applications to get a second collection
+            var $data = $applications.clone();
+
+            // attempt to call Quicksand on every form change
+            $filterType.add($filterSort).change(function(e) {
+                if ($($filterType+':checked').val() == 'all') {
+                    var $filteredData = $data.find('li');
+                } else {
+                    var $filteredData = $data.find('li[data-type=' + $($filterType+":checked").val() + ']');
+                }
+
+                // if sorted by size
+                if ($('#filter input[name="sort"]:checked').val() == "size") {
+                    var $sortedData = $filteredData.sorted({
+                        by: function(v) {
+                            return parseFloat($(v).find('span[data-type=size]').text());
+                        }
+                    });
+                } else {
+                    // if sorted by name
+                    var $sortedData = $filteredData.sorted({
+                        by: function(v) {
+                            return $(v).find('strong').text().toLowerCase();
+                        }
+                    });
+                }
+
+                // finally, call quicksand
+                $applications.quicksand($sortedData, {
+                    duration: 800,
+                    easing: 'easeInOutQuad'
+                });
+
+            });
+
+        });
+        <!-- second sort -->
+
+        // Custom sorting plugin
+        (function($) {
+            $.fn.sorted = function(customOptions) {
+                var options = {
+                    reversed: false,
+                    by: function(a) { return a.text(); }
+                };
+                $.extend(options, customOptions);
+                $data = $(this);
+                arr = $data.get();
+                arr.sort(function(a, b) {
+                    var valA = options.by($(a));
+                    var valB = options.by($(b));
+                    if (options.reversed) {
+                        return (valA < valB) ? 1 : (valA > valB) ? -1 : 0;
+                    } else {
+                        return (valA < valB) ? -1 : (valA > valB) ? 1 : 0;
+                    }
+                });
+                return $(arr);
+            };
+        })(jQuery);
+
+        // DOMContentLoaded
+        $(function() {
+
+            // bind radiobuttons in the form
+            var $filterType = $('#filtered input[name="types"]');
+            var $filterSort = $('#filtered input[name="sortd"]');
+
+            // get the first collection
+            var $applications = $('.applications');
+
+            // clone applications to get a second collection
+            var $data = $applications.clone();
+
+            // attempt to call Quicksand on every form change
+            $filterType.add($filterSort).change(function(e) {
+                if ($($filterType+':checked').val() == 'all') {
+                    var $filteredData = $data.find('li');
+                } else {
+                    var $filteredData = $data.find('li[data-types=' + $($filterType+":checked").val() + ']');
+                }
+
+                // if sorted by size
+                if ($('#filtered input[name="sortd"]:checked').val() == "size") {
+                    var $sortedData = $filteredData.sorted({
+                        by: function(v) {
+                            return parseFloat($(v).find('span[data-types=size]').text());
+                        }
+                    });
+                } else {
+                    // if sorted by name
+                    var $sortedData = $filteredData.sorted({
+                        by: function(v) {
+                            return $(v).find('strong').text().toLowerCase();
+                        }
+                    });
+                }
+
+                // finally, call quicksand
+                $applications.quicksand($sortedData, {
+                    duration: 800,
+                    easing: 'easeInOutQuad'
+                });
+
+            });
+
+        });
+        $('.btn.fund').click(function(event) {
+            event.preventDefault();
+            item_id = ($(event.target).parent()).parent().attr('data-id');
+            selected_item = item_id;
+            return;
+        });
+
+        $('#fund_item').click(function(event) {
+            event.preventDefault();
+            item_id = selected_item;
+            var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
+            console.log('fuuuunding');
+            $.post('/items/fund/' + item_id + '/', {'amount':amount}, function(data){
+                switch(data['error']){
+                    case 'AUTH_REQUIRED': alert('redirect login'); redirect("{% url acct_login %}");
+                    case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
+                    case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                    case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                    case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                };
+                redirect("/");
+            }, 'json');
+
+            $('#fundModal').modal('hide');
+            get_account_bids(function(data){
+                $('#member_bids').text(data);
+            });
+        });
+
+
+        $('.bid-btn').click(function(event){
+            event.preventDefault();
+            auction_id = $(this).attr('data-auctionid');
+            $.post('/bid/ajax/' + auction_id + '/', function(data){
+                switch(data['error']){
+                    case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                    case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
+                    case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                    case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                    case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                }
+                get_account_bids(function(data){
+                    $('#member_bids').text(data);
+                });
+                // TODO conditional to update bids
+                //update_bids();
+            });
+        });
+
+
+    });
     </script>
 {% endblock %}

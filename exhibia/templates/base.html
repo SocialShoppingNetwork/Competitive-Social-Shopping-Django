@@ -53,12 +53,19 @@
     {% block extra_head_base %}
         {% block extra_head %}{% endblock %}
     {% endblock %}
+
+    <script>
+        //var socket = new io.Socket('127.0.0.1');
+        //socket.connect();
+        // etc
+    </script>
+
 </head>
 
 <body style="width: auto;min-width: 760px;overflow-x: hidden; ">
 {% block right_after_body %}{% endblock %}
 <div id="fb-root"></div>
-{% include 'fb/header.html' %}
+{% include 'header.html' %}
 {% include 'fb/modal.html' %}
 {% credits_checkout %}
 

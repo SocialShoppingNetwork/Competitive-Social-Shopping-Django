@@ -43,7 +43,7 @@ def bid_ajax(request, auction_id):
 
 from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
-@render_to('fb/index.html')
+@render_to('index.html')
 def index(request):
 
     auctions = Auction.objects.waiting_pledge()
@@ -62,7 +62,7 @@ def index(request):
 def xauction_bid(request, auction_id):
     pass
 
-@render_to('fb/item_exhibit.html')
+@render_to('auctions/item_exhibit.html')
 def view_item(request, slug=''):
     auction_id = request.GET.get('auction')
     auction = None
