@@ -184,7 +184,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     "easy_thumbnails",
     "gunicorn",
-    'django_socketio',
     # project
     "about",
     "profiles",
