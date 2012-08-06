@@ -60,10 +60,10 @@ urlpatterns = patterns("",
     #url(r'^uploadify/', include('uploadify.urls')),
     url(r'^uploader/', include('uploader.urls')),
     url(r'^socials/', include('socials.urls')),
+    url(r'^chat/', include('chat.urls')),
     (r'^tinymce/', include('tinymce.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'},  name='logout'),
     url(r'', include('social_auth.urls')),
-    url("", include('django_socketio.urls')),
 )
 
 
