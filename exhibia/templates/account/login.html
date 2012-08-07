@@ -10,12 +10,19 @@
 {% endblock %}
 {% block body %}
 <div class="container">
-    {% if openid and not user.is_authenticated %}
+	{% if openid and not user.is_authenticated %}
         <p><span class="warning">It appears you have started to login using OpenID. Want to <a href="/openid/register/">finish logging in</a>?</span></p>
     {% endif %}
     
-    <h1>{% trans "Log In" %}</h1>
-    
+    <h1>{% trans "Log In" %}</h1><hr>
+<div class="row well">
+	<div class="span5 divider">
+	<!-- Log in with social networks -->
+		<p>
+        	<a href="{% url socialauth_begin "facebook" %}">Sign in / Facebook</a>
+    	</p>
+	</div>
+	<div class="span6">
     {% if user.is_authenticated %}
         {% user_display user as user_display %}
         <p><span class="warning">{% trans "Note" %}</span>: {% blocktrans %}you are already logged in as {{ user_display }}.{% endblocktrans %}</p>
@@ -41,11 +48,8 @@
             </div>
         </fieldset>
     </form>
-    <p>{% trans "Or sign in with" %}:</p>
-
-    <p>
-        <a href="{% url socialauth_begin "facebook" %}">Sign in / Facebook</a>
-    </p>
+    </div>
+</div>
 </div>
 {% endblock %}
 
