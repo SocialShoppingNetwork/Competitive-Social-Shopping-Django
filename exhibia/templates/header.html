@@ -1,49 +1,56 @@
-<div class="navbar hedr">
-    <div class="navbar-inner">
-        <div class="container">
-            <div class="navbar-search">
-                <a href="/"><div class="logo">exhibia</div></a>
-            </div>
-            <div style="">
-                <div class="hdrmenu">
-                    <ul class="nav pull-right">
-                        <li id="fat-menu" style="width:98px;"><a href="" style="color: #000">How It Works</a></li>
-                        <li id="fat-menu" class="dropdown" style="width: 50px;">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Brands<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </li>
-                        <li id="fat-menu" class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <form id="filtered">
-                                    <li class="slct"><input style="display: none" type="radio" name="types" id="cam" value="camera"><a href="" class="lbd"><label for="cam">Cameras</label></a></li>
-                                    <li class="slct"><input style="display: none" type="radio" name="types" id="tv" value="tv"><a href="" class="lbd"><label for="tv">Televisions</label></a></li>
-                                    <!--                      <li class="divider"></li> -->
-                                    <li class="slct"><input style="display: none" type="radio" name="types" id="all" value="all"><a href="" class="lbd"><label for="all">All Items</label></a></li>
-                                </form>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="fbg5" style="width: 140px;position: absolute;margin-top: -7px;right: 225px"><a href="#" style="color: #d30746">
-                    <div style="position: absolute; width: 50px;overflow: hidden;" >
-                        <div class="fb-like" data-href="http://www.facebook.com/Exhibia" data-send="false" data-layout="button_count" data-width="40" data-show-faces="false"></div>
-                    </div>
-                    <p style="float: right;font-size: 13px;margin-top: 2px;">Get 5 Bids</p></a></div>
-                <div style="position: absolute;right: 20px;font-size: 16px;margin-top: -5px;">
-                    <ul class="nav woitms" style="margin-top: -8px;margin-right: 80px;">
-                        <li class="bids-lft" style="padding: 0px;padding-top:5px;padding-left: 3px;font-size: 13px;width: 75px; height: 27px;">Bids:<span id="member_bids">{{ member.credits }}</span></li>
-                        <li class="won-itms" style="padding-left: 0px;font-size: 13px;width: 65px; height: 27px;"><a data-toggle="modal" href="#myModal" style="margin-top: -6px;margin-left: -5px;">Checkout:<span>16</span></a></li>
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+		  <a class="brand" href="#">Exhibia</a>
+		  <ul class="nav">
+            <li class="active"><a href="#">How it Works</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Brands <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav pull-right">
+          {% if member %}
+          	<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i>{{ member.user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">My Account</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url logout %}">Log Out</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li><a href="#">Sign In</a></li>
+          {% endif %}
+            <li class="divider-vertical"></li>
+            <form class="navbar-search pull-left" action="">
+            	<input type="text" class="search-query span2" placeholder="Search">
+          	</form>
+          </ul>
+	</div>
+  </div>
+</div>
 
-                    </ul>
-                </div>
-                <br/>
                 {% if member %}
                     <p align="right" style="text-align: right;">
                         {{ member.user.username }} |

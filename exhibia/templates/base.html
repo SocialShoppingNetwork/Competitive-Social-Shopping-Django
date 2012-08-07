@@ -10,30 +10,6 @@
 
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/exhibia.css" rel="stylesheet">
-    <style type="text/css">
-        .container {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
-    </style>
-    <style type="text/css">
-        div.scroller{
-            position:relative;
-            height:24px;
-            width:95%;
-            display:block;
-            overflow:hidden;
-        }
-        div.scrollingtext{
-            position:absolute;
-            white-space:nowrap;
-            font-family:'Trebuchet MS',Arial;
-            font-size:16px;
-            font-weight:bold;
-            color:#000000;
-        }
-    </style>
-
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -61,14 +37,14 @@
 
 </head>
 
-<body style="width: auto;min-width: 760px;overflow-x: hidden; ">
+<body>
 {% block right_after_body %}{% endblock %}
 <div id="fb-root"></div>
 {% include 'header.html' %}
 {% include 'fb/modal.html' %}
 {% credits_checkout %}
 
-<div class="container" style="width: auto;min-width: 760px;margin-top: 90px;">
+<div class="container">
     <div class="scroller">
         <div class="scrollingtext">Something something scrolling to the left</div>
     </div>
