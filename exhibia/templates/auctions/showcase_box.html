@@ -1,10 +1,9 @@
-{% load thumbnail %}
 {% with auction as a %}
 <li data-id="{{ a.id }}" data-type="util" data-types="camera" class="span3 showcase">
 	<div class="thumbnail">
 		<h5><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></h5>
       	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
-			<img class="product" src="{% thumbnail a.item.image.img 135x135 %}" />
+			<img class="product" src="{{ a.item.image.img }}" />
 		</a>
         <div class="caption">
         	<h1 id="timer_{{ a.id }}">{{ a.time_left }} seconds</h1>
