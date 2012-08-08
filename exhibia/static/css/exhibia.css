@@ -436,12 +436,12 @@ p small {
   line-height: 27px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1,.h1,
+h2,.h2,
+h3,.h3,
+h4,.h4,
+h5,.h5,
+h6,.h6 {
   margin: 0;
   font-family: inherit;
   font-weight: bold;
@@ -449,62 +449,62 @@ h6 {
   text-rendering: optimizelegibility;
 }
 
-h1 small,
-h2 small,
-h3 small,
-h4 small,
-h5 small,
-h6 small {
+h1 small, .h1 small,
+h2 small, .h2 small,
+h3 small, .h3 small,
+h4 small, .h4 small,
+h5 small, .h5 small,
+h6 small, .h6 small {
   font-weight: normal;
   color: #999999;
 }
 
-h1 {
+h1, .h1 {
   font-size: 30px;
   line-height: 36px;
 }
 
-h1 small {
+h1 small, .h1 small {
   font-size: 18px;
 }
 
-h2 {
+h2, .h2 {
   font-size: 24px;
   line-height: 36px;
 }
 
-h2 small {
+h2 small, .h2 small {
   font-size: 18px;
 }
 
-h3 {
+h3, .h3 {
   font-size: 18px;
   line-height: 27px;
 }
 
-h3 small {
+h3 small, .h3 small {
   font-size: 14px;
 }
 
-h4,
-h5,
-h6 {
+h4, .h4
+h5, .h5
+h6, .h6 {
   line-height: 18px;
 }
 
-h4 {
+h4, .h4 {
   font-size: 14px;
 }
 
-h4 small {
+h4 small, .h4 small {
   font-size: 12px;
 }
 
-h5 {
+h5, .h5 {
   font-size: 12px;
 }
 
-h6 {
+h6, .h6 {
   font-size: 11px;
   color: #999999;
   text-transform: uppercase;

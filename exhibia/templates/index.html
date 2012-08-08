@@ -1,9 +1,14 @@
 {% extends 'site_base.html' %}
 {% block body %}
+    <div class="scroller">
+        <div class="scrollingtext">Something something scrolling to the left</div>
+    </div>
     <div id="items_container" class="row items" style="width: auto;min-width: 760px;margin-top: 10px;">
         {% include 'auctions/auctions.html' %}
     </div>
-    <div class="navbar navbar-fixed-bottom fbbar" style="width: 760px;display: none;">
+{% endblock %}
+{% block extra_body %}
+   <div class="navbar navbar-fixed-bottom fbbar" style="width: 760px;display: none;">
         <div class="navbar-inner">
             <div class="container">
                 <ul class="nav share">
@@ -18,9 +23,6 @@
             </div>
         </div>
     </div>
-
-{% endblock %}
-{% block extra_body %}
     <script>
     $(document).ready(function() {
         socket = io.connect('http://{{ SOCKETIO_SERVER }}');

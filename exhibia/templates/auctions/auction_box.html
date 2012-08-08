@@ -1,7 +1,7 @@
 {% with auction as a %}
 <li data-id="{{ a.id }}" data-type="app" data-types="camera" class="span3 funding">
 	<div class="thumbnail">
-		<h3><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></h3>
+		<div class="h3"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
       	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
 			<img class="product" src="{{ a.item.image.img.url }}" />
 		</a>
@@ -13,7 +13,7 @@
 				<div class="span1"><span id="amount_pleged_{{ a.id }}">${{ a.amount_pleged }}</span>FUNDED</div>
 				<div class="span1"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</div>
 			</div><hr/>
-			<a class="btn fund btn-fund" data-toggle="modal" href="#fundModal">FUND</a>
+			<a class="btn fund btn-fund btn-big" data-toggle="modal" href="#fundModal">FUND</a>
         </div>
 	</div>
 </li>
