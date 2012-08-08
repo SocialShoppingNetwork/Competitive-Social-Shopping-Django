@@ -1,6 +1,6 @@
 {%  if  hide_header %}
 {% else %}
-    <ul id="applications" class="image-grid applications" style="list-style-type: none;overflow-z: auto; min-width: 760px;padding-top: 10px;">
+	<ul id="applications" class="thumbnails">
 {% endif %}
 {% for auction in items %}
     {% if auction.is_processing %}
@@ -11,5 +11,5 @@
 {% endfor %}
 {% if hide_header %}
 {% else %}
-</ul>
+	</ul>
 {% endif %}
