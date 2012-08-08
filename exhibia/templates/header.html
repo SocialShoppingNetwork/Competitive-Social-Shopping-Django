@@ -40,7 +40,7 @@
               </ul>
             </li>
           {% else %}
-            <li><a href="#">Sign In</a></li>
+            <li><a href="{% url acct_login %}"">Sign In</a></li>
           {% endif %}
             <li class="divider-vertical"></li>
             <form class="navbar-search pull-left" action="">
@@ -50,45 +50,3 @@
 	</div>
   </div>
 </div>
-
-                {% if member %}
-                    <p align="right" style="text-align: right;">
-                        {{ member.user.username }} |
-                        <a href="{% url logout %}">logout</a>
-                    </p>
-                {% else %}
-                    <p align="right" style="text-align: right;">
-                        <a href="{% url acct_login %}">sign in</a>
-                    </p>
-                {% endif %}
-                <form id="filter">
-                    <fieldset>
-                        <br />
-                        <ul class="sortthis">
-                            <li style="width: 40px;"><label>Phase:</label></li>
-                            <li style="width: 40px;"><label><input style="position: absolute;margin-top: 1px;" type="radio" name="type" value="all" checked="checked">All</label></li>
-                            <li style="width:45px"><label><input style="position: absolute;margin-top: 1px;" type="radio" name="type" value="util">Bid</label></li>
-                            <li style="width:53px;"><label><input style="position: absolute;margin-top: 1px;" type="radio" name="type" value="app">Fund</label></li>
-                        </ul>
-
-                    </fieldset>
-                    <!--  <fieldset>
-                        <legend>Sort by</legend>
-                        <label><input type="radio" name="sort" value="size" checked="checked">Size</label>
-                        <label><input type="radio" name="sort" value="name">Name</label>
-                      </fieldset>
-                    -->
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
