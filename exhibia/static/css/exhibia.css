@@ -4981,3 +4981,17 @@ a.badge:hover {
 .invisible {
   visibility: hidden;
 }
+
+/* Home items title */
+.row.items .thumbnail .h3 {
+	text-align: center;
+	padding: 10px 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	height: 54px;
+}
+/* Home items title */
+.row.items .thumbnail img.product {
+	max-height: 130px;
+}
