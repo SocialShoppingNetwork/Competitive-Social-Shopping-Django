@@ -162,6 +162,7 @@ body {
   line-height: 18px;
   color: #333333;
   background-color: #ffffff;
+  padding-top: 70px;
 }
 
 a {
@@ -3610,14 +3611,19 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar .brand {
-  display: block;
-  float: left;
-  padding: 25px 20px 24px;
-  margin-left: -20px;
-  font-size: 20px;
-  font-weight: 200;
-  line-height: 1;
-  color: #999999;
+	display: block;
+	float: left;
+	padding: 1px 20px 24px;
+	margin-left: -20px;
+	font-size: 19px;
+	font-weight: 200;
+	line-height: 1;
+	color: #999;
+	background: url(../img/exhibia_logo.png) no-repeat center;
+	width: 207px;
+	height: 38px;
+	text-indent: -5000px;
+	margin-right: 20px;
 }
 
 .navbar .navbar-text {
