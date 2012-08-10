@@ -45,7 +45,7 @@ urlpatterns = patterns("",
     #u url(r'', include('social_auth.urls')),
     #u url(r'', include('social_login.urls')),
 
-    #url(r"^testimonials/", include("testimonials.urls")),
+    url(r"^testimonials/", include("testimonials.urls")),
 
     url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user", name="admin_invite_user"),
     url(r"^admin/", include(admin.site.urls)),

@@ -85,7 +85,7 @@ class AuctionManager(models.Manager):
         return self.just_ended().filter(ended_unixtime__lte=time()-settings.MAX_TIME_HOMEPAGE)
 
     def about_end(self):
-            return self.running().filter(last_unixtime__lte=time()-F('bidding_time'))
+        return self.running().filter(last_unixtime__lte=time()-F('bidding_time'))
 
     def finish_expired(self):
         self.expired().update(status='f')
@@ -241,6 +241,10 @@ class Auction(models.Model):
     def end_dt(self):
         return datetime.fromtimestamp(int(self.last_unixtime))
 
+    @property
+    def is_ended(self):
+        return self.ended_unixtime != None
+    
     def end(self):
         self.status = AUCTION_JUST_ENDED
         self.ended_unixtime = time()

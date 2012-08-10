@@ -188,6 +188,7 @@ INSTALLED_APPS = [
     "about",
     "profiles",
     "auctions",
+    "testimonials",
     "bidin",
     #"matic",
     "utils",

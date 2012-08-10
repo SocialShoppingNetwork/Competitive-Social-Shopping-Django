@@ -1,6 +1,7 @@
+var port = process.env.PORT || 4000;
 var io = require('socket.io').listen(4000);
 var	nMemcached = require( 'memcached')
-memcached = new nMemcached( "127.0.0.1:11211" );
+memcached = new nMemcached( "127.0.0.1:11211");
 
 io.sockets.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });

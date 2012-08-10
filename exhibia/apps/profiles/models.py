@@ -21,6 +21,10 @@ class Member(ProfileBase):
     phone = models.CharField(max_length=30, null=True, blank=True)
     birthday = models.DateField(null=True, blank=True, help_text="for example: 1980-7-9")
 
+
+    #chat
+    is_banned = models.BooleanField(default=False)
+
     def bid(self, auction):
         auction.bid_by(self)
         self.credits -= 1

@@ -1,0 +1,33 @@
+{% extends 'site_base.html' %}
+{% block body %}
+
+    <form id="uploader" action="https://{{ bucket }}.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="key" value="uploads/${filename}">
+        <input type="hidden" name="AWSAccessKeyId" value="{{ aws_key }}">
+        <input type="hidden" name="acl" value="private">
+        <input type="hidden" name="success_action_redirect" value="http://testing.exhibia.com:8000/">
+        <input type="hidden" name="policy" value="{{ policy }}">
+        <input type="hidden" name="signature" value="{{ signature }}">
+        <input type="hidden" name="Content-Type" value="image/jpeg">
+        <input type="hidden" name="x-ignore-auction" value="44444">
+        <input type="hidden" name="x-amz-meta-price" value="10.00">
+        <!-- Include any additional input fields here -->
+        File to upload to S3:
+        <input name="file" id="file1" type="file">
+        <br>
+        <input type="submit" value="Upload File to S3">
+    </form>
+
+
+    <table>
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Upload" />
+        </form>
+    </table>
+    <a href="#" id="send">send</a>
+{% endblock %}
+
+{% block extra_body %}
+{% endblock %}
