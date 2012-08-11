@@ -12,8 +12,14 @@
           	<div class="row funded">
 				<div class="span1"><span id="amount_pleged_{{ a.id }}">${{ a.amount_pleged }}</span>FUNDED</div>
 				<div class="span1"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</div>
-			</div><hr/>
-			<a class="btn fund btn-fund btn-big" data-toggle="modal" href="#fundModal">FUND</a>
+			</div>
+        </div>
+        <div class="panel">
+        	<div class="btn-group fund-options">
+        		<a class="btn fund btn-success btn-big" data-toggle="modal" href="#fundModal"><i class="icon-heart icon-white"></i> FUND</a>
+        		<a class="btn btn-big" rel="tooltip" data-original-title="Favorite"><i class="icon-star"></i></a>
+        		<a class="btn btn-big" rel="tooltip" data-original-title="Share"><i class="icon-share"></i></a>
+        	</div>
         </div>
 	</div>
 </li>

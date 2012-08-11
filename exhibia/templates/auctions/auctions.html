@@ -12,4 +12,9 @@
 {% if hide_header %}
 {% else %}
 	</ul>
+	<script>
+		$('document').ready(function() {
+			$('a[rel=tooltip]').tooltip();
+		});
+	</script>
 {% endif %}

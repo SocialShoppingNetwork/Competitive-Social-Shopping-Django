@@ -4476,7 +4476,6 @@ input[type="submit"].btn.btn-mini {
 
 .thumbnail {
   display: block;
-  padding: 4px;
   line-height: 1;
   border: 1px solid #ddd;
   background-color: #fff;
@@ -4505,7 +4504,12 @@ a.thumbnail:hover {
 .thumbnail .caption {
   padding: 9px;
 }
-
+.thumbnail .panel {
+	background-color: #f7f7f7;
+	padding: 5px 10px;
+	border-top: 1px solid #dbdbdb;
+	text-align: center;
+}
 .label,
 .badge {
   font-size: 10.998px;
@@ -4656,6 +4660,7 @@ a.badge:hover {
 }
 
 .progress .bar {
+  line-height: 18px;
   width: 0;
   height: 18px;
   font-size: 12px;
@@ -4991,7 +4996,27 @@ a.badge:hover {
 	-o-text-overflow: ellipsis;
 	height: 54px;
 }
-/* Home items title */
+/* Home items image */
 .row.items .thumbnail img.product {
 	max-height: 130px;
+}
+/* Home items funded container */
+.row.items .funded {
+	padding-left: 29px;
+	font-size: 10px;
+	text-align: center;
+}
+/* Home items funded column*/
+.row.items .funded .span1 {
+	color: #333;
+}
+/* Home items funded column inner span */
+.row.items .funded .span1 span {
+	display: block;
+	font-size: 21px;
+	font-weight: bold;
+	text-transform:uppercase;
+}
+.fund-options {
+	margin-left: 25px;
 }
