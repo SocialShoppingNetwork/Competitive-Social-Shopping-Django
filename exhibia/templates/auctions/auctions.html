@@ -1,7 +1,4 @@
-{%  if  hide_header %}
-{% else %}
-	<ul id="applications" class="thumbnails">
-{% endif %}
+	<ul id="items" class="thumbnails">
 {% for auction in items %}
     {% if auction.is_processing %}
         {% include "auctions/showcase_box.html" %}
@@ -9,12 +6,4 @@
         {% include "auctions/auction_box.html" %}
     {% endif %}
 {% endfor %}
-{% if hide_header %}
-{% else %}
 	</ul>
-	<script>
-		$('document').ready(function() {
-			$('a[rel=tooltip]').tooltip();
-		});
-	</script>
-{% endif %}

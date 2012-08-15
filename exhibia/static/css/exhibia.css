@@ -177,7 +177,7 @@ a:hover {
 }
 
 .row {
-  margin-left: -20px;
+  /*margin-left: -20px;*/
   *zoom: 1;
 }
 .row.packages { margin-left: -5px; }
@@ -393,6 +393,7 @@ a:hover {
 }
 
 .container {
+  position: relative;
   margin-right: auto;
   margin-left: auto;
   *zoom: 1;
@@ -5021,3 +5022,21 @@ a.badge:hover {
 	margin-left: 25px;
 }
 .fund-title a { color: #444; }
+/* This is to position the sorting button group on top */
+.btn-group.sorting {
+	position: absolute;
+	right: 0;
+	top: -9px;
+}
+/* Scrolling text style */
+.scroller {
+	display: block;
+	height: 45px;
+	overflow: hidden;
+	min-width: 400px;
+}
+.scrollingtext {
+	padding: 10px 0;
+	position: absolute;
+	top: 5px;
+}

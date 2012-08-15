@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
+	
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/exhibia.css" rel="stylesheet">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -24,7 +24,6 @@
     <script>
         var selected_item = null;
     </script>
-
     {% block extra_head_base %}
         {% block extra_head %}{% endblock %}
     {% endblock %}
@@ -56,11 +55,10 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="{{ STATIC_URL }}js/jquery.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-<script src="{{ STATIC_URL }}js/jquery-1.4.1-and-plugins.min.js"></script>
 {% block extra_body_base %}
-    <script>
+    <!---<script>
         jQuery.noConflict();
-        $.exhibia = {};
+        /*$.exhibia = {};*/
         $(document).ready(function(){
             $('input[name=option5]', '#fund_form').click(function(event){
                 $('#uptou').val($(event.target).attr('value'));
@@ -68,7 +66,7 @@
         });
     </script>
     <script src="http://{{ SOCKETIO_SERVER }}/socket.io/socket.io.js"></script>
-    <script src="{{ STATIC_URL }}js/winnina.js"></script>
+    <script src="{{ STATIC_URL }}js/winnina.js"></script>--->
     {% block extra_body %}{% endblock %}
 {% endblock %}
 </body>
