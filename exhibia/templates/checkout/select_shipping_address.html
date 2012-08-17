@@ -1,0 +1,49 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    {% for shipping in shipping_profiles %}
+        <div>
+            <form action="." method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ shipping.id }}"/>
+                <input type="hidden" name="select" value="1"/>
+                <input type="submit" value="Ship to this Address"/>
+            </form>
+            <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
+            <p>{{ shipping.address1 }}</p>
+            <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
+            <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
+            <p>Phone: {{ shipping.phone }}</p>
+            <p>
+                <form action="." method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ shipping.id }}"/>
+                    <input type="hidden" name="action" value="edit"/>
+                    <input type="submit" value="Edit">
+                </form>
+                <form action="." method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ shipping.id }}"/>
+                    <input type="hidden" name="delete" value="1"/>
+                    <input type="submit" value="Delete">
+                </form>
+            </p>
+        </div>
+    {% endfor %}
+    {% if Shipping %}
+        <p>Edit</p>
+    {% else %}
+        <p>Enter a new shipping  address</p>
+    {% endif %}
+    <form action="." method="post" class="uniForm">
+        {% csrf_token %}
+        {% if shipping %}
+            <input type="hidden" name="id" value="{{ shipping.id }}" />
+        {% endif %}
+        {{ form|crispy }}
+        <input type="submit" value="Save">
+    </form>
+
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

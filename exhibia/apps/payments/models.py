@@ -3,6 +3,8 @@ from django_countries import CountryField
 from django.db import models
 from django.db.models import F
 from django.core.validators import RegexValidator
+from django.utils.translation import ugettext_lazy as _
+
 from auctions.constants import *
 from payments.constants import *
 
@@ -92,16 +94,15 @@ class AuctionOrder(models.Model):
     class Meta:
         ordering = ["-id"]
 
-class ShippingInformation(models.Model):
-    order = models.OneToOneField(AuctionOrder, related_name='shipping')
-    first_name = models.CharField(max_length=70)
-    last_name = models.CharField(max_length=70)
-    address1 = models.CharField(max_length=100)
-    address2 = models.CharField(max_length=100, blank=True, null=True)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50, blank=True, null=True)
-    zip = models.CharField(max_length=10, blank=True, null=True)
-    country = CountryField()
-    phone = models.CharField(max_length=15)
-    tracking_number = models.CharField(max_length=20, blank=True, null=True)
+class Card(models.Model):
+    member = models.ForeignKey("profiles.Member")
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    number = models.CharField(max_length=30)
+    expiration_month = models.PositiveSmallIntegerField()
+    expiration_year = models.PositiveSmallIntegerField()
+
+    deleted = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    def __unicode__(self):
+        return "%s" % (self.number)

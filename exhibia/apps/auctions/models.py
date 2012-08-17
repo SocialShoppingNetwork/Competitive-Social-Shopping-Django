@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models import F
 from django.db.models import Avg, Max, Min, Count
 from django.core.validators import RegexValidator
+from django_countries import CountryField
 
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 
@@ -28,14 +29,26 @@ AUCTION_STATUS = (
     (AUCTION_SHOWCASE, "Showcase"),
     (AUCTION_PAUSE, "Pause"),
     (AUCTION_JUST_ENDED, "Just Ended"),
-
     (AUCTION_FINISHED, "Finished"),
-
     (AUCTION_FINISHED_NO_PLEDGED, "Finished without pledged the price"),
-
     (AUCTION_WAITING_PAYMENT, "Waiting Payment"), #NEW
     (AUCTION_PAID, "Paid"),
     (AUCTION_COMPLETED, "Completed"),
+)
+
+
+ORDER_WAITING_PAYMENT = 'wp'
+ORDER_SHIPPING_FEE_REQUESTED = 'rf'
+ORDER_PROCESSING_ORDER = 'rf'
+ORDER_DELIVERED = 'dl'
+ORDER_WAITING_TESTIMONIAL = 'wt'
+
+ORDER_STATUS = (
+    (ORDER_WAITING_PAYMENT, "Waiting Payment"),
+    (ORDER_SHIPPING_FEE_REQUESTED, "Shipping fee Requested"),
+    (ORDER_PROCESSING_ORDER, "Processing order"), #PAID
+    (ORDER_DELIVERED, "Delivered"),
+    (ORDER_WAITING_TESTIMONIAL, "Waiting Testimonial"),
 )
 
 BID_TYPE_CHOICES = (
@@ -118,6 +131,7 @@ class Category(models.Model):
 
 from tinymce import models as tinymce_models
 
+
 class AuctionItem(models.Model):
     code = models.CharField(max_length=15,
                             primary_key=True,
@@ -175,17 +189,22 @@ class AuctionItem(models.Model):
 
 class Auction(models.Model):
     item = models.ForeignKey(AuctionItem, related_name='auctions', db_index=True)
-    status = models.CharField(max_length=1, default=AUCTION_WAITING_PLEDGE, choices=AUCTION_STATUS, db_index=True)
+    #status = models.CharField(max_length=1, default=AUCTION_WAITING_PLEDGE, choices=AUCTION_STATUS, db_index=True)
+    status = models.CharField(max_length=2, default=AUCTION_WAITING_PLEDGE, choices=AUCTION_STATUS, db_index=True)
+
+    #order_status = models.CharField(max_length=2, blank=True, null=True, choices=ORDER_STATUS, db_index=True)
+    #waiting payment, processign order, upload testimonial
+
     amount_pleged = models.PositiveIntegerField(default=0)
     backers = models.PositiveIntegerField(default=0)
     current_offer = models.FloatField(default=0.0)
     pledge_time =  models.PositiveIntegerField(default=43200)
 
     deadline_time = models.FloatField(db_index=True)
-
     bidding_time = models.PositiveSmallIntegerField()
     last_bidder = models.CharField(max_length=30, default='', db_index=True)
-    last_bidder_member = models.ForeignKey('profiles.Member', blank=True, null=True)
+    last_bidder_member = models.ForeignKey('profiles.Member', blank=True, null=True, related_name='items_won')  #winner
+
     last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True, null=True) #Todo remove this field
     last_unixtime = models.FloatField(null=True, blank=True, db_index=True)
     ended_unixtime = models.FloatField(blank=True, null=True)
@@ -248,6 +267,8 @@ class Auction(models.Model):
     def end(self):
         self.status = AUCTION_JUST_ENDED
         self.ended_unixtime = time()
+        if self.last_bidder_member:
+            self.order_status = ORDER_WAITING_PAYMENT
         self.save()
 
     def pause(self):
@@ -261,12 +282,12 @@ class Auction(models.Model):
             self.status = AUCTION_SHOWCASE
         self.save()
     
-    def bid_by(self, bidder, bot=False):
+    def bid_by(self, bidder):
         if self.status in ['f','m','d','c','e']:
             raise AuctionExpired
         
-        username = bidder.user.username if not bot else bidder.username
-        if not bot and bidder.credits <= 0:
+        username = bidder.user.username
+        if bidder.credits <= 0:
             raise NotEnoughCredits
         
         if self.last_bidder == username:
@@ -280,16 +301,14 @@ class Auction(models.Model):
         #elif self.status == "s":
         #    raise AuctionPaused
         
-        bid_type = 'n' if not bot else 'm'
+        bid_type = 'n'
         price = self.current_offer + settings.PRICE_INTERVAL
         unixtime = time()
         if self.status == 'w':
             self.status = 'p'
-        if not bot:
-            b = AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
+        b = AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
         self.last_bidder = username
-        if not bot:
-            self.last_bidder_member = bidder
+        self.last_bidder_member = bidder
         self.last_bid_type = bid_type
         self.last_unixtime = time()
         self.current_offer = price
@@ -338,3 +357,4 @@ class AuctionPlegde(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
         return '%s %s' % (self.auction, self.member)
+

@@ -193,9 +193,12 @@ INSTALLED_APPS = [
     #"matic",
     "utils",
     "payments",
+    "shipping",
+    "checkout",
     # ndevs apps
     "socials",
     "social_auth",
+    "django_countries",
 
 ]
 

@@ -1,0 +1,35 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    {% for shipping in shipping_profiles %}
+        <div>
+            <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
+            <p>{{ shipping.address1 }}</p>
+            <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
+            <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
+            <p>Phone: {{ shipping.phone }}</p>
+            <p>
+                <a href="{% url account_shipping %}?id={{ shipping.id }}">Edit</a>
+                <a href="{% url account_shipping %}?id={{ shipping.id }}&delete=1">Delete</a>
+            </p>
+        </div>
+    {% endfor %}
+    {% if Shipping %}
+        <p>Edit</p>
+    {% else %}
+        <p>Enter a new shipping  address</p>
+    {% endif %}
+    <form {% if shipping %}
+            action=".?id={{ shipping.id }}"
+          {% else %}
+            action="."
+          {% endif %}
+          method="post" class="uniForm">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Save">
+    </form>
+
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

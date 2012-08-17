@@ -1,0 +1,24 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <div>
+        <img class="product" src="{{ auction.item.image.img.url }}" />
+
+        <h1>{{ auction.item.name }}</h1>
+        <h3>Shipping Address:</h3>
+        <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
+        <p>{{ shipping.address1 }}</p>
+        <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
+        <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
+        <p>Phone: {{ shipping.phone }}</p>
+
+        <h1>Shipping:</h1>
+        <p>{{ shipping_option.name  }} : {{ shipping_option.price }}</p>
+        <h3>Billing Information:</h3>
+        <p>{{ card.number }}</p>
+
+        <a>Place Order</a>
+    </div>
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'site_base.html' %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+    <img src="{{ member.img_url }}"/>
+
+    <p>{{ member.user.first_name }} {{ member.user.last_name }}</p>
+
+    <p>{{ member.user.username }}</p>
+
+    <p>Bids: {{ member.credits }}</p>
+
+    {% if member.verified %}
+        <p>Verified</p>
+    {% else %}
+        <p>No Verified</p>
+    {% endif %}
+
+
+    <h2>Waiting Payments</h2>
+    {% for auction in auctions_waiting_payment %}
+        <div>
+            <p>{{ auction.item.name }} <a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a></p>
+            <img width="64" height="64" src="{{ auction.item.image.img.url }}">
+
+        </div>
+    {% endfor %}
+    <h2>Processing / Shipped</h2>
+    {% for auction in auctions_processing_shipped %}
+
+    {% endfor %}
+
+    <h2>Record Testimonial</h2>
+    {% for auction in auctions_record_testimonial %}
+    {% endfor %}
+
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

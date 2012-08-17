@@ -36,6 +36,13 @@ urlpatterns = patterns("",
     url(r'^accounts/profile/pay/(?P<order_id>\d+).html$', 'profiles.views.order_pay', {}, name="order_pay"),
     url(r'^accounts/profile/info/$', 'profiles.views.member_info', {}, name='member_info'),
     url(r'^accounts/profile/bids/$', 'profiles.views.member_bids', {}, name='member_bids'),
+    url(r'^accounts/profile/bids/$', 'profiles.views.member_bids', {}, name='member_bids'),
+    url(r'^accounts/profile/$', 'profiles.views.account', {}, name="profile_account"),
+
+    url(r'^account/$', 'profiles.views.account', {}, name="profile_account"),
+
+    url(r'^accounts/shipping/$', 'profiles.views.manage_shipping', {}, name="account_shipping"),
+
     
     url(r"^items/", include("auctions.urls")),
 
@@ -46,6 +53,8 @@ urlpatterns = patterns("",
     #u url(r'', include('social_login.urls')),
 
     url(r"^testimonials/", include("testimonials.urls")),
+    url(r"^checkout/", include("checkout.urls")),
+
 
     url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user", name="admin_invite_user"),
     url(r"^admin/", include(admin.site.urls)),

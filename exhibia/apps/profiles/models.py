@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 from idios.models import ProfileBase
+from django_countries import CountryField
 
 from auctions.models import Auction
 
@@ -20,7 +21,6 @@ class Member(ProfileBase):
     state = models.CharField(max_length=30, null=True, blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True)
     birthday = models.DateField(null=True, blank=True, help_text="for example: 1980-7-9")
-
 
     #chat
     is_banned = models.BooleanField(default=False)
@@ -54,35 +54,9 @@ class Member(ProfileBase):
     def auctionorders_history(self):
         return AuctionOrder.objects.filter(auction__status="c", winner=self)"""
 
-class BotManager(models.Manager):
-    def available(self):
-        active_bots = list(Auction.objects.live().exclude(maticbid__bots=None).values_list('maticbid__bots',flat=True))
-        return self.get_query_set().exclude(id__in=active_bots)
 
-    def active(self):
-        return self.get_query_set().filter(id__in=list(Auction.objects.live().exclude(maticbid__bots=None).values_list('maticbid__bots',flat=True)))
 
-class Bot(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-    objects = BotManager()
-    def bid(self, auction):
-        auction.bid_by(self, bot=True)
-    def __unicode__(self):
-        return self.username
-
-class ShippingProfile(models.Model):
-    member = models.OneToOneField(Member)
-    first_name = models.CharField(_("name"), max_length=50, null=True, blank=True)
-    last_name = models.CharField(_("name"), max_length=50, null=True, blank=True)
-    address1 = models.CharField(max_length=100, blank=True)
-    address2 = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    zip_code = models.CharField(max_length=10, blank=True)
-    state = models.CharField(max_length=30, null=True, blank=True)
-    phone = models.CharField(max_length=30, null=True, blank=True)
-    def __unicode__(self):
-        return str(self.member)
-
+"""
 def create_shipping_profile(sender, instance=None, **kwargs):
     if instance is None:
         return
@@ -96,3 +70,23 @@ def create_shipping_profile(sender, instance=None, **kwargs):
                                                                        'state':instance.state,
                                                                        'phone':instance.phone})
 post_save.connect(create_shipping_profile, sender=Member)
+"""
+
+class BillingAddress(models.Model):
+    member = models.ForeignKey('profiles.Member')
+    first_name = models.CharField(_("First Name"), max_length=50)
+    last_name = models.CharField(_("Last Name"), max_length=50)
+    address1 = models.CharField(max_length=100)
+    address2 = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=30)
+    country = CountryField()
+    zip_code = models.CharField(max_length=10)
+    phone = models.CharField(max_length=30)
+    deleted = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    shipping = models.OneToOneField("shipping.ShippingAddress", blank=True, null=True)
+    def __unicode__(self):
+        return str(self.member)
+
+

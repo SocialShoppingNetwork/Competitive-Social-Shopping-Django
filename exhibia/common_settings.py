@@ -14,7 +14,7 @@ DALPAY_MERCHANT_ID = '120205'
 TWITTER_CONSUMER_KEY         = 'y2vUwX1Bsamx9X8wYmM9g'
 TWITTER_CONSUMER_SECRET      = 'LvavS6nKMrzG8wMm6feah84lnMxOXb6e9mKVrf09Pg'
 
-LOGIN_URL          = '/login-form/'
+LOGIN_URL          = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'
 
