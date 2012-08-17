@@ -20,12 +20,19 @@ from checkout.models import Order
 from shipping.models import ShippingAddress, ShippingRequest
 from shipping.forms import ShippingForm
 
+from payments.models import Card
+from payments.forms import CardForm
+
+from profiles.forms import BillingForm
+from profiles.models import BillingAddress
+
 @login_required
 @render_to('checkout/select_shipping_address.html')
 def select_shipping_address(request, auction_id):
     member = request.user.get_profile()
     auction = get_object_or_404(member.items_won.filter(order=None), id=auction_id)
     shipping_profiles = member.shippingaddress_set.filter(deleted=False)
+    next_url = request.REQUEST.get('next')
 
     id = request.POST.get('id')
     action = request.POST.get('action')
@@ -42,7 +49,10 @@ def select_shipping_address(request, auction_id):
     if 'select' in request.POST:
         request.session[session_shipping] = shipping.id
         if auction.item.shippingfee_set.filter(country=shipping.country).exists():
-            return HttpResponseRedirect(reverse('checkout_select_shipping', args=[auction_id]))
+            redirect_url = reverse('checkout_select_shipping', args=[auction_id])
+            if next_url:
+                redirect_url = '%s?next=%s' % (redirect_url, next_url)
+            return HttpResponseRedirect(redirect_url)
         else:
             return HttpResponseRedirect(reverse('checkout_request_fee', args=[auction_id]))
 
@@ -78,14 +88,12 @@ def select_shipping_address(request, auction_id):
         form = ShippingForm()
 
     return {
+        'next_url':next_url,
         'auction':auction,
         'form':form,
         'shipping_profiles':shipping_profiles,
         'shipping':shipping
     }
-
-from payments.models import Card
-from payments.forms import CardForm
 
 @login_required
 @render_to('checkout/select_payment.html')
@@ -143,12 +151,17 @@ def review_order(request, auction_id):
     card = get_object_or_404(member.card_set.filter(deleted=False), id=card_id)
     shipping = get_object_or_404(ShippingAddress, id=shipping_id, member=member, deleted=False)
     shipping_option = get_object_or_404(auction.item.shippingfee_set.all(), id=shipping_option_id)
+    #TODO verify country here
 
-
+    if billing_id:
+        billing = get_object_or_404(member.billingaddress_set.filter(deleted=False), id=billing_id)
+    else:
+        billing = shipping.billingaddress
     return {
-        'card' : card,
-        'shipping': shipping,
-        'auction': auction,
+        'card':card,
+        'shipping':shipping,
+        'billing':billing,
+        'auction':auction,
         'shipping_option':shipping_option
     }
 
@@ -200,7 +213,7 @@ def request_shipping_fee(request, auction_id):
 @render_to('checkout/select_shipping.html')
 def select_shipping(request, auction_id):
     member = request.user.get_profile()
-
+    next_url = request.REQUEST.get('next')
     session_card = 'auction_%s_payment' % auction_id
     session_shipping = 'auction_%s_shipping' % auction_id
     session_shipping_option = 'auction_%s_shipping_option' % auction_id
@@ -215,15 +228,78 @@ def select_shipping(request, auction_id):
         shipping_id = request.POST.get('shipping')
         shipping_option = get_object_or_404(auction.item.shippingfee_set.all(), id=shipping_id)
         request.session[session_shipping_option] = shipping_option.id
-        return HttpResponseRedirect(reverse('checkout_select_payment', args=[auction_id]))
+
+        if next_url:
+            redirect_url = next_url
+        else:
+            redirect_url = reverse('checkout_select_payment', args=[auction_id])
+        return HttpResponseRedirect(redirect_url)
     return {
+        'next_url':next_url,
         'auction':auction,
         'shipping_options':shipping_options,
         'shipping':shipping,
     }
 
+@login_required
+@render_to('checkout/select_billing_address.html')
+def select_billing(request, auction_id):
+    member = request.user.get_profile()
+    auction = get_object_or_404(member.items_won.filter(order=None), id=auction_id)
+    billing_profiles = member.billingaddress_set.filter(deleted=False)
+    next_url = request.REQUEST.get('next')
 
+    id = request.POST.get('id')
+    action = request.POST.get('action')
+    billing = None
+    if id:
+        billing = get_object_or_404(BillingAddress, id=id, member=member, deleted=False)
+    session_billing = 'auction_%s_billing' % auction_id
 
+    if 'delete' in request.POST:
+        billing.deleted = True
+        billing.save()
+        return HttpResponseRedirect(reverse('checkout_select_billing_address', args=[auction_id]))
 
+    if 'select' in request.POST:
+        request.session[session_billing] = billing.id
+        return HttpResponseRedirect(reverse('checkout_review', args=[auction.id]))
 
+    if request.method == 'POST':
+        if action =='edit':
+            form = BillingForm(initial=billing.__dict__)
+        else:
+            form = BillingForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                if billing:
+                    #Update and Select
+                    billing.first_name =  data['first_name']
+                    billing.last_name = data['last_name']
+                    billing.address1 = data['address1']
+                    billing.address2 = data['address2']
+                    billing.city = data['city']
+                    billing.zip_code = data['zip_code']
+                    billing.country = data['country']
+                    billing.state = data['state']
+                    billing.phone = data['phone']
+                    billing.save()
+                    request.session[session_billing] = billing.id
+                    return HttpResponseRedirect(reverse('checkout_select_billing_address', args=[auction_id]))
+                else:
+                    #Create new Billing address, SAVE
+                    billing = form.save(commit=False)
+                    billing.member = member
+                    billing.save()
+                    request.session[session_billing] = billing.id
+                    return HttpResponseRedirect(reverse('checkout_select_billing_address', args=[auction_id]))
+    else:
+        form = BillingForm()
 
+    return {
+        'next_url':next_url,
+        'auction':auction,
+        'form':form,
+        'billing_profiles':billing_profiles,
+        'billing':billing,
+    }

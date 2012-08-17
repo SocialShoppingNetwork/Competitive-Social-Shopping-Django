@@ -6,6 +6,7 @@
             <form action="." method="post">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{ shipping.id }}"/>
+                {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}"/>{% endif %}
                 <input type="hidden" name="select" value="1"/>
                 <input type="submit" value="Ship to this Address"/>
             </form>
@@ -30,7 +31,7 @@
             </p>
         </div>
     {% endfor %}
-    {% if Shipping %}
+    {% if shipping %}
         <p>Edit</p>
     {% else %}
         <p>Enter a new shipping  address</p>
@@ -41,6 +42,7 @@
             <input type="hidden" name="id" value="{{ shipping.id }}" />
         {% endif %}
         {{ form|crispy }}
+        {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}"/>{% endif %}
         <input type="submit" value="Save">
     </form>
 

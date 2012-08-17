@@ -60,6 +60,7 @@ ORDER_STATUS = (
     (ORDER_PROCESSING_ORDER, "Processing order"), #PAID
     (ORDER_SHIPPED, "Shipped"),
 )
+
 class ShippingRequest(models.Model):
     member = models.ForeignKey("profiles.Member")
     auction = models.OneToOneField('auctions.Auction') #TODO check this

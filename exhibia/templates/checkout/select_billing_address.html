@@ -1,0 +1,51 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    {% for billing in billing_profiles %}
+        <div>
+            <form action="." method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ billing.id }}"/>
+                {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}"/>{% endif %}
+                <input type="hidden" name="select" value="1"/>
+                <input type="submit" value="Use this Address"/>
+            </form>
+            <p>{{ billing.first_name }} {{ billing.last_name }}</p>
+            <p>{{ billing.address1 }}</p>
+            <p>{{ billing.city }},{{ billing.state }} {{ billing.zip_code }}</p>
+            <p>{{ billing.country.name }} <img src="{{ billing.country.flag }}"></p>
+            <p>Phone: {{ billing.phone }}</p>
+            <p>
+            <form action="." method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ billing.id }}"/>
+                <input type="hidden" name="action" value="edit"/>
+                <input type="submit" value="Edit">
+            </form>
+            <form action="." method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ billing.id }}"/>
+                <input type="hidden" name="delete" value="1"/>
+                <input type="submit" value="Delete">
+            </form>
+            </p>
+        </div>
+    {% endfor %}
+    {% if billing %}
+        <p>Edit</p>
+    {% else %}
+        <p>Enter a new billing  address</p>
+    {% endif %}
+    <form action="." method="post" class="uniForm">
+        {% csrf_token %}
+        {% if billing %}
+            <input type="hidden" name="id" value="{{ billing.id }}" />
+        {% endif %}
+        {{ form|crispy }}
+        {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}"/>{% endif %}
+        <input type="submit" value="Save">
+    </form>
+
+{% endblock %}
+{% block extra_body %}
+{% endblock %}
