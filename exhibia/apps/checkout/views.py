@@ -148,6 +148,11 @@ def review_order(request, auction_id):
     shipping_option_id = request.session.get(session_shipping_option)
 
     auction = get_object_or_404(member.items_won.filter(order=None), id=auction_id)
+    try:
+        order = auction.order
+        return HttpResponseRedirect(reverse('profile_account'))
+    except :
+        order = None
     card = get_object_or_404(member.card_set.filter(deleted=False), id=card_id)
     shipping = get_object_or_404(ShippingAddress, id=shipping_id, member=member, deleted=False)
     shipping_option = get_object_or_404(auction.item.shippingfee_set.all(), id=shipping_option_id)
@@ -157,6 +162,34 @@ def review_order(request, auction_id):
         billing = get_object_or_404(member.billingaddress_set.filter(deleted=False), id=billing_id)
     else:
         billing = shipping.billingaddress
+
+    if request.POST:
+        Order.objects.create(
+            auction=auction,
+            card=card,
+            shipping_first_name=shipping.first_name,
+            shipping_last_name=shipping.last_name,
+            shipping_address1=shipping.address1,
+            shipping_address2=shipping.address2,
+            shipping_city=shipping.city,
+            shipping_country=shipping.country,
+            shipping_zip_code=shipping.zip_code,
+            shipping_phone=shipping.phone,
+            shipping_state=shipping.state,
+
+            billing_first_name=billing.first_name,
+            billing_last_name=billing.last_name,
+            billing_address1=billing.address1,
+            billing_address2=billing.address2,
+            billing_city=billing.city,
+            billing_country=billing.country,
+            billing_zip_code=billing.zip_code,
+            billing_phone=billing.phone,
+            billing_state=billing.state,
+            member=member
+        )
+
+        return HttpResponseRedirect(reverse('profile_account'))
     return {
         'card':card,
         'shipping':shipping,
@@ -179,13 +212,14 @@ def request_shipping_fee(request, auction_id):
             raise HttpResponseBadRequest() # OR REDIRECT
     except Order.DoesNotExist:
         pass
+
+    shipping_request = None
     try:
         shipping_request = auction.shippingrequest
     except ShippingRequest.DoesNotExist:
         if not shipping:
             return HttpResponseRedirect(reverse('checkout_select_shipping_address', args=[auction.id]))
             #Redirect
-        shipping_request = None
 
     if request.method == 'POST':
         if shipping_request:
@@ -302,4 +336,13 @@ def select_billing(request, auction_id):
         'form':form,
         'billing_profiles':billing_profiles,
         'billing':billing,
+    }
+
+@login_required
+@render_to('checkout/view_order.html')
+def view_order(request, order_id):
+    member = request.user.get_profile()
+    order = get_object_or_404(member.order_set.all(), id=order_id)
+    return {
+        'order':order,
     }

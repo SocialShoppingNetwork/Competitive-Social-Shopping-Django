@@ -21,20 +21,25 @@
     <h2>Waiting Payments</h2>
     {% for auction in auctions_waiting_payment %}
         <div>
-            <p>{{ auction.item.name }} <a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a></p>
+            <p>{{ auction.item.name }} - {{ auction.item.code }}<a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a></p>
             <img width="64" height="64" src="{{ auction.item.image.img.url }}">
 
         </div>
     {% endfor %}
-    <h2>Processing / Shipped</h2>
-    {% for auction in auctions_processing_shipped %}
-
+    <h2>Processing</h2>
+    {% for auction in auctions_processing %}
+        <div>
+            <p>{{ auction.item.name }}</p>
+            <img width="64" height="64" src="{{ auction.item.image.img.url }}">
+        </div>
     {% endfor %}
-
-    <h2>Record Testimonial</h2>
-    {% for auction in auctions_record_testimonial %}
+    <h2>Shipped</h2>
+    {% for auction in auctions_shipped %}
+        <div>
+            <p><a href="{% url checkout_view_order auction.order.id %}">{{ auction.item.name }}</a></p>
+            <img width="64" height="64" src="{{ auction.item.image.img.url }}">
+        </div>
     {% endfor %}
-
 {% endblock %}
 {% block extra_body %}
 {% endblock %}

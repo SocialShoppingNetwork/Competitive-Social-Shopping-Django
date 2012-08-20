@@ -40,6 +40,8 @@ urlpatterns = patterns("",
     url(r'^accounts/profile/$', 'profiles.views.account', {}, name="profile_account"),
 
     url(r'^account/$', 'profiles.views.account', {}, name="profile_account"),
+    url(r'^account/orders/(\w+)/$', 'checkout.views.view_order', {}, name="checkout_view_order"),
+
 
     url(r'^accounts/shipping/$', 'profiles.views.manage_shipping', {}, name="account_shipping"),
 

@@ -105,14 +105,14 @@ def member_bids(request):
 
 ORDER_WAITING_PAYMENT = 'wp'
 ORDER_SHIPPING_FEE_REQUESTED = 'rf'
-ORDER_PROCESSING_ORDER = 'rf'
+ORDER_PROCESSING_ORDER = 'op'
 ORDER_PAID = 'pd' # Processing Order
 ORDER_DELIVERED = 'dl'
 ORDER_WAITING_TESTIMONIAL = 'wt'
 from django.db.models import Q
 
 
-from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED
+from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED, ORDER_PROCESSING
 @login_required
 @render_to('profiles/account.html')
 def account(request):
@@ -123,18 +123,19 @@ def account(request):
     #                                            Q(shippingorder__status=ORDER_WAITING_PAYMENT) |
     #                                            Q(shippingorder__status=ORDER_SHIPPING_FEE_REQUESTED))
     auctions_waiting_payment = member.items_won.filter(order=None)
-    print auctions_waiting_payment.count()
-    #orders processing and shipped
-    #auctions_processing_shipped = member.items_won.filter(Q(shippingorder__status=ORDER_PROCESSING_ORDER) |
-    #                                             Q(shippingorder__status=ORDER_SHIPPED))
-    auctions_processing_shipped = []
-    auctions_record_testimonial = []
-    #auctions_record_testimonial = member.items_won.filter(shippingorder__status=ORDER_SHIPPED, video=None)
 
+
+    #orders processing and shipped
+    auctions_processing = member.items_won.filter(order__status=ORDER_PROCESSING)
+    print auctions_processing
+
+    auctions_shipped = member.items_won.filter(order__status=ORDER_SHIPPED)
+    print '--------'
+    print auctions_shipped
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
-            'orders_processing_shipped': auctions_processing_shipped,
-            'orders_record_testimonial': auctions_record_testimonial,
+            'auctions_processing':auctions_processing,
+            'auctions_shipped': auctions_shipped,
     }
 
 @login_required

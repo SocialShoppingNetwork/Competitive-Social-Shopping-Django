@@ -46,7 +46,7 @@
                 <br/>
                 {% if member %}
                     <p align="right" style="text-align: right;">
-                        <a href="/account">{{ member.user.username }}</a> |
+                        <a href="{% url profile_account %}">{{ member.user.username }}</a> |
                         <a href="{% url logout %}">logout</a>
                     </p>
                 {% else %}
