@@ -6,7 +6,7 @@
         <h3>Shipping Information</h3>
         <p>Status: {% if order.status == "op" %} processing {% else %} shipped{% endif %}</p>
         {% if order.tracking_number %}
-            <p>{{ shipping_company_name }} : {{ order.tracking_number }}</p>
+            <p>{{ order.shipping_company_name }} : {{ order.tracking_number }}</p>
         {% endif %}
         <p>{{ order.shipping_first_name }} order.shipping_last_lame</p>
         <p>{{ order.shipping_address1 }}</p>

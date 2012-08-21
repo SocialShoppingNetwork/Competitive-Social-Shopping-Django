@@ -1,0 +1,35 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    {% for billing in billing_profiles %}
+        <div>
+            <p>{{ billing.first_name }} {{ billing.last_name }}</p>
+            <p>{{ billing.address1 }}</p>
+            <p>{{ billing.city }},{{ billing.state }} {{ billing.zip_code }}</p>
+            <p>{{ billing.country.name }} <img src="{{ billing.country.flag }}"></p>
+            <p>Phone: {{ billing.phone }}</p>
+            <p>
+                <a href="{% url account_billing %}?id={{ billing.id }}">Edit</a>
+                <a href="{% url account_billing %}?id={{ billing.id }}&delete=1">Delete</a>
+            </p>
+        </div>
+    {% endfor %}
+    {% if billing %}
+        <p>Edit</p>
+    {% else %}
+        <p>Enter a new billing  address</p>
+    {% endif %}
+    <form {% if billing %}
+        action=".?id={{ billing.id }}"
+    {% else %}
+        action="."
+    {% endif %}
+        method="post" class="uniForm">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Save">
+    </form>
+
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

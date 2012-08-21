@@ -41,9 +41,9 @@ urlpatterns = patterns("",
 
     url(r'^account/$', 'profiles.views.account', {}, name="profile_account"),
     url(r'^account/orders/(\w+)/$', 'checkout.views.view_order', {}, name="checkout_view_order"),
-
-
-    url(r'^accounts/shipping/$', 'profiles.views.manage_shipping', {}, name="account_shipping"),
+    url(r'^account/shipping/$', 'profiles.views.manage_shipping', {}, name="account_shipping"),
+    url(r'^account/billing/$', 'profiles.views.manage_billing', {}, name="account_billing"),
+    url(r'^account/payments/$', 'profiles.views.manage_payments', {}, name="account_payments"),
 
     
     url(r"^items/", include("auctions.urls")),
