@@ -45,7 +45,6 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 @render_to('index.html')
 def index(request):
-
     auctions = Auction.objects.waiting_pledge()
     #showcase = Auction.objects.showcase()
     showcase = Auction.objects.live()
@@ -64,7 +63,7 @@ def xauction_bid(request, auction_id):
 
 @render_to('auctions/item_exhibit.html')
 def view_item(request, slug=''):
-    auction_id = request.GET.get('auction')
+    auction_id = request.GET.get('item')
     auction = None
     item = None
     if auction_id:
@@ -144,7 +143,6 @@ def fund(request, auction_id):
         return HttpResponseRedirect('/')
 
 from utils import auction_to_dict, auctions_to_dict
-
 @csrf_exempt
 def auction_info(request, auction_id):
     auction = [get_object_or_404(Auction, id=auction_id)]
@@ -155,6 +153,8 @@ def auctions_info(request):
     auctions = Auction.objects.waiting_pledge()
     return HttpResponse(cjson.encode(auctions_to_dict(auctions)))
 
+
+
 from payments.forms import PledgeForm
 @render_to('payments/pledge.html')
 def pledge(request, item_id):
@@ -162,7 +162,6 @@ def pledge(request, item_id):
     form = PledgeForm(initial={'auction':auction.id})
     return {'auction':auction,
             'form':form}
-
 
 @render_to('fb/checkout.html')
 @login_required

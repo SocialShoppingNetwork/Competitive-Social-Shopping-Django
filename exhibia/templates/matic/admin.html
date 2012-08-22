@@ -12,63 +12,31 @@
         var socket = null;
         $(document).ready(function(){
             function update(){
-                $.post("/matic/status/", {}, function(data){
+                $.post("{% url matic_status %}", {}, function(data){
                     data = $.parseJSON(data);
-                    auctions = data['auctions']
-                    a = new Auctions(auctions);
-                    a.update_ui(auctions);
+                    console.log(data);
+                    items = new Items(data);
+                    admin_update_auctions_ui(data);
                 });
             }
             setInterval(update, 1000);
-            $('.bid').click(function(event){
-                event.preventDefault();
-                auction_id = $(this).attr('data-auctionid');
-                $.post('/bid/ajax/' + auction_id + '/', function(data){
-                    switch(data['error']){
-                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
-                        case 'NOT_ENOUGH_CREDITS': $.colorbox({href:"/buycredits/"}); break;
-                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
-                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
-                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
-                    }
-                    // TODO conditional to update bids
-                    update_bids();
-                });
-            });
+
             $(".auction_bidding_time").live("click", function(event){
                 auction_id = $(event.target).attr('rel');
                 time = prompt("bidding time", $(event.target).text());
-                $.post("/matic/change/time/" + auction_id + "/" + time + "/", function(data){});
-            });
-            $(".matic_win").live("click", function(event){
-                event.preventDefault();
-                auction_id = $(event.target).attr('rel');
-                $.post("/matic/change/win/" + auction_id + "/", function(data){
-                   console.log(data);
-                });
-            });
-
-            $(".matic_bids_left").live("click", function(event){
-                event.preventDefault();
-                bids_left = prompt("bids", $(event.target).text());
-                auction_id = $(event.target).attr('rel');
-                if (bids_left != null){
-                    $.post("/matic/change/bidsleft/" + auction_id + "/" + bids_left + "/", function(data){});
-                }
+                url = "{% url matic_change_bidding_time 1 2 %}"
+                url = url.replace("1", auction_id).replace("2", time);
+                $.post(url, function(data){});
             });
 
             $(".auction_status").live("click", function(event){
                 event.preventDefault();
                 auction_id = $(event.target).attr('rel');
-                $.post("/matic/change/status/" + auction_id + "/", function(data){
-                   console.log(data);
+                url = "{% url matic_change_status 1 %}";
+                url = url.replace("1", auction_id);
+                $.post(url, function(data){
+                    console.log(data);
                 });
-            });
-
-            $(".auction_bid").live("click", function(event){
-               event.preventDefault();
-                auction_id = $(event.target).attr('rel');
-                $.post("/matic/bid/" + auction_id + "/", function(data){});
             });
 
             $("#pause_all").click(function(event){
@@ -81,8 +49,9 @@
                 });
             });
 
-       });
+        });
     </script>
+
 {% endblock %}
 
 {% block coltype %}colMS{% endblock %}
@@ -100,42 +69,45 @@
         <caption><a href=""class="section">Auctions</a></caption>
         <thead>
             <tr>
-                <th></th>
+                <th>&nbsp</th>
+
                 <th>timer</th>
+
                 <th>ticktime</th>
+
                 <th>bidder</th>
+
+                <th>userbid</th>
+
+                <th>backers</th>
+
+                <th>running</th>
+
                 <th>price</th>
 
-                <th>bids_left</th>
-                <th>userbid</th>
-                <th>win</th>
-                <th>running</th>
-                <th>&nbsp</th>
+                <th>funded</th>
 
             </tr>
         </thead>
-        <tbody></tbody>
-        {% for auction in auctions %}
-        <tr>
-            <th scope="row"><a href="{% url auction_item auction.item.name|slugify %}">{{ auction.item.name }}</a></th>
-            <td id="timer_{{ auction.id }}"></td>
-            <td id="bidding_time_{{ auction.id }}" class="auction_bidding_time" rel="{{ auction.id }}"></td>
-            <td id="last_bidder_{{ auction.id }}"></td>
-            <td>$<span id="current_price_{{ auction.id }}"></span></td>
-            <!-- matic -->
-            <td id="bids_left_{{ auction.id }}" rel="{{ auction.id }}" class="matic_bids_left"></td>
-            <td id="usersbid_{{ auction.id }}"></td>
-            <td>
-                <input type="checkbox" rel="{{ auction.id }}" id="win_{{ auction.id }}" class="matic_win"/>
-            </td>
+        <tbody>
 
+        {% for auction in auctions %}
+            <tr>
+            <th scope="row"><a target="_blank" href="{% url auction_item auction.item.slug_name %}?item={{ auction.id }}" ><img class="product" height="24" width="24" src="{{ auction.item.image.img.url }}" />{{ auction.item.name }}</a></th>
+            <td id="timer_{{ auction.id }}">{{ auction.time_left }}</td>
+            <td id="bidding_time_{{ auction.id }}" class="auction_bidding_time" rel="{{ auction.id }}">{{ auction.bidding_time }}</td>
+            <td id="last_bidder_{{ auction.id }}">{{ auction.last_bidder }}</td>
+            <td id="usersbid_{{ auction.id }}">1</td>
+            <td id="backers_{{ auction.id }}">{{ auction.backers_history.count }}</td>
             <td>
-                <!--<a href="" class="running">&nbsp</a>-->
                 <input type="checkbox" rel="{{ auction.id }}" id="status_{{ auction.id }}" class="auction_status"/>
             </td>
-            <td> <a href="#" rel="{{ auction.id }}" class="auction_bid">bid</a></td>
-        </tr>
+            <td>{{ auction.item.price }}</td>
+            <td id="funded_{{ auction.id }}">{{ auction.funded|floatformat:0 }}</td>
+            <!--<td><a href="#" rel="{{ auction.id }}" class="auction_bid">bid</a></td>-->
+            </tr>
         {% endfor %}
+        </tbody>
         </table>
 </div>
 </div>

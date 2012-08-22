@@ -1,7 +1,7 @@
 {% with auction as a %}
 <li data-id="{{ a.id }}" data-type="app" class="span3 span3a item_waiting item" style="margin-bottom: 10px;">
     <h2>{{ a.item.name }}</h2>
-    <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}"><img class="product" src="{{ a.item.image.img.url }}" /></a>
+    <a href="{% url auction_item a.item.slug_name %}?item={{ a.id }}"><img class="product" src="{{ a.item.image.img.url }}" /></a>
     <hr />
     <div class="progress progress-info progress-striped active">
         <div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>

@@ -93,7 +93,7 @@
     <script>
         function update_item(){
             //  updates items waiting plegde
-            $.post('{% url auction_info auction.id %}', function(data){
+            $.post('{% url auction_info  auction.id %}', function(data){
                 data = $.parseJSON(data);
                 update_items_ui(data);
             });

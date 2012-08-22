@@ -2,9 +2,9 @@
 {% with auction as a %}
 <li data-id="{{ a.id }}" data-type="util" data-types="camera" class="span3 span3a item_showcase item" style="margin-bottom: 10px;">
     <h2>
-        <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a>
+        <a href="{% url auction_item a.item.slug_name %}?item={{ a.id }}">{{ a.item.name }}</a>
     </h2>
-    <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
+    <a href="{% url auction_item a.item.slug_name %}?item={{ a.id }}">
         <img class="product" src="{% thumbnail a.item.image.img 135x135 %}" />
     </a>
     <hr/>
