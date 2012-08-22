@@ -10,14 +10,15 @@
     <p>{{ member.user.username }}</p>
 
     <p>Bids: {{ member.credits }}</p>
-
+    <a href="{% url acct_passwd %}">Change password</a>
     {% if member.verified %}
         <p>Verified</p>
     {% else %}
         <p>No Verified</p>
     {% endif %}
-
-
+    <a href="{% url account_shipping %}">Manage your shipping</a>
+    <a href="{% url account_billing %}">Manage your Billing</a>
+    <a href="{% url account_payments %}">Manage your payments methods</a>
     <h2>Waiting Payments</h2>
     {% for auction in auctions_waiting_payment %}
         <div>
