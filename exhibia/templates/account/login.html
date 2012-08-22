@@ -10,7 +10,10 @@
 {% endblock %}
 {% block body %}
 	{% if openid and not user.is_authenticated %}
-        <p><span class="warning">It appears you have started to login using OpenID. Want to <a href="/openid/register/">finish logging in</a>?</span></p>
+		<div class="alert">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  <strong>It appears you have started to login using OpenID. Want to <a href="/openid/register/">finish logging in</a>?
+		</div>
     {% endif %}
     
     <h1>{% trans "Log In" %}</h1><hr>
