@@ -5,10 +5,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import simplejson
+from django.db.models.signals import post_save
 from gdata.youtube.service import YouTubeService
-
-from ndevs.social.facebook import FacebookApi
-
 
 VIDEO_CATEGORIES = (('Film', 'Film & Animation'),
 ('Autos','Autos'),
@@ -30,19 +28,26 @@ VIDEO_CATEGORIES_DICT = dict(VIDEO_CATEGORIES)
 
 class Video(models.Model):
     member = models.ForeignKey('profiles.Member', related_name='testimonials')
-    auction = models.ForeignKey('auctions.Auction', related_name='testimonials')
-    #item = models.ForeignKey(Item, related_name='videos')
+    auction = models.OneToOneField('auctions.Auction', unique=True)
     title = models.CharField(max_length=500, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    review = models.TextField(blank=True, null=True)
+    rated = models.SmallIntegerField(default=5)
     file = models.FileField(upload_to='item_videos')
+
     youtube_url = models.URLField(verify_exists=False)
+
     facebook_video_id = models.CharField(max_length=500, blank=True, null=True)
     facebook_video_info = models.TextField(blank=True, null=True)
     facebook_page_video_id = models.CharField(max_length=500, blank=True, null=True)
     facebook_page_video_info = models.TextField(blank=True, null=True)
 
+    share_on_facebook = models.BooleanField(default=False)
+    share_on_twitter = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         unique_together = ('member', 'auction')
+
     def upload_record(self, file, type='flv'):
         if self.file:
             self.file.delete()
@@ -79,6 +84,7 @@ class Video(models.Model):
             self.save()
 
     def upload_to_facebook(self):
+        from ndevs.social.facebook import FacebookApi
         if self.file:
             config = getattr(settings, 'SOCIAL_ACCOUNTS', {}).get('facebook')
             api = FacebookApi(access_token_str=config.get('ACCESS_TOKEN'), consumer_key=config.get('API_ID'),
@@ -92,6 +98,7 @@ class Video(models.Model):
             self.save()
 
     def upload_to_facebook_page(self):
+        from ndevs.social.facebook import FacebookApi
         if self.file:
             config = getattr(settings, 'SOCIAL_ACCOUNTS', {}).get('facebook')
             api = FacebookApi(access_token_str=config.get('PAGE_ACCESS_TOKEN'), consumer_key=config.get('API_ID'),

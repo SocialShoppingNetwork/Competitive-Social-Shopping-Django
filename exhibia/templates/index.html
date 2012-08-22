@@ -46,8 +46,10 @@
             auctions = $.parseJSON(data['auctions']);
             $.exhibia['auctions'] = new Auctions(auctions);
             update_auctions_ui(auctions);
+        });
+        socket.on('user_message', function(username, message, picture){
+           console.log(username + ': ' + message);
         });*/
-
         $('.scrollingtext').bind('marquee', function() {
             var ob = $(this);
             var tw = ob.width();

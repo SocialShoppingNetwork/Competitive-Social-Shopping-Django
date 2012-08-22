@@ -16,7 +16,6 @@ from annoying.functions import get_object_or_None
 from annoying.decorators import render_to, ajax_request
 
 from auctions.models import Auction
-from profiles.models import Bot
 #from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 
 @staff_member_required
@@ -33,9 +32,6 @@ def to_json(auction):
             'bidding_time': auction.bidding_time,
             'current_price': auction.current_price,
             'bidding_time': auction.bidding_time,
-            'matic':{'bids_left': auction.maticbid.bids_left,
-                     'users_bid': auction.maticbid.users_bid,
-                     'win': auction.maticbid.win}
             }
 
 def auctions_to_json(auctions):

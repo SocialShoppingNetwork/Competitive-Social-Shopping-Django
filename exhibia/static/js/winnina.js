@@ -163,3 +163,24 @@ function fill_payment_form(item_description, item_price, custom_value){
     $('#paynow_item_price').attr('value', item_price);
     if (custom_value) $('#paynow_custom_field2').attr('value', custom_value);
 }
+
+
+
+function send_message(message){
+    $.ajax({
+        type: "POST",
+        url: "/chat/send-message/",
+        data: JSON.stringify({'message':message}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data){alert(data);},
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
+}
+
+
+function ban_user(username){
+    $.post("/chat/send-message/",{'username':username});
+}

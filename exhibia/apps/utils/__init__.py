@@ -1,4 +1,13 @@
+import urllib
+import urllib2
 from django.contrib.sites.models import Site
+
+def post(url, values):
+    data = urllib.urlencode(values)
+    req = urllib2.Request(url, data)
+    response = urllib2.urlopen(req)
+    the_page = response.read()
+    return the_page
 
 def full_url(url):
     site = Site.objects.get_current()

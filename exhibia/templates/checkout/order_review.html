@@ -1,0 +1,38 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <div>
+        <img class="product" src="{{ auction.item.image.img.url }}" />
+
+        <h1>{{ auction.item.name }}</h1>
+        <h3>Shipping Address:</h3>
+        <span><a href="{% url checkout_select_shipping_address auction.id %}?next={% url checkout_review auction.id %}">change</a></span>
+
+        <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
+        <p>{{ shipping.address1 }}</p>
+        <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
+        <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
+        <p>Phone: {{ shipping.phone }}</p>
+
+        <h3>Shipping:</h3>
+        <span><a href="{% url checkout_select_shipping auction.id %}?next={% url checkout_review auction.id %}">change</a></span>
+        <p>{{ shipping_option.name }}: ${{ shipping_option.price }}</p>
+
+        <h3>Billing Information:</h3>
+        <span><a href="{% url checkout_select_billing auction.id %}">change</a></span>
+        <p>Card: {{ card.number }} <a href="{% url checkout_select_payment auction.id %}">change</a></p>
+        <p>{{ billing.first_name }} {{ billing.last_name }}</p>
+        <p>{{ billing.address1 }}</p>
+        <p>{{ billing.city }},{{ billing.state }} {{ billing.zip_code }}</p>
+        <p>{{ billing.country.name }} <img src="{{ billing.country.flag }}"></p>
+        <p>Phone: {{ billing.phone }}</p>
+
+        <h2>Order Summary</h2>
+        <p>Item:  $0.00 </p>
+        <p>Shipping & handling:  ${{ shipping_option.price }} </p>
+        <p>Total: ${{ shipping_option.price }}</p>
+        <a>Place Order</a>
+    </div>
+{% endblock %}
+{% block extra_body %}
+{% endblock %}

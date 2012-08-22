@@ -1,0 +1,24 @@
+{% extends 'site_base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <div>
+        <img class="product" src="{{ auction.item.image.img.url }}" />
+        {% if shipping_request %}
+            You already have a shipping request for this item.
+        {% endif %}
+        <h3>Shipping Address:</h3>
+        <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
+        <p>{{ shipping.address1 }}</p>
+        <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
+        <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
+        <p>Phone: {{ shipping.phone }}</p>
+        {% if not shipping_request %}
+            <form action="." method="post">
+                {% csrf_token %}
+                <input type="submit" value="Request Shipping fee">
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block extra_body %}
+{% endblock %}
