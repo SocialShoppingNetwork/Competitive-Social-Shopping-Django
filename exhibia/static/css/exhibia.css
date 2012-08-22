@@ -5040,3 +5040,11 @@ a.badge:hover {
 	position: absolute;
 	top: 5px;
 }
+
+/* Inner container with white background */
+.container.white-bg {
+	padding: 10px 20px;
+	background: white;
+	margin: 20px 10px;
+	border: 1px solid #EEE;
+}

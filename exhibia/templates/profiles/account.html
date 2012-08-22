@@ -1,40 +1,68 @@
 {% extends 'site_base.html' %}
 {% load thumbnail %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 {% block body %}
-
-    <img src="{{ member.img_url }}"/>
-
-    <p>{{ member.user.first_name }} {{ member.user.last_name }}</p>
-
-    <p>{{ member.user.username }}</p>
-
-    <p>Bids: {{ member.credits }}</p>
-
-    {% if member.verified %}
-        <p>Verified</p>
-    {% else %}
-        <p>No Verified</p>
-    {% endif %}
-
-
-    <h2>Waiting Payments</h2>
-    {% for auction in auctions_waiting_payment %}
-        <div>
-            <p>{{ auction.item.name }} <a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a></p>
-            <img width="64" height="64" src="{{ auction.item.image.img.url }}">
-
-        </div>
-    {% endfor %}
-    <h2>Processing / Shipped</h2>
+	<h1>{% trans "My Account "%}</h1><hr>
+	<div class="row">
+		<div class="span1">
+    		<img src="{{ member.img_url }}"/>
+		</div>
+		<div class="span6">
+			<ul class="unstyled">
+	   		 	<li><h3>User Name{{ member.user.first_name }} {{ member.user.last_name }}
+	   		 		{% if member.verified %}
+        				<span class="badge badge-success">{% trans "Verified" %}</span>
+    				{% else %}
+        				<span class="badge badge-inverse">{% trans "No Verified" %}</span>
+    				{% endif %}</h3></li>
+				<li>{{ member.user.username }}</li>
+				<li>{% trans "Bids" %}: {{ member.credits }}</li>
+			</ul>
+		</div>
+	</div><hr>
+  	<h4>{% trans "Waiting Payments" %}</h4>
+	<div class="container white-bg">
+		<table class="table table-striped">
+			<thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+            <tbody>
+	 		{% for auction in auctions_waiting_payment %}
+				<tr>
+				    <th>
+				    	<div class="row">
+				    		<div class="span1"><img width="64" height="64" src="{{ auction.item.image.img.url }}"></div>
+				    		<div class="span3">{{ auction.item.name }}</div>
+				    	</div>
+				    </th>
+				    <th>
+				    	<a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a>
+				    </th>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+    </div>
+    <hr>
+    <h4>Processing / Shipped</h4>
+    <div class="container white-bg">
+    	<table class="table table-striped">
+		  …
+		</table>
     {% for auction in auctions_processing_shipped %}
 
     {% endfor %}
-
-    <h2>Record Testimonial</h2>
+	</div>
+	<hr>
+    <h4>Record Testimonial</h4>
+    <div class="container white-bg">
     {% for auction in auctions_record_testimonial %}
     {% endfor %}
-
+	</div>
 {% endblock %}
 {% block extra_body %}
 {% endblock %}
