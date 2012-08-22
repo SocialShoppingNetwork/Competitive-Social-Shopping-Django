@@ -96,12 +96,10 @@ class AuctionOrder(models.Model):
 
 class Card(models.Model):
     member = models.ForeignKey("profiles.Member")
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
     number = models.CharField(max_length=30)
+    holder_name = models.CharField(max_length=70)
     expiration_month = models.PositiveSmallIntegerField()
     expiration_year = models.PositiveSmallIntegerField()
-
     deleted = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
