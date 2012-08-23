@@ -2,7 +2,7 @@ import os
 from common_settings import *
 import dj_database_url
 
-DATABASES = {'default': dj_database_url.config(default='postgres://rlvwccsmhg:MIeA6Waiu1qShR48nNQx@ec2-107-21-206-166.compute-1.amazonaws.com/rlvwccsmhg')}
+DATABASES = {'default': dj_database_url.config(default='postgres://jvjcqnzpknrupl:xwhTQPhAGpgIukqWJm8DgkEHJo@ec2-23-21-209-179.compute-1.amazonaws.com:5432/deeqq8uavud2cq')}
 
 
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '')
