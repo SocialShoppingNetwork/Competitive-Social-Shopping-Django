@@ -14,7 +14,6 @@ from auctions.models import Auction
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 
 #from profiles.forms import MemberInfoFormUS
-from payments.models import AuctionOrder
 from payments.constants import *
 from payments.models import Card
 from payments.forms import CardForm
