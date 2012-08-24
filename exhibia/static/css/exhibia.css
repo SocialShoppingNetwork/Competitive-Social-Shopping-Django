@@ -5048,3 +5048,9 @@ a.badge:hover {
 	margin: 20px 10px;
 	border: 1px solid #EEE;
 }
+
+.img-circle {
+	-webkit-border-radius: 500px;
+	-moz-border-radius: 500px;
+	border-radius: 500px;
+}
