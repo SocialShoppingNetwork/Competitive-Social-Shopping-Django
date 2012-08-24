@@ -14,12 +14,13 @@ from auctions.models import Auction
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 
 #from profiles.forms import MemberInfoFormUS
-from payments.models import AuctionOrder
 from payments.constants import *
-
-
+from payments.models import Card
+from payments.forms import CardForm
 from shipping.forms import ShippingForm
 from shipping.models import ShippingAddress
+from profiles.models import BillingAddress
+from profiles.forms import BillingForm
 
 @login_required
 def auctions_won(request, template_name='profiles/auctions_won.html'):
@@ -105,14 +106,14 @@ def member_bids(request):
 
 ORDER_WAITING_PAYMENT = 'wp'
 ORDER_SHIPPING_FEE_REQUESTED = 'rf'
-ORDER_PROCESSING_ORDER = 'rf'
+ORDER_PROCESSING_ORDER = 'op'
 ORDER_PAID = 'pd' # Processing Order
 ORDER_DELIVERED = 'dl'
 ORDER_WAITING_TESTIMONIAL = 'wt'
 from django.db.models import Q
 
 
-from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED
+from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED, ORDER_PROCESSING
 @login_required
 @render_to('profiles/account.html')
 def account(request):
@@ -123,22 +124,23 @@ def account(request):
     #                                            Q(shippingorder__status=ORDER_WAITING_PAYMENT) |
     #                                            Q(shippingorder__status=ORDER_SHIPPING_FEE_REQUESTED))
     auctions_waiting_payment = member.items_won.filter(order=None)
-    print auctions_waiting_payment.count()
-    #orders processing and shipped
-    #auctions_processing_shipped = member.items_won.filter(Q(shippingorder__status=ORDER_PROCESSING_ORDER) |
-    #                                             Q(shippingorder__status=ORDER_SHIPPED))
-    auctions_processing_shipped = []
-    auctions_record_testimonial = []
-    #auctions_record_testimonial = member.items_won.filter(shippingorder__status=ORDER_SHIPPED, video=None)
 
+
+    #orders processing and shipped
+    auctions_processing = member.items_won.filter(order__status=ORDER_PROCESSING)
+    print auctions_processing
+
+    auctions_shipped = member.items_won.filter(order__status=ORDER_SHIPPED)
+    print '--------'
+    print auctions_shipped
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
-            'orders_processing_shipped': auctions_processing_shipped,
-            'orders_record_testimonial': auctions_record_testimonial,
+            'auctions_processing':auctions_processing,
+            'auctions_shipped': auctions_shipped,
     }
 
 @login_required
-@render_to('profiles/shipping.html')
+@render_to('profiles/manage_shipping.html')
 def manage_shipping(request):
     member = request.user.get_profile()
     shipping_profiles = member.shippingaddress_set.filter(deleted=False)
@@ -185,10 +187,88 @@ def manage_shipping(request):
         'shipping':shipping
     }
 
-"""
-* Pay Shipping Fee
-* Waiting Shipping fee
-* Processing Shipping
-* Processing Order
-* Post Testimonials
-"""
+@login_required
+@render_to('profiles/manage_billing.html')
+def manage_billing(request):
+    member = request.user.get_profile()
+    billing_profiles = member.billingaddress_set.filter(deleted=False)
+    billing = None
+    id = request.GET.get('id')
+    if 'delete' in request.GET:
+        billing = get_object_or_404(BillingAddress, id=id, member=member, deleted=False)
+        billing.deleted = True
+        billing.save()
+        return HttpResponseRedirect(reverse('profile_account'))
+
+    if request.method == 'POST':
+        form = BillingForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            if id:
+                billing = get_object_or_404(BillingForm, id=id, member=member, deleted=False)
+                billing.first_name =  data['first_name']
+                billing.last_name = data['last_name']
+                billing.address1 = data['address1']
+                billing.address2 = data['address2']
+                billing.city = data['city']
+                billing.zip_code = data['zip_code']
+                billing.country = data['country']
+                billing.state = data['state']
+                billing.phone = data['phone']
+                billing.save()
+            else:
+                billing = form.save(commit=False)
+                billing.member = member
+                billing.save()
+            return HttpResponseRedirect(reverse('profile_account'))
+    else:
+        if id:
+            billing = get_object_or_404(BillingAddress, id=id, member=member, deleted=False)
+            form = BillingForm(initial=billing.__dict__)
+        else:
+            form = BillingForm()
+
+    return {
+        'form':form,
+        'billing_profiles':billing_profiles,
+        'billing':billing
+    }
+
+@login_required
+@render_to('profiles/manage_payments.html')
+def manage_payments(request):
+    member = request.user.get_profile()
+    cards = member.card_set.filter(deleted=False)
+    card = None
+    id = request.GET.get('card')
+    if 'delete' in request.GET:
+        card = get_object_or_404(Card, id=id, member=member, deleted=False)
+        card.deleted = True
+        card.save()
+        return HttpResponseRedirect(reverse('profile_account'))
+
+    if request.method == 'POST':
+        form = CardForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            if id:
+                data = form.cleaned_data
+                card = form.save(commit=False)
+                card.member = member
+                card.save()
+                cards = member.card_set.filter(deleted=False)
+                form = CardForm()
+
+            return HttpResponseRedirect(reverse('profile_account'))
+    else:
+        if id:
+            card = get_object_or_404(Card, id=id, member=member, deleted=False)
+            form = CardForm(initial=billing.__dict__)
+        else:
+            form = CardForm()
+
+    return {
+        'form':form,
+        'cards':cards,
+        'card':card
+    }

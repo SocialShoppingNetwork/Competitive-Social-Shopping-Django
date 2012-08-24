@@ -31,7 +31,10 @@
         <p>Item:  $0.00 </p>
         <p>Shipping & handling:  ${{ shipping_option.price }} </p>
         <p>Total: ${{ shipping_option.price }}</p>
-        <a>Place Order</a>
+        <form action="." method="post">
+            {% csrf_token %}
+            <input type="submit" value="Place order"/>
+        </form>
     </div>
 {% endblock %}
 {% block extra_body %}

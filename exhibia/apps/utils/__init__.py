@@ -39,3 +39,16 @@ def auctions_to_dict(auctions):
     for a in auctions:
         result['a_%s' % a.id] =  auction_to_dict(a)
     return result
+
+from django.template.defaultfilters import floatformat
+def admin_auctions_to_dict(auctions):
+    result = {}
+    for a in auctions:
+        d = auction_to_dict(a)
+        d.update({
+            'backers':a.backers_history.count(),
+            'funded':floatformat(a.funded,2),
+            'users_bid':10000,
+        })
+        result['a_%s' % a.id] = d
+    return result

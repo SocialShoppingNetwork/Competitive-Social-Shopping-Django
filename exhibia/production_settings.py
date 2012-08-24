@@ -2,7 +2,7 @@ import os
 from common_settings import *
 import dj_database_url
 
-DATABASES = {'default': dj_database_url.config(default='postgres://rlvwccsmhg:MIeA6Waiu1qShR48nNQx@ec2-107-21-206-166.compute-1.amazonaws.com/rlvwccsmhg')}
+DATABASES = {'default': dj_database_url.config(default='postgres://grjlylwwcvspvq:es_QtWuoKxfyCVsqy0vx7B_1XC@ec2-107-22-168-228.compute-1.amazonaws.com:5432/daao89oh8cm122')}
 
 
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '')
@@ -23,3 +23,5 @@ CACHES = {
 }
 
 SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
+
+DEBUG = True

@@ -164,8 +164,6 @@ function fill_payment_form(item_description, item_price, custom_value){
     if (custom_value) $('#paynow_custom_field2').attr('value', custom_value);
 }
 
-
-
 function send_message(message){
     $.ajax({
         type: "POST",

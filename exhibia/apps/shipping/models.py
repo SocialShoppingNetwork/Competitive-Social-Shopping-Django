@@ -3,17 +3,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 
-from shipping.constants import SHIPPING_STANDARD, SHIPPING_EXPEDITED, SHIPPING_SAME_DAY, SHIPPING_INTERNATIONAL
-from shipping.constants import SHIPPING_COMPANY_FEDEX, SHIPPING_COMPANY_USPS, SHIPPING_COMPANY_UPS, SHIPPING_COMPANY_DHL
-from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_PROCESSING_ORDER, ORDER_SHIPPED
+from shipping.constants import SHIPPING_OPTIONS
+from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_PROCESSING, ORDER_SHIPPED
+from shipping.constants import SHIPPING_COMPANIES
 from profiles.models import BillingAddress
 
-SHIPPING_OPTIONS = (
-    (SHIPPING_STANDARD, 'Shipping Standard'),
-    (SHIPPING_EXPEDITED, 'Shipping Expedited'),
-    (SHIPPING_SAME_DAY, 'Shipping Same day'),
-    (SHIPPING_INTERNATIONAL, 'International Shipping')
-)
+
 
 class ShippingAddress(models.Model):
     member = models.ForeignKey('profiles.Member')
@@ -46,20 +41,6 @@ class ShippingFee(models.Model):
     def name(self):
         d = dict(SHIPPING_OPTIONS)
         return d[self.shipping]
-
-SHIPPING_COMPANIES = (
-    (SHIPPING_COMPANY_FEDEX, 'FEDEX'),
-    (SHIPPING_COMPANY_USPS, 'USPS'),
-    (SHIPPING_COMPANY_UPS, 'UPS'),
-    (SHIPPING_COMPANY_DHL, 'DHL')
-)
-
-ORDER_STATUS = (
-    (ORDER_WAITING_PAYMENT, "Waiting Payment"),
-    (ORDER_SHIPPING_FEE_REQUESTED, "Shipping fee Requested"),
-    (ORDER_PROCESSING_ORDER, "Processing order"), #PAID
-    (ORDER_SHIPPED, "Shipped"),
-)
 
 class ShippingRequest(models.Model):
     member = models.ForeignKey("profiles.Member")
@@ -94,6 +75,9 @@ def create_billing_address(sender, instance, created, raw, **kwargs):
             'country':instance.country,
             'zip_code':instance.zip_code,
             'phone':instance.phone,
+            'address1':instance.address1,
+            'address2':instance.address1,
+            'state':instance.state,
             'shipping':instance
     }
     BillingAddress.objects.create(**data)

@@ -40,14 +40,15 @@ urlpatterns = patterns("",
     url(r'^accounts/profile/$', 'profiles.views.account', {}, name="profile_account"),
 
     url(r'^account/$', 'profiles.views.account', {}, name="profile_account"),
-
-    url(r'^accounts/shipping/$', 'profiles.views.manage_shipping', {}, name="account_shipping"),
+    url(r'^account/orders/(\w+)/$', 'checkout.views.view_order', {}, name="checkout_view_order"),
+    url(r'^account/shipping/$', 'profiles.views.manage_shipping', {}, name="account_shipping"),
+    url(r'^account/billing/$', 'profiles.views.manage_billing', {}, name="account_billing"),
+    url(r'^account/payments/$', 'profiles.views.manage_payments', {}, name="account_payments"),
 
     
     url(r"^items/", include("auctions.urls")),
 
     #url(r"^testimonials/", include("testimonials.urls")),
-    url(r"^matic/", include("matic.urls")),
 
     #u url(r'', include('social_auth.urls')),
     #u url(r'', include('social_login.urls')),
@@ -58,6 +59,7 @@ urlpatterns = patterns("",
 
     url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user", name="admin_invite_user"),
     url(r"^admin/", include(admin.site.urls)),
+    url(r"^adminx/", include("matic.urls")),
     url(r"^about/", include("about.urls")),
 
 
