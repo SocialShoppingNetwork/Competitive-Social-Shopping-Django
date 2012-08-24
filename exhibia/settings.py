@@ -12,7 +12,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 PINAX_THEME = "default"
 
 
-DEBUG = 'HEROKU' in os.environ
+DEBUG = 'HEROKU' not in os.environ
 TEMPLATE_DEBUG = DEBUG
 
 # tells Pinax to serve media through the staticfiles app.
