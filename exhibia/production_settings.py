@@ -23,4 +23,5 @@ CACHES = {
 }
 
 SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
-DEBUG = False
+
+DEBUG = True
