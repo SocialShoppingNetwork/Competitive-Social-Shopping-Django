@@ -5054,3 +5054,52 @@ a.badge:hover {
 	-moz-border-radius: 500px;
 	border-radius: 500px;
 }
+
+/* Chat when is a tab on bottom */
+#chat.tabbed {
+	position: fixed;
+	bottom: 0; right: 30px;
+	width: 220px;
+}
+
+#chat.tabbed > .container {
+	background: white;
+	height: 220px;
+	border: 1px solid #EAEAEA;
+	width: auto;
+}
+#chat.tabbed h3.tab-title {
+	background: #333;
+	color: white;
+	padding: 0px 10px;
+	font-size: 12px;
+}
+#chat.tabbed .type-message {
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+	background-color: whiteSmoke;
+	padding: 3px 27px;
+	border-top: 1px solid #EAEAEA;
+}
+#chat.tabbed .type-message > input {
+	margin-left: -6px;
+}
+#chat.tabbed .chat-container {
+	height: 185px;
+	overflow-y: auto;
+}
+#chat.tabbed .chat-container li {
+	padding: 10px 0;
+	border-bottom: 1px solid #F8F8F8;
+}
+#chat.tabbed .chat-container li .span1 {
+	width: 30px; height: 30px;
+}
+#chat.tabbed .user-name {
+	font-weight: bold;
+	margin-right: 5px;
+}
+#chat.tabbed [class*="span"] {
+	margin-left: 8px;
+}

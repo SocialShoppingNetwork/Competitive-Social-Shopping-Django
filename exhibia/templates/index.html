@@ -11,6 +11,18 @@
     <div id="items_container" class="row items">
         {% include 'auctions/auctions.html' %}
     </div>
+    
+    <div id="chat" class="tabbed">
+		<h3 class="tab-title">Chat</h3>
+		<div class="container">
+			<ul class="unstyled chat-container"></ul>
+			<div class="input-prepend type-message">
+				<span class="add-on"><i class="icon-envelope"></i></span>
+				<input id="chat-msg" type="text" class="span2" />
+			</div>
+		</div>
+	</div>
+    
 {% endblock %}
 {% block extra_body %}
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.easing.1.3.js"></script>
@@ -18,7 +30,7 @@
 	<script type="text/javascript" src="{{ STATIC_URL }}js/item.js"></script>
     <script>
     $(document).ready(function() {
-        /* socket = io.connect('http://{{ SOCKETIO_SERVER }}');
+        socket = io.connect('http://{{ SOCKETIO_SERVER }}');
         //socket.connect();
         socket.on('news', function (data) {
             //console.log(data);
@@ -47,9 +59,24 @@
             $.exhibia['auctions'] = new Auctions(auctions);
             update_auctions_ui(auctions);
         });
+        
+        // User hits enter
+        $('#chat-msg').keyup(function(e){ 
+			var code = e.which;
+			
+			if(code==13) {
+				send_message($(this).val());
+				$(this).val('');
+			}
+		});
+        
         socket.on('user_message', function(username, message, picture){
-           console.log(username + ': ' + message);
-        });*/
+        	var chat_msg = $('<li />').addClass('row').hide();
+        		chat_msg.html('<div class="span1"><img src="' + picture +'" class="img-circle" /></div><div class="span2"><span class="user-name">' + username +'</span>' + message +'</div>');
+           $('#chat .chat-container').prepend(chat_msg);
+           		chat_msg.slideDown();
+        });
+        
         $('.scrollingtext').bind('marquee', function() {
             var ob = $(this);
             var tw = ob.width();

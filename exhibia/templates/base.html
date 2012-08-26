@@ -56,17 +56,9 @@
 <script src="{{ STATIC_URL }}js/jquery.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
 {% block extra_body_base %}
-    <!---<script>
-        jQuery.noConflict();
-        /*$.exhibia = {};*/
-        $(document).ready(function(){
-            $('input[name=option5]', '#fund_form').click(function(event){
-                $('#uptou').val($(event.target).attr('value'));
-            });
-        });
-    </script>
+	<script>$.exhibia = {};</script>
     <script src="http://{{ SOCKETIO_SERVER }}/socket.io/socket.io.js"></script>
-    <script src="{{ STATIC_URL }}js/winnina.js"></script>--->
+    <script src="{{ STATIC_URL }}js/winnina.js"></script>
     {% block extra_body %}{% endblock %}
 {% endblock %}
 </body>
