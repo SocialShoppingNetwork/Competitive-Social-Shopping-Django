@@ -49,6 +49,11 @@
                 add_remove_auctions();
             });
         }
+		
+		$('#chat .tab-title').click(function() {
+			$('#chat .container').toggle();		
+		});
+		
         setInterval(update_all_items, 10000);
 
         setInterval(update_auctions, 1000);
@@ -76,16 +81,6 @@
            $('#chat .chat-container').prepend(chat_msg);
            		chat_msg.slideDown();
         });
-        
-        $('.scrollingtext').bind('marquee', function() {
-            var ob = $(this);
-            var tw = ob.width();
-            var ww = ob.parent().width();
-            ob.css({ right: -tw });
-            ob.animate({ right: ww }, 30000, 'linear', function() {
-                ob.trigger('marquee');
-            });
-        }).trigger('marquee');
 
         $('.bid-btn').click(function(event){
             event.preventDefault();

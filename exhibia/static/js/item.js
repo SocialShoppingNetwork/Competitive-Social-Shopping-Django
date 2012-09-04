@@ -9,7 +9,29 @@ $(document).ready(function() {
 		} else if ( $(this).scrollTop() < desc_pos.top && $el.css('position') == 'fixed')  {
 			$el.css({'position': 'relative'}); 
 		}
-	});*/
+	});
+	
+	$('#fund_item').click(function(event) {
+                event.preventDefault();
+                var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
+                $.post('/items/fund/' + {{ auction.id }} + '/', {'amount':amount}, function(data){
+                    switch(data['error']){
+                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                        case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
+                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                    }
+                    //window.location.reload();
+                }, 'json');
+                $('#fundModal').modal('hide');
+                get_account_bids(function(data){
+                    $('#member_bids').text(data);
+                });
+                update_item();
+                window.location.reload();
+            });Q
+	*/
 	
 	/* Quick sand sorting */
 	var $items_container = $('#items');
