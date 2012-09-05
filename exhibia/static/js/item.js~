@@ -35,7 +35,8 @@ $(document).ready(function() {
                 });
                 update_item();
                 window.location.reload();
-            });
+            });Q
+	
 	
 	/* Quick sand sorting */
 	var $items_container = $('#items');
