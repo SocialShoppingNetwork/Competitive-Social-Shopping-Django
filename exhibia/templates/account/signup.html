@@ -5,45 +5,53 @@
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 {% block extra_head %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/login/social-buttons.css" />
+    <!--<link rel="stylesheet" href="{{ STATIC_URL }}css/login/social-buttons.css" />-->
 {% endblock %}
 {% block body %}
     <h1>{% trans "Sign Up" %}</h1>
-    
+    <hr>
     {% if user.is_authenticated %}
         <p>{% trans "You are already logged in." %}</p>
     {% else %}
-        <p>{% trans "Already have an account?" %} <a href="{% url acct_login %}">{% trans "Log In" %}</a>!</p>
-        <p class="signup-register"><span>{% trans "Register using" %}:</span>
-            <a class="register-by register-by-facebook" href="#{% url socialauth_begin backend='facebook' %}" rel="facebook"></a>
-            <a class="register-by register-by-twitter" href="#{% url socialauth_begin backend='twitter' %}"rel="twitter"></a>
-            <a class="register-by register-by-google-oauth2" href="#{% url socialauth_begin backend='google-oauth2' %}" rel="google-oauth2"></a>
-            <a class="register-by-django" href="#">{% trans "username/password" %}</a>
-        </p>
-        <div class="cleared"></div>
-        <form class="signup uniForm" id="signup_form" method="post" action="{% url acct_signup %}" autocapitalize="off">
-            {% csrf_token %}
-            <fieldset class="inlineLabels">
-                {{ form|as_uni_form }}
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <input type="hidden" id="id_{{ uid_confirmed_name }}" name="{{ uid_confirmed_name }}" value="{{ uid }}" />
-                <div class="signup-btns form_block">
-                    <input class="signup-btn signup-btn-app" type="button" value="{% trans "Sign Up &raquo;" %}"/>
-                    <a class="signup-btn signup-btn-facebook" href="#" title="{% trans "Sign Up With Facebook &raquo;" %}"></a>
-                    <a class="signup-btn signup-btn-twitter" href="#" title="{% trans "Sign Up With Twitter &raquo;" %}"></a>
-                    <a class="signup-btn signup-btn-google-oauth2" href="#" title="{% trans "Sign Up With Google &raquo;" %}"></a>
-                </div>
-            </fieldset>
-        </form>
-
-        {% url terms as terms_url %}
-        {% url privacy as privacy_url %}
-        <p>{% blocktrans %}By clicking "Sign Up", you are indicating that you have read and agree to the <a href="{{ terms_url }}">Terms of Use</a> and <a href="{{ privacy_url }}">Privacy Policy</a>.{% endblocktrans %}</p>
-        
-        <p>{% blocktrans %}If you have any trouble creating your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</p>
-        
+    <div class="well row">
+    	<div class="span5 divider">
+		    <h4>{% trans "Already have an account?" %} <a href="{% url acct_login %}">{% trans "Log In" %}</a>!</h4><hr>
+		    <h2 class="signup-register">{% trans "Register using" %}:</h2><br>
+		    <ul class="unstyled" align="center">
+		        <li><a class="span1 btn btn-primary register-by-facebook" href="#{% url socialauth_begin backend='facebook' %}" rel="facebook">Facebook</a></li>
+		        <li><a class="span1 btn btn-info register-by-twitter" href="#{% url socialauth_begin backend='twitter' %}"rel="twitter">Twitter</a></li>
+		        <li><a class="span1 btn register-by-google-oauth2" href="#{% url socialauth_begin backend='google-oauth2' %}" rel="google-oauth2">Google</a></li>
+		        <!--<li><a class="span3 btn btn-inverse register-by-django" href="#">{% trans "username/password" %}</a><br></li>-->
+		    </ul>
+        </div>
+        <div class="span5">
+        	<h4>{% trans "Create a new account" %}</h4><hr>
+		    <form class="signup uniForm" id="signup_form" method="post" action="{% url acct_signup %}" autocapitalize="off">
+		        {% csrf_token %}
+		        <fieldset class="inlineLabels">
+		            {{ form|as_uni_form }}
+		            {% if redirect_field_value %}
+		                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		            {% endif %}
+		            <input type="hidden" id="id_{{ uid_confirmed_name }}" name="{{ uid_confirmed_name }}" value="{{ uid }}" />
+		            <div class="signup-btns form_block">
+		                <input class="signup-btn signup-btn-app" type="button" value="{% trans "Sign Up &raquo;" %}"/>
+		                <a class="signup-btn signup-btn-facebook" href="#" title="{% trans "Sign Up With Facebook &raquo;" %}"></a>
+		                <a class="signup-btn signup-btn-twitter" href="#" title="{% trans "Sign Up With Twitter &raquo;" %}"></a>
+		                <a class="signup-btn signup-btn-google-oauth2" href="#" title="{% trans "Sign Up With Google &raquo;" %}"></a>
+		            </div>
+		        </fieldset>
+		    </form>
+		</div>
+	</div>
+	
+    {% url terms as terms_url %}
+   	{% url privacy as privacy_url %}
+   	<hr>
+  	<blockquote class="pull-right">
+	   <p>{% blocktrans %}By clicking "Sign Up", you are indicating that you have read and agree to the <a href="{{ terms_url }}">Terms of Use</a> and <a href="{{ privacy_url }}">Privacy Policy</a>.{% endblocktrans %}</p>
+	   <small>{% blocktrans %}If you have any trouble creating your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</small>
+	</blockquote>
     {% endif %}
 {% endblock %}
 

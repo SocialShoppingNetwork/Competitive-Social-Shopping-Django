@@ -4999,7 +4999,7 @@ a.badge:hover {
 }
 /* Home items image */
 .row.items .thumbnail img.product {
-	height: 130px;
+	max-height: 130px;
 }
 /* Home items funded container */
 .row.items .funded {

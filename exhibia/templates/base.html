@@ -7,34 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
+	
     <!-- Le styles -->
-    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/exhibia.css" rel="stylesheet">
-    <style type="text/css">
-        .container {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
-    </style>
-    <style type="text/css">
-        div.scroller{
-            position:relative;
-            height:24px;
-            width:95%;
-            display:block;
-            overflow:hidden;
-        }
-        div.scrollingtext{
-            position:absolute;
-            white-space:nowrap;
-            font-family:'Trebuchet MS',Arial;
-            font-size:16px;
-            font-weight:bold;
-            color:#000000;
-        }
-    </style>
-
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -49,7 +24,6 @@
     <script>
         var selected_item = null;
     </script>
-
     {% block extra_head_base %}
         {% block extra_head %}{% endblock %}
     {% endblock %}
@@ -62,43 +36,30 @@
 
 </head>
 
-<body style="width: auto;min-width: 760px;overflow-x: hidden; ">
+<body>
 {% block right_after_body %}{% endblock %}
 <div id="fb-root"></div>
 {% include 'header.html' %}
 {% include 'fb/modal.html' %}
 {% credits_checkout %}
 
-<div class="container" style="width: auto;min-width: 760px;margin-top: 90px;">
-    <div class="scroller">
-        <div class="scrollingtext">Something something scrolling to the left</div>
-    </div>
+<div class="container">
     {% block body %}
     {% endblock %}
 
     {% include 'fb/checkout-dialog.html' %}
 </div> <!-- /container -->
-
+{% block status_bar %}{% endblock %}
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="{{ STATIC_URL }}js/jquery.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-<script src="{{ STATIC_URL }}js/jquery-1.4.1-and-plugins.min.js"></script>
 {% block extra_body_base %}
-    <script>
-        jQuery.noConflict();
-        $.exhibia = {};
-        $(document).ready(function(){
-            $('input[name=option5]', '#fund_form').click(function(event){
-                $('#uptou').val($(event.target).attr('value'));
-            });
-        });
-    </script>
+	<script>$.exhibia = {};</script>
     <script src="http://{{ SOCKETIO_SERVER }}/socket.io/socket.io.js"></script>
     <script src="{{ STATIC_URL }}js/winnina.js"></script>
     {% block extra_body %}{% endblock %}
 {% endblock %}
-
 </body>
 </html>

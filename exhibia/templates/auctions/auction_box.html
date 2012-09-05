@@ -1,16 +1,24 @@
 {% with auction as a %}
-<li data-id="{{ a.id }}" data-type="app" class="span3 span3a item_waiting item" style="margin-bottom: 10px;">
-    <h2>{{ a.item.name }}</h2>
-    <a href="{% url auction_item a.item.slug_name %}?item={{ a.id }}"><img class="product" src="{{ a.item.image.img.url }}" /></a>
-    <hr />
-    <div class="progress progress-info progress-striped active">
-        <div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
-    </div>
-    <hr/>
-    <div class="funded" style="height: 45px;">
-        <h7 class="fundha"><span id="amount_pleged_{{ a.id }}">${{ a.amount_pleged }}</span>FUNDED</h7>
-        <h7 class="fundhb"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</h7>
-    </div><hr/>
-    <p style="margin-top: -5px"><a class="btn fund btn-fund" data-toggle="modal" href="#fundModal">FUND</a></p>
+<li data-id="{{ a.id }}" data-type="app" data-types="camera" class="span3 funding">
+	<div class="thumbnail">
+		<div class="h3 fund-title"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
+      	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
+			<img class="product" src="{{ a.item.image.img.url }}" />
+		</a>
+        <div class="caption">
+        	<div class="progress progress-info progress-striped active">
+        		<div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
+    		</div>
+          	<div class="row funded">
+				<div class="span1"><span id="amount_pleged_{{ a.id }}">${{ a.amount_pleged }}</span>FUNDED</div>
+				<div class="span1"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</div>
+			</div>
+        </div>
+        <div class="panel">
+        	<div class="btn-group fund-options">
+        		<a class="btn fund btn-success btn-big" data-uri="{% url auction_fund a.id %}" data-toggle="modal" href="#fundModal"><i class="icon-leaf icon-white"></i> FUND</a>
+        	</div>
+        </div>
+	</div>
 </li>
 {% endwith %}

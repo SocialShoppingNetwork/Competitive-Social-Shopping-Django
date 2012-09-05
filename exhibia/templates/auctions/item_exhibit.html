@@ -100,15 +100,6 @@
         }
         $(document).ready(function() {
 
-            $('.scrollingtext').bind('marquee', function() {
-                var ob = $(this);
-                var tw = ob.width();
-                var ww = ob.parent().width();
-                ob.css({ right: -tw });
-                ob.animate({ right: ww }, 30000, 'linear', function() {
-                    ob.trigger('marquee');
-                });
-            }).trigger('marquee');
 
             {% if auction.is_processing %}
             $('#bid-btn').click(function(event){

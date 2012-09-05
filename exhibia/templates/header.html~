@@ -1,7 +1,7 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
-		  <a class="brand" href="{% url home %}">Exhibia</a>
+		  <a class="brand" href="#">Exhibia</a>
 		  <ul class="nav">
             <li class="active"><a href="#">How it Works</a></li>
             <li class="dropdown">
