@@ -5103,3 +5103,5 @@ a.badge:hover {
 #chat.tabbed [class*="span"] {
 	margin-left: 8px;
 }
+.showcase .well { padding: 5px; margin: 4px 0; }
+.showcase .h2.time { line-height: 22px; }
