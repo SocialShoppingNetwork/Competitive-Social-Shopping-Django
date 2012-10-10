@@ -45,7 +45,7 @@ urlpatterns = patterns("",
     url(r'^account/billing/$', 'profiles.views.manage_billing', {}, name="account_billing"),
     url(r'^account/payments/$', 'profiles.views.manage_payments', {}, name="account_payments"),
 
-    
+
     url(r"^items/", include("auctions.urls")),
 
     #url(r"^testimonials/", include("testimonials.urls")),
@@ -65,7 +65,6 @@ urlpatterns = patterns("",
 
     url(r"^account/", include("pinax.apps.account.urls")),
     url(r"^openid/", include(PinaxConsumer().urls)),
-    url(r"^profiles/", include("idios.urls")),
     url(r"^notices/", include("notification.urls")),
     url(r"^announcements/", include("announcements.urls")),
     #url(r'^uploadify/', include('uploadify.urls')),

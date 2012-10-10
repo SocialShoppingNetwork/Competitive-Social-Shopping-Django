@@ -1,14 +1,14 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
-
-from idios.models import ProfileBase
+from django.contrib.auth.models import User
 from django_countries import CountryField
 
 from auctions.models import Auction
 
-class Member(ProfileBase):
-    name = models.CharField(_("name"), max_length=50, null=True, blank=True)
+class Member(models.Model):
+
+    user = models.OneToOneField(User, verbose_name=_("user"), related_name='profile')
     about = models.TextField(_("about"), null=True, blank=True)
     location = models.CharField(_("location"), max_length=40, null=True, blank=True)
     website = models.URLField(_("website"), null=True, blank=True, verify_exists=False)
@@ -20,10 +20,14 @@ class Member(ProfileBase):
     zip_code = models.CharField(max_length=10, blank=True)
     state = models.CharField(max_length=30, null=True, blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True)
-    birthday = models.DateField(null=True, blank=True, help_text="for example: 1980-7-9")
+    birthday = models.DateField(null=True, blank=True,
+                             help_text="for example: 1980-7-9")
 
     #chat
     is_banned = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.user.username
 
     def bid(self, auction):
         auction.bid_by(self)
@@ -55,7 +59,6 @@ class Member(ProfileBase):
         return AuctionOrder.objects.filter(auction__status="c", winner=self)"""
 
 
-
 """
 def create_shipping_profile(sender, instance=None, **kwargs):
     if instance is None:
@@ -73,7 +76,8 @@ post_save.connect(create_shipping_profile, sender=Member)
 """
 
 class BillingAddress(models.Model):
-    member = models.ForeignKey('profiles.Member')
+
+    user = models.ForeignKey(User, related_name='billing_addesses')
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
     address1 = models.CharField(max_length=100)
@@ -86,7 +90,12 @@ class BillingAddress(models.Model):
     deleted = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     shipping = models.OneToOneField("shipping.ShippingAddress", blank=True, null=True)
+
     def __unicode__(self):
-        return str(self.member)
+        return str(self.user.username)
 
 
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Member.objects.create(user=instance)
+post_save.connect(create_user_profile, sender=User)

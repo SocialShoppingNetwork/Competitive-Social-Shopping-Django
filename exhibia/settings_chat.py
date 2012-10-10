@@ -17,7 +17,6 @@ INSTALLED_APPS = [
     "compressor",
     "timezones",
     "pagination",
-    "idios",
     # Pinax
     "pinax.apps.account",
     "gunicorn",
