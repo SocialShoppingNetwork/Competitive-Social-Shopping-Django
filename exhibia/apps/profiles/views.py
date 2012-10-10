@@ -272,3 +272,4 @@ def manage_payments(request):
         'cards':cards,
         'card':card
     }
+

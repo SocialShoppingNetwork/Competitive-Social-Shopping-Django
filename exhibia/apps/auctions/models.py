@@ -102,7 +102,7 @@ class AuctionManager(models.Manager):
 
     def finish_expired(self):
         self.expired().update(status='f')
-        
+
     def create_from_item(self, item):
         auction = Auction.objects.create(item=item, bidding_time=item.bidding_time, deadline_time=time()+item.pledge_time)
         item.amount -= 1
@@ -164,7 +164,7 @@ class AuctionItem(models.Model):
 
     def __unicode__(self):
         return self.name
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ('auction_item', [self.slug_name])
@@ -211,7 +211,7 @@ class Auction(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     objects = AuctionManager()
-    
+
     def __unicode__(self):
         return self.item.name
 
@@ -263,7 +263,7 @@ class Auction(models.Model):
     @property
     def is_ended(self):
         return self.ended_unixtime != None
-    
+
     def end(self):
         self.status = AUCTION_JUST_ENDED
         self.ended_unixtime = time()
@@ -281,26 +281,26 @@ class Auction(models.Model):
         else:
             self.status = AUCTION_SHOWCASE
         self.save()
-    
+
     def bid_by(self, bidder):
         if self.status in ['f','m','d','c','e']:
             raise AuctionExpired
-        
+
         username = bidder.user.username
         if bidder.credits <= 0:
             raise NotEnoughCredits
-        
+
         if self.last_bidder == username:
             #TODO check this only raise without conditions, no win require, no conditions
             raise AlreadyHighestBid
-        
+
         #if self.status == "w":
         #    raise AuctionIsNotReadyYet
 
         # Paused Auction Will still accept bid
         #elif self.status == "s":
         #    raise AuctionPaused
-        
+
         bid_type = 'n'
         price = self.current_offer + settings.PRICE_INTERVAL
         unixtime = time()
@@ -332,8 +332,9 @@ class AuctionBid(models.Model):
     price = models.FloatField()
     unixtime = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
-    #def __unicode__(self):
-    #rrrr    #return '%s - %s ' %(self.auction, self.bidder)
+
+    def __unicode__(self):
+        return '%s : %s ' %(self.auction, self.bidder)
 
 class AuctionItemImages(models.Model):
     item = models.ForeignKey(AuctionItem, related_name="images")

@@ -129,3 +129,5 @@ def associate_accounts(request):
            'disconnect_error': request.session.pop(settings.SOCIAL_DISCONNECT_AUTH_ERROR_KEY, None),
            'last_login': request.session.get('social_auth_last_login_backend'),
            'backends': grouped_backends()}
+
+

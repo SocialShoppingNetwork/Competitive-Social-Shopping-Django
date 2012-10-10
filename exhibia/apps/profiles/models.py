@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+from datetime import datetime
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django_countries import CountryField
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 
+from django_countries import CountryField
 from auctions.models import Auction
 
 class Member(models.Model):
@@ -27,7 +31,7 @@ class Member(models.Model):
     is_banned = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.user.username
+        return unicode(self.user)
 
     def bid(self, auction):
         auction.bid_by(self)
@@ -92,10 +96,45 @@ class BillingAddress(models.Model):
     shipping = models.OneToOneField("shipping.ShippingAddress", blank=True, null=True)
 
     def __unicode__(self):
-        return str(self.user.username)
+        return unicode(self.user)
 
 
+class IPAddress(models.Model):
+    user = models.ForeignKey(User, related_name='ip_addresses')
+    IPAddress = models.IPAddressField()
+    last_login = models.DateField(default=datetime.now)
+
+    def __unicode__(self):
+        return ''
+
+    class Meta:
+        unique_together = ('user', 'IPAddress')
+        ordering = ('-last_login', )
+        verbose_name_plural = 'IP addresses'
+
+class BannedIPAddress(models.Model):
+    IPAddress = models.IPAddressField()
+    created_at = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return unicode(self.IPAddress)
+
+    class Meta:
+        app_label = "auth"
+        db_table = "profiles_bannedipaddress"
+        verbose_name_plural = 'Banned IP addresses'
+
+
+
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Member.objects.create(user=instance)
-post_save.connect(create_user_profile, sender=User)
+
+@receiver(user_logged_in)
+def save_ip(sender, request, user, *args, **kwargs):
+    obj, created = IPAddress.objects.get_or_create(user=user,
+        IPAddress=request.META.get('X-Real-IP') or request.META['REMOTE_ADDR'])
+    if not created:
+        obj.last_login = datetime.now()
+        obj.save()
