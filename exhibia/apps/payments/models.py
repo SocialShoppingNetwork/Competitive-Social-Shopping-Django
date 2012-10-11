@@ -89,7 +89,7 @@ class AuctionOrder(models.Model):
         unique_together = ('auction', 'winner')
 
     def __unicode__(self):
-        return "%s won by %s" % (self.auction, self.winner)
+        return u"%s won by %s" % (self.auction, self.winner)
 
     class Meta:
         ordering = ["-id"]
@@ -103,4 +103,4 @@ class Card(models.Model):
     deleted = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     def __unicode__(self):
-        return "%s" % (self.number)
+        return u"%s" % (self.number)
