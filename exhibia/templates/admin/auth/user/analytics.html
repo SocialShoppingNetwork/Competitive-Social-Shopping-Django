@@ -1,0 +1,87 @@
+{% extends "admin/base_site.html" %}
+{% load i18n adminmedia %}
+
+{% block extrahead %}{{ block.super }}
+{% url admin:jsi18n as jsi18nurl %}
+<script type="text/javascript" src="{{ jsi18nurl|default:'../../../jsi18n/' }}"></script>
+{{ media }}
+{{ form.media }}
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+  <style type="text/css">
+    .paginator span { font-weight: bold; padding-left: 30px; }
+  </style>
+
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="../../../">
+      {% trans "Home" %}
+    </a>
+    &rsaquo;
+    <a href="../../">
+       {{ opts.app_label|capfirst }}
+    </a>
+    &rsaquo;
+    <a href="../">
+       {{ opts.verbose_name_plural|capfirst }}
+    </a>
+    &rsaquo;
+    {{ title }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <div class="module" id="changelist">
+
+    <div id="toolbar">
+        <form id="changelist-search" action="" method="post">
+          {% csrf_token %}
+          <div>
+            {% for field in form %}
+              {{ field.errors }}
+              {{ field.label_tag }}: {{ field }}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {% endfor %}
+            <input type="submit" value="{% trans 'Search' %}" />
+          </div>
+        </form>
+    </div>
+    <form id="changelist-form">
+      <table cellspacing="0" id="result_list">
+          <thead>
+            <tr>
+              <th>{% trans "Source" %}</th>
+              <th>{% trans "Singups" %}</th>
+              <th>{% trans "Sales count" %}</th>
+              <th>{% trans "Sales amount" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for object in rows %}
+            <tr class="{% cycle 'row1' 'row2' %}">
+              <td>{{ object.provider }}</td>
+              <td>{{ object.user_count }}</td>
+              <td>{{ object.sale_count }}</td>
+              <td>${{ object.sale_amount }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+      </table>
+        <p class="paginator">
+          <span>{% trans "Total users joined" %}</span>: {{ total_users_joined }}
+          <span>{% trans "Total sales done" %}</span>: {{ total_sale_count }}
+          <span>{% trans "Total sales amount" %}</span>: ${{ total_sale_amount }}
+        </p>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

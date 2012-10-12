@@ -76,7 +76,7 @@ class AuctionOrder(models.Model):
         (ORDER_SUSPENDED, "Suspended"),
     )
     auction = models.ForeignKey("auctions.Auction")
-    winner = models.ForeignKey("profiles.Member", editable=False)
+    winner = models.ForeignKey("auth.User", editable=False, related_name='auction_order')
     amount_paid = models.FloatField(default=0)
     method = models.CharField(max_length=3, choices=PAYMENT_METHOD, default=PLIMUS)
     status = models.CharField(max_length=3, choices=AUCTION_ORDER_STATUS, default=ORDER_NOT_PAID)

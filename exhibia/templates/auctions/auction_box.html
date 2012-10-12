@@ -1,14 +1,16 @@
 {% with auction as a %}
 <li data-id="{{ a.id }}" data-type="app" data-types="camera" class="span3 funding">
 	<div class="thumbnail">
-		<div class="h3 fund-title"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
+		<div class="h3 fund-title">
+            <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a>
+        </div>
       	<a href="{% url auction_item a.item.slug_name %}?item={{ a.id }}">
 			<img class="product" src="{{ a.item.image.img.url }}" />
 		</a>
         <div class="caption">
-        	<div class="progress progress-info progress-striped active">
-        		<div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
-    		</div>
+            <div class="progress progress-info progress-striped">
+                <div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
+            </div>
           	<div class="row funded">
 				<div class="span1"><span id="amount_pleged_{{ a.id }}">${{ a.amount_pleged }}</span>FUNDED</div>
 				<div class="span1"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</div>

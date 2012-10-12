@@ -126,8 +126,12 @@ class Brand(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.CharField(max_length=250, unique=True)
+
     def __unicode__(self):
         return self.name
+    class Meta:
+        verbose_name = u'Category'
+        verbose_name_plural = u'Categories'
 
 from tinymce import models as tinymce_models
 
@@ -340,6 +344,9 @@ class AuctionItemImages(models.Model):
     item = models.ForeignKey(AuctionItem, related_name="images")
     img = models.ImageField(help_text="default image 120px height 200px width recommended", upload_to="items")
     is_default = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return unicode(self.img)
 
     def get_full_url(self):
         return full_url(self.img.url)

@@ -11,7 +11,7 @@
     <div id="items_container" class="row items">
         {% include 'auctions/auctions.html' %}
     </div>
-    
+
     <div id="chat" class="tabbed">
 		<h3 class="tab-title">Chat</h3>
 		<div class="container">
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	</div>
-    
+
 {% endblock %}
 {% block extra_body %}
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.easing.1.3.js"></script>
@@ -49,11 +49,11 @@
                 add_remove_auctions();
             });
         }
-		
+
 		$('#chat .tab-title').click(function() {
-			$('#chat .container').toggle();		
+			$('#chat .container').toggle();
 		});
-		
+
         setInterval(update_all_items, 10000);
 
         setInterval(update_auctions, 1000);
@@ -64,17 +64,17 @@
             $.exhibia['auctions'] = new Auctions(auctions);
             update_auctions_ui(auctions);
         });
-        
+
         // User hits enter
-        $('#chat-msg').keyup(function(e){ 
+        $('#chat-msg').keyup(function(e){
 			var code = e.which;
-			
+
 			if(code==13) {
 				send_message($(this).val());
 				$(this).val('');
 			}
 		});
-        
+
         socket.on('user_message', function(username, message, picture){
         	var chat_msg = $('<li />').addClass('row').hide();
         		chat_msg.html('<div class="span1"><img src="' + picture +'" class="img-circle" /></div><div class="span2"><span class="user-name">' + username +'</span>' + message +'</div>');

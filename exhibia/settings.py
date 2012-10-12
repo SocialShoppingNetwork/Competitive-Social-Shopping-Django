@@ -16,7 +16,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # tells Pinax to serve media through the staticfiles app.
-SERVE_MEDIA = DEBUG
+SERVE_MEDIA = False
 
 # django-compressor is turned off by default due to deployment overhead for
 # most users. See <URL> for more information
@@ -63,25 +63,24 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, "site_media", "media")
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, "media")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = "/site_media/static/media/"
-#MEDIA_URL = "/site_media/media/"
+# MEDIA_URL = "/site_media/static/media/"
+MEDIA_URL = "/media/"
 
 # Absolute path to the directory that holds static files like app media.
 # Example: "/home/media/media.lawrence.com/apps/"
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "site_media", "static")
+STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
 
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
-STATIC_URL = "/site_media/static/"
+STATIC_URL = "/static/"
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
-    os.path.join(PROJECT_ROOT, "static"),
     #os.path.join(PINAX_ROOT, "themes", PINAX_THEME, "static"),
 ]
 
@@ -120,7 +119,7 @@ MIDDLEWARE_CLASSES = [
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pagination.middleware.PaginationMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
-    #"debug_toolbar.middleware.DebugToolbarMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "utils.middleware.MemberMiddleware",
 ]
 
@@ -187,6 +186,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "easy_thumbnails",
     "gunicorn",
+    "storages",
+
     # project
     "about",
     "profiles",
@@ -202,6 +203,7 @@ INSTALLED_APPS = [
     "socials",
     "social_auth",
     "django_countries",
+
 
 ]
 
@@ -239,9 +241,25 @@ LOGIN_REDIRECT_URLNAME = "home"
 EMAIL_CONFIRMATION_DAYS = 2
 EMAIL_DEBUG = DEBUG
 
+def show_toolbar(request):
+    if 'HEROKU' in os.environ:
+        if not request.user.is_superuser():
+            return False
+    return True
+
 DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
+    "TAG":'head',
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
 }
+
+
+#storages
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_ACCESS_KEY_ID = 'AKIAJCAXW2LKY2RXOFAA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'exhibia'
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
