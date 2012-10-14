@@ -26,7 +26,9 @@ class Member(models.Model):
     phone = models.CharField(max_length=30, null=True, blank=True)
     birthday = models.DateField(null=True, blank=True,
                              help_text="for example: 1980-7-9")
-
+    referer = models.CharField(max_length=100, blank=True, null=True)
+    referral_url = models.ForeignKey('referrals.ReferralLink', blank=True,
+                 null=True, related_name='invited_users')
     #chat
     is_banned = models.BooleanField(default=False)
 

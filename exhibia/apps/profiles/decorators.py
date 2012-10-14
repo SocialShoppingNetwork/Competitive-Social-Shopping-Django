@@ -6,12 +6,12 @@ from .models import BannedIPAddress
 
 
 def check_for_ip(function):
-    def wraps(request):
+    def wraps(request, *args, **kwargs):
         if BannedIPAddress.objects.filter(IPAddress=request.META.get('X-Real-IP')\
                                              or request.META['REMOTE_ADDR']):
             return render(request, 'account/banned.html')
         else:
-            return function(request)
+            return function(request, *args, **kwargs)
     return wraps
 
 

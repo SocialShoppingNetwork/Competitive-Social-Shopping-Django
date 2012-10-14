@@ -15,7 +15,7 @@ from pinax.apps.account.views import group_and_bridge, group_context
 from social_login.forms import SignupForm
 from social_auth import __version__ as version
 from social_auth.backends import UID_CONFIRMED, UID_USERNAME, BACKENDS, OpenIdAuth, BaseOAuth, BaseOAuth2
-
+from referrals.models import ReferralLink
 from annoying.decorators import render_to
 
 
@@ -72,6 +72,15 @@ def signup(request, **kwargs):
             else:
                 if form.is_valid():
                     user = form.save(request=request)
+                    profile = user.profile
+                    if request.session.get('ref'):
+                        profile.referer = request.session.get('ref')
+                    if request.session.get('referral_link'):
+                        try:
+                            profile.referral_url = ReferralLink.objects.get(pk=\
+                                    int(request.session.get('referral_link')))
+                        except: pass
+                    profile.save()
                     if settings.ACCOUNT_EMAIL_VERIFICATION:
                         ctx.update({
                             "email": form.cleaned_data["email"],

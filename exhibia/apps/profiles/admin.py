@@ -69,7 +69,6 @@ class CustomUser(UserAdmin):
         for provider in providers:
             social_users = User.objects.filter(social_auth__provider=provider,
                               date_joined__range=(start_date, end_date))
-            print 'social_users - ', social_users
             orders = list(AuctionOrder.objects.filter(winner__pk__in=\
                        social_users.values_list('pk', flat=True).query))
             socials_pks.extend(i.pk for i in social_users)
@@ -88,7 +87,6 @@ class CustomUser(UserAdmin):
                     'sale_count': len(orders),
                     'sale_amount': sum(i.amount_paid for i in orders) or 0
                     })
-        print rows
         return render(request, 'admin/auth/user/analytics.html',
                       {'form':form,
                       'media': self.media,

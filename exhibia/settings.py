@@ -77,7 +77,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
 
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
-STATIC_URL = "/static/"
+STATIC_URL = "//s3.amazonaws.com/exhibia/"
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
@@ -121,6 +121,7 @@ MIDDLEWARE_CLASSES = [
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "utils.middleware.MemberMiddleware",
+    "referrals.middlewares.RefererMiddleware",
 ]
 
 ROOT_URLCONF = "exhibia.urls"
@@ -179,6 +180,8 @@ INSTALLED_APPS = [
     "pagination",
     "south",
     "tinymce",
+    "social_auth",
+    "django_countries",
     # Pinax
     "pinax.apps.account",
     "pinax.apps.signup_codes",
@@ -201,9 +204,7 @@ INSTALLED_APPS = [
     "checkout",
     # ndevs apps
     "socials",
-    "social_auth",
-    "django_countries",
-
+    'referrals',
 
 ]
 

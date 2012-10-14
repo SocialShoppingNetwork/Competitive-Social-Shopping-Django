@@ -7,6 +7,7 @@ admin.autodiscover()
 
 from pinax.apps.account.openid_consumer import PinaxConsumer
 from profiles.decorators import required, check_for_ip
+from profiles.forms import ExhibiaSignupForm
 
 handler500 = "pinax.views.server_error"
 
@@ -86,10 +87,15 @@ urlpatterns = patterns("",
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'},
                         name='logout'),
     url(r'', include('social_auth.urls')),
+    url(r'^ref/(?P<ref_id>\d+?)/$', 'referrals.views.refferal', name='refferal_url'),
 
 )
 
+from pinax.apps.account.urls import signup_view
 urlpatterns += required(check_for_ip, patterns('',
+        # ovveride pinax form so we can save referrals
+         url(r"^account/signup/$", signup_view, {'form_class':ExhibiaSignupForm},
+                name="acct_signup"),
          url(r"^account/", include("pinax.apps.account.urls")),
                      )
 )
