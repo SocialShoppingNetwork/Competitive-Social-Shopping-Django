@@ -1,0 +1,469 @@
+[
+    {
+        "pk": 1,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 11:14:25",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 11:16:05",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 11:19:00",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 11:20:20",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-15 11:20:25",
+            "deleted": true,
+            "address1": "200 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 11:48:53",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 12:10:15",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-15 12:11:26",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "FL",
+            "country": "US",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-15 12:12:32",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "GB",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Santa Cruz",
+            "first_name": "Victor H.",
+            "last_name": "Salazar",
+            "created": "2012-08-16 13:10:36",
+            "deleted": false,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 1,
+            "phone": "59133553306",
+            "state": " Santa Cruz",
+            "country": "BO",
+            "zip_code": "000000"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-16 13:11:03",
+            "deleted": false,
+            "address1": "300s Biscayne Blvd",
+            "address2": "",
+            "user": 1,
+            "phone": "59133553306",
+            "state": "FL",
+            "country": "TH",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Victor Hugo",
+            "last_name": "Salazar",
+            "created": "2012-08-17 12:57:17",
+            "deleted": true,
+            "address1": "Puerto San Carlos 6080",
+            "address2": "",
+            "user": 2,
+            "phone": "7894564135",
+            "state": "FL",
+            "country": "BO",
+            "zip_code": "33166"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 12:57:34",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:02:01",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:02:35",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:03:26",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:03:33",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:18:10",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Santa Cruz",
+            "first_name": "Victor",
+            "last_name": "Salazar",
+            "created": "2012-08-17 13:18:23",
+            "deleted": true,
+            "address1": "Puerto San Carlos",
+            "address2": "6080",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "Santa Cruz",
+            "country": "BO",
+            "zip_code": "0000"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:39:06",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:40:02",
+            "deleted": true,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Santa Cruz",
+            "first_name": "Victor",
+            "last_name": "Salazar",
+            "created": "2012-08-17 14:41:09",
+            "deleted": false,
+            "address1": "Puerto San Carlos",
+            "address2": "6080",
+            "user": 2,
+            "phone": "1-1231280",
+            "state": "Santa Cruz",
+            "country": "BO",
+            "zip_code": "0000"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "shipping.shippingaddress",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 14:49:59",
+            "deleted": false,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    },
+
+    {
+        "pk": 1,
+        "model": "shipping.shippingfee",
+        "fields": {
+            "item": "hawaiiVaca1Pck",
+            "price": 20.0,
+            "created": "2012-08-17 11:57:41",
+            "shipping": "SS",
+            "country": "US"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "shipping.shippingfee",
+        "fields": {
+            "item": "lgsoundbar",
+            "price": 20.0,
+            "created": "2012-08-17 11:59:01",
+            "shipping": "SS",
+            "country": "US"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "shipping.shippingfee",
+        "fields": {
+            "item": "lgsoundbar",
+            "price": 30.0,
+            "created": "2012-08-17 11:59:18",
+            "shipping": "SSD",
+            "country": "US"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "shipping.shippingrequest",
+        "fields": {
+            "city": "Miami",
+            "first_name": "Mikko",
+            "last_name": "Filpulla",
+            "created": "2012-08-17 13:39:10",
+            "auction": 3,
+            "address1": "300 s biscayne blvd apt 3509",
+            "address2": "",
+            "waiting": true,
+            "user": 2,
+            "phone": "5618893101",
+            "state": "Florida",
+            "country": "US",
+            "zip_code": "33131"
+        }
+    }
+]

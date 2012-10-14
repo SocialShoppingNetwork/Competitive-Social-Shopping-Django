@@ -95,7 +95,6 @@ class BillingAddress(models.Model):
     phone = models.CharField(max_length=30)
     deleted = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    shipping = models.OneToOneField("shipping.ShippingAddress", blank=True, null=True)
 
     def __unicode__(self):
         return unicode(self.user)

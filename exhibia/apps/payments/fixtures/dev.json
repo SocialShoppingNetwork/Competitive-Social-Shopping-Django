@@ -1,0 +1,62 @@
+[
+    {
+        "pk": 1,
+        "model": "payments.card",
+        "fields": {
+            "expiration_month": 5,
+            "expiration_year": 2015,
+            "created": "2012-08-16 14:19:14",
+            "deleted": false,
+            "number": "555554444333221",
+            "member": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "payments.card",
+        "fields": {
+            "expiration_month": 5,
+            "expiration_year": 2015,
+            "created": "2012-08-16 14:36:38",
+            "deleted": false,
+            "number": "33322110",
+            "member": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "payments.card",
+        "fields": {
+            "expiration_month": 5,
+            "expiration_year": 2015,
+            "created": "2012-08-16 14:36:49",
+            "deleted": false,
+            "number": "33322110",
+            "member": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "payments.card",
+        "fields": {
+            "expiration_month": 5,
+            "expiration_year": 2015,
+            "created": "2012-08-17 12:00:11",
+            "deleted": false,
+            "number": "4444333221",
+            "member": 2
+        }
+    },
+    {
+        "pk": 5,
+        "model": "payments.card",
+        "fields": {
+            "expiration_month": 1,
+            "expiration_year": 2013,
+            "created": "2012-08-17 13:04:31",
+            "deleted": false,
+            "number": "8888888888",
+            "member": 2
+        }
+    }
+]

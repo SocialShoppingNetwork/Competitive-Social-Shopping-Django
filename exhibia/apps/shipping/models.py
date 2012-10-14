@@ -11,7 +11,7 @@ from profiles.models import BillingAddress
 
 
 class ShippingAddress(models.Model):
-    member = models.ForeignKey('profiles.Member')
+    user = models.ForeignKey('auth.User')
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
     address1 = models.CharField(max_length=100)
@@ -26,7 +26,7 @@ class ShippingAddress(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return str(self.member)
+        return unicode(self.user)
 
 class ShippingFee(models.Model):
     item = models.ForeignKey('auctions.AuctionItem')
@@ -43,7 +43,7 @@ class ShippingFee(models.Model):
         return d[self.shipping]
 
 class ShippingRequest(models.Model):
-    member = models.ForeignKey("profiles.Member")
+    user = models.ForeignKey("auth.User")
     auction = models.OneToOneField('auctions.Auction') #TODO check this
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
@@ -57,17 +57,17 @@ class ShippingRequest(models.Model):
     waiting = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     class Meta:
-        unique_together =('member', 'auction',)
+        unique_together =('user', 'auction',)
     def __unicode__(self):
-        return str(self.member)
+        return unicode(self.user)
 
 def create_billing_address(sender, instance, created, raw, **kwargs):
     if instance is None:
         return
     if not created:
         return
-    data = instance.__dict__
-    data = {'member':instance.member,
+    # data = instance.__dict__
+    data = {'user':instance.user,
             'first_name':instance.first_name,
             'last_name':instance.last_name,
             'city':instance.city,
@@ -78,7 +78,7 @@ def create_billing_address(sender, instance, created, raw, **kwargs):
             'address1':instance.address1,
             'address2':instance.address1,
             'state':instance.state,
-            'shipping':instance
+            # 'shipping':instance
     }
     BillingAddress.objects.create(**data)
 post_save.connect(create_billing_address, sender=ShippingAddress)
