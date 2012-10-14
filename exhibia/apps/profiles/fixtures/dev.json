@@ -459,33 +459,6 @@
         }
     },
     {
-        "pk": 175,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "add_order",
-            "name": "Can add order",
-            "content_type": 59
-        }
-    },
-    {
-        "pk": 176,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "change_order",
-            "name": "Can change order",
-            "content_type": 59
-        }
-    },
-    {
-        "pk": 177,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "delete_order",
-            "name": "Can delete order",
-            "content_type": 59
-        }
-    },
-    {
         "pk": 16,
         "model": "auth.permission",
         "fields": {
@@ -699,33 +672,6 @@
             "codename": "delete_emailconfirmation",
             "name": "Can delete email confirmation",
             "content_type": 18
-        }
-    },
-    {
-        "pk": 178,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "add_flatpage",
-            "name": "Can add flat page",
-            "content_type": 60
-        }
-    },
-    {
-        "pk": 179,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "change_flatpage",
-            "name": "Can change flat page",
-            "content_type": 60
-        }
-    },
-    {
-        "pk": 180,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "delete_flatpage",
-            "name": "Can delete flat page",
-            "content_type": 60
         }
     },
     {
@@ -972,33 +918,6 @@
         }
     },
     {
-        "pk": 181,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "add_card",
-            "name": "Can add card",
-            "content_type": 61
-        }
-    },
-    {
-        "pk": 182,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "change_card",
-            "name": "Can change card",
-            "content_type": 61
-        }
-    },
-    {
-        "pk": 183,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "delete_card",
-            "name": "Can delete card",
-            "content_type": 61
-        }
-    },
-    {
         "pk": 130,
         "model": "auth.permission",
         "fields": {
@@ -1185,33 +1104,6 @@
             "codename": "delete_shippingfee",
             "name": "Can delete shipping fee",
             "content_type": 52
-        }
-    },
-    {
-        "pk": 172,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "add_shippingrequest",
-            "name": "Can add shipping request",
-            "content_type": 58
-        }
-    },
-    {
-        "pk": 173,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "change_shippingrequest",
-            "name": "Can change shipping request",
-            "content_type": 58
-        }
-    },
-    {
-        "pk": 174,
-        "model": "auth.permission",
-        "fields": {
-            "codename": "delete_shippingrequest",
-            "name": "Can delete shipping request",
-            "content_type": 58
         }
     },
     {

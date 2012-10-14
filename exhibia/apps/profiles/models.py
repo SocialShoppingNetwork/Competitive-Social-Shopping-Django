@@ -128,8 +128,8 @@ class BannedIPAddress(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
+def create_user_profile(sender, instance, created, raw,**kwargs):
+    if created and not raw:
         Member.objects.create(user=instance)
 
 @receiver(user_logged_in)

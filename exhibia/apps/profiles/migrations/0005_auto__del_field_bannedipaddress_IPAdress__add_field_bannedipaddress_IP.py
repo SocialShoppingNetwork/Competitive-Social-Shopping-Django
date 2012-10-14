@@ -9,11 +9,11 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Deleting field 'BannedIPAddress.IPAdress'
-        db.delete_column('profiles_bannedipaddress', 'IPAdress')
+        db.delete_column('profiles_bannedipaddress', 'IPAddress')
 
         # Adding field 'BannedIPAddress.IPAddress'
         db.add_column('profiles_bannedipaddress', 'IPAddress',
-                      self.gf('django.db.models.fields.IPAddressField')(default='', max_length=15),
+                      self.gf('django.db.models.fields.IPAddressField')(max_length=15),
                       keep_default=False)
 
 

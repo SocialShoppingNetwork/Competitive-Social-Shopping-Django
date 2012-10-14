@@ -43,7 +43,7 @@ class Migration(SchemaMigration):
             ('phone', self.gf('django.db.models.fields.CharField')(max_length=30)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('shipping', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['shipping.ShippingAddress'], unique=True, null=True, blank=True)),
+            # ('shipping', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['shipping.ShippingAddress'], unique=True, null=True, blank=True)),
         ))
         db.send_create_signal('profiles', ['BillingAddress'])
 

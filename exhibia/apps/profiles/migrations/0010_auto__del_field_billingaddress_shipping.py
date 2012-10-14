@@ -9,7 +9,8 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Deleting field 'BillingAddress.shipping'
-        db.delete_column('profiles_billingaddress', 'shipping_id')
+        # db.delete_column('profiles_billingaddress', 'shipping_id')
+        pass
 
 
     def backwards(self, orm):

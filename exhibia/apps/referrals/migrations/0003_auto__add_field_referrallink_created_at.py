@@ -12,6 +12,9 @@ class Migration(SchemaMigration):
         db.add_column('referrals_referrallink', 'created_at',
                       self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now),
                       keep_default=False)
+        db.add_column('profiles_member', 'referral_url',
+                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='invited_users', null=True, to=orm['referrals.ReferralLink']),
+                      keep_default=False)
 
 
     def backwards(self, orm):

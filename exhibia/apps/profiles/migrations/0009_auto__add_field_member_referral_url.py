@@ -8,10 +8,11 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        pass
         # Adding field 'Member.referral_url'
-        db.add_column('profiles_member', 'referral_url',
-                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='invited_users', null=True, to=orm['referrals.ReferralLink']),
-                      keep_default=False)
+        # db.add_column('profiles_member', 'referral_url',
+        #               self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='invited_users', null=True, to=orm['referrals.ReferralLink']),
+        #               keep_default=False)
 
 
     def backwards(self, orm):

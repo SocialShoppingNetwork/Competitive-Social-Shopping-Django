@@ -56,15 +56,17 @@ class ShippingRequest(models.Model):
     phone = models.CharField(max_length=30)
     waiting = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         unique_together =('user', 'auction',)
+
     def __unicode__(self):
         return unicode(self.user)
 
 def create_billing_address(sender, instance, created, raw, **kwargs):
     if instance is None:
         return
-    if not created:
+    if not created or raw:
         return
     # data = instance.__dict__
     data = {'user':instance.user,
