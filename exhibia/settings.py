@@ -244,7 +244,7 @@ EMAIL_DEBUG = DEBUG
 
 def show_toolbar(request):
     if 'HEROKU' in os.environ:
-        if not request.user.is_superuser():
+        if not request.user.is_superuser:
             return False
     return True
 
