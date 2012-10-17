@@ -18,10 +18,6 @@ TEMPLATE_DEBUG = DEBUG
 # tells Pinax to serve media through the staticfiles app.
 SERVE_MEDIA = False
 
-# django-compressor is turned off by default due to deployment overhead for
-# most users. See <URL> for more information
-COMPRESS = False
-
 INTERNAL_IPS = [
     "127.0.0.1",
     "192.168.1.50"
@@ -104,8 +100,10 @@ SECRET_KEY = "y(si0o6#r6@b87d24!(dl=9pe23b*b@tobc(x$()@1#q)4ds-u"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = [
-    "django.template.loaders.filesystem.load_template_source",
-    "django.template.loaders.app_directories.load_template_source",
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -261,6 +259,13 @@ STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_ACCESS_KEY_ID = 'AKIAJCAXW2LKY2RXOFAA'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'exhibia'
+
+# django-compressor
+COMPRESS = True
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.

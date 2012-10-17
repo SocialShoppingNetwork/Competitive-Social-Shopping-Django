@@ -1,4 +1,4 @@
-{% load payments_tags %}
+{% load payments_tags compress %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-	
+
     <!-- Le styles -->
+    {% compress css %}
     <link href="{{ STATIC_URL }}css/exhibia.css" rel="stylesheet">
+    {% endcompress %}
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <!-- Le fav and touch icons 
+    <!-- Le fav and touch icons
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
@@ -53,13 +55,18 @@
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="{{ STATIC_URL }}js/jquery.js"></script>
-<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+
 {% block extra_body_base %}
-	<script>$.exhibia = {};</script>
-    <script src="http://{{ SOCKETIO_SERVER }}/socket.io/socket.io.js"></script>
+    {% compress js %}
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}js/socket.io.js"></script>
     <script src="{{ STATIC_URL }}js/winnina.js"></script>
-    {% block extra_body %}{% endblock %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.quicksand.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/item.js"></script>
+    {% endcompress %}
+    {% block extra_js %}{% endblock %}
 {% endblock %}
 </body>
 </html>
