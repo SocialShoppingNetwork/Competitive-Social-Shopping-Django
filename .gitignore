@@ -4,3 +4,5 @@ site_media/
 .project
 .pydevproject
 *.db
+exhibia/cache
+exhibia/settings/local_settings.py

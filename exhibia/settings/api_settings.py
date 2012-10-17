@@ -1,6 +1,5 @@
-PRICE_INTERVAL = 0.01
-MAX_AUCTIONS = 12
-MAX_TIME_HOMEPAGE = 30
+# -*- coding: utf-8 -*-
+
 
 #payments
 TEST_MODE = True
@@ -57,10 +56,6 @@ SOCIAL_ACCOUNTS = {
 
 RED5_STREAM_PATH = '/Users/vh5/Downloads/hd/red8/webapps/hdfvr/streams/_definst_/'
 
-SITE_NAME = 'testing.exhibia.com'
-
-SOCKETIO_SERVER = '%s:4000' % (SITE_NAME)
-
 # Social
 
 GOOGLEPLUS_ITEM_LIMIT_DAILY = 2
@@ -69,18 +64,6 @@ FACEBOOK_LIKES_ITEM_LIMIT_DAILY = 2
 FACEBOOK_LIKE_ITEM_FREEBIDS = 1
 
 # endSocial
-
-
-TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "table,spellchecker,paste,searchreplace",
-    'theme': "advanced",
-    'cleanup_on_startup': True,
-    'custom_undo_redo_levels': 10,
-    'width' : '768',
-    'height':'512',
-    }
-
-PLEDGE_TIME = 180
 
 
 FACEBOOK_APP_ID              = '141579195865100'

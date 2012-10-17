@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # Django settings for basic pinax project.
-import os
-import os.path
+from os import environ, path
 import posixpath
 import pinax
 
-PINAX_ROOT = os.path.abspath(os.path.dirname(pinax.__file__))
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+PINAX_ROOT = path.abspath(path.dirname(pinax.__file__))
+PROJECT_ROOT = path.join(path.abspath(path.dirname(__file__)), '../')
 
 # tells Pinax to use the default theme
 PINAX_THEME = "default"
@@ -18,10 +17,6 @@ TEMPLATE_DEBUG = DEBUG
 # tells Pinax to serve media through the staticfiles app.
 SERVE_MEDIA = False
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-    "192.168.1.50"
-]
 
 ADMINS = [
     # ("Your Name", "your_email@domain.com"),
@@ -30,14 +25,14 @@ ADMINS = [
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-            "ENGINE": "django.db.backends.sqlite3", # Add "postgresql_psycopg2", "postgresql", "mysql", "sqlite3" or "oracle".
-            "NAME": "exhibia.db",                       # Or path to database file if using sqlite3.
-            "USER": "",                             # Not used with sqlite3.
-            "PASSWORD": "",                         # Not used with sqlite3.
-            "HOST": "",                             # Set to empty string for localhost. Not used with sqlite3.
-            "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
-    },
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'd374ksafc2ng20',
+    'HOST': 'ec2-107-22-170-5.compute-1.amazonaws.com',
+    'PORT': 5432,
+    'USER': 'flhtkewvpaznps',
+    'PASSWORD': 'M72ZD95HEp3QrAGk-WHbI4Nk1A'
+  }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -59,7 +54,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, "media")
+MEDIA_ROOT = path.join(PROJECT_ROOT, "media")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -69,15 +64,15 @@ MEDIA_URL = "/media/"
 
 # Absolute path to the directory that holds static files like app media.
 # Example: "/home/media/media.lawrence.com/apps/"
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
+STATIC_ROOT = path.join(PROJECT_ROOT, "static")
 
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
-STATIC_URL = "//s3.amazonaws.com/exhibia/"
+STATIC_URL = "http://s3.amazonaws.com/exhibia/"
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
-    #os.path.join(PINAX_ROOT, "themes", PINAX_THEME, "static"),
+    #path.join(PINAX_ROOT, "themes", PINAX_THEME, "static"),
 ]
 
 STATICFILES_FINDERS = [
@@ -92,8 +87,6 @@ STATICFILES_FINDERS = [
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 
-# Subdirectory of COMPRESS_ROOT to store the cached media files in
-COMPRESS_OUTPUT_DIR = "cache"
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "y(si0o6#r6@b87d24!(dl=9pe23b*b@tobc(x$()@1#q)4ds-u"
@@ -107,6 +100,7 @@ TEMPLATE_LOADERS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'django.middleware.gzip.GZipMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -125,8 +119,8 @@ MIDDLEWARE_CLASSES = [
 ROOT_URLCONF = "exhibia.urls"
 
 TEMPLATE_DIRS = [
-    os.path.join(PROJECT_ROOT, "templates"),
-    os.path.join(PINAX_ROOT, "themes", PINAX_THEME, "templates"),
+    path.join(PROJECT_ROOT, "templates"),
+    path.join(PINAX_ROOT, "themes", PINAX_THEME, "templates"),
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
@@ -207,7 +201,7 @@ INSTALLED_APPS = [
 ]
 
 FIXTURE_DIRS = [
-    os.path.join(PROJECT_ROOT, "fixtures"),
+    path.join(PROJECT_ROOT, "fixtures"),
 ]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
@@ -221,11 +215,6 @@ ABSOLUTE_URL_OVERRIDES = {
 AUTH_PROFILE_MODULE = "profiles.Member"
 NOTIFICATION_LANGUAGE_MODULE = "account.Account"
 
-ACCOUNT_OPEN_SIGNUP = True
-ACCOUNT_REQUIRED_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = False
-ACCOUNT_EMAIL_AUTHENTICATION = False
-ACCOUNT_UNIQUE_EMAIL = EMAIL_CONFIRMATION_UNIQUE_EMAIL = False
 
 AUTHENTICATION_BACKENDS = [
     'social_auth.backends.facebook.FacebookBackend',
@@ -240,43 +229,28 @@ LOGIN_REDIRECT_URLNAME = "home"
 EMAIL_CONFIRMATION_DAYS = 2
 EMAIL_DEBUG = DEBUG
 
-def show_toolbar(request):
-    if 'HEROKU' in os.environ:
-        if not request.user.is_superuser:
-            return False
-    return True
+COMPRESS_URL = STATIC_URL
 
-DEBUG_TOOLBAR_CONFIG = {
-    "INTERCEPT_REDIRECTS": False,
-    "TAG":'head',
-    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+
+environ['MEMCACHE_SERVERS'] = environ.get('MEMCACHIER_SERVERS', '')
+environ['MEMCACHE_USERNAME'] = environ.get('MEMCACHIER_USERNAME', '')
+environ['MEMCACHE_PASSWORD'] = environ.get('MEMCACHIER_PASSWORD', '')
+environ['MEMCACHE_SERVERS'] = "mc2.ec2.memcachier.com:11211"
+environ['MEMCACHE_USERNAME'] = "237cfc"
+environ['MEMCACHE_PASSWORD'] = "c8442b7942494c9f54c0"
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+        'LOCATION': environ.get('MEMCACHIER_SERVERS', ''),
+        'TIMEOUT': 500,
+        'BINARY': True,
+        'KEY_PREFIX': 'bidstick',
+    },
 }
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_COOKIE_AGE = 15552000
 
+SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
 
-#storages
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-AWS_ACCESS_KEY_ID = 'AKIAJCAXW2LKY2RXOFAA'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'exhibia'
-
-# django-compressor
-COMPRESS = True
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
-
-
-
-# local_settings.py can be used to override environment-specific settings
-# like database and email that differ between development and production.
-on_heroku = 'HEROKU' in os.environ
-if on_heroku:
-    try:
-        from production_settings import *
-    except ImportError:
-        pass
-else:
-    try:
-        from local_settings import *
-    except ImportError:
-        pass
+SITE_NAME = 'testing.exhibia.com'
