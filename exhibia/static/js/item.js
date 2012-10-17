@@ -33,7 +33,7 @@ $(document).ready(function() {
                 get_account_bids(function(data){
                     $('#member_bids').text(data);
                 });
-                update_item();
+                update_item_ui();
                 window.location.reload();
             });
 	

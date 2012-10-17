@@ -1,21 +1,23 @@
 {% with auction as a %}
 <li data-id="{{ a.id }}" data-type="util" data-types="camera" class="span3 showcase">
 	<div class="thumbnail">
-		<div class="h5"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
+		<div class="h3 fund-title"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
       	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
 			<img class="product" src="{{ a.item.image.img }}" />
 		</a>
         <div class="caption">
-        	<div class="h1" id="timer_{{ a.id }}">{{ a.time_left }} seconds</div>
-          	<h6>Tick time: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} seconds</span></h6>
-          	<hr/>
-			<div class="h5">
+        	<div class="h2 time" align="center" id="timer_{{ a.id }}">{{ a.time_left }} seconds</div>
+          	<h6 align="center">Tick time: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} seconds</span></h6>
+			<div class="h5 well" align="center">
 				<img class="social" width="24" height="24" id="last_bidder_img_{{ a.id }}" src="{{ STATIC_URL }}img/facebook-16x16.png" />
 				<span style="font-size: 11px;" id="last_bidder_{{ a.id }}">{{ a.last_bidder }}</span>
 			</div>
-			<hr/>
-			<p style="margin-top: -5px"><a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#">BID</a>
         </div>
+		<div class="panel">
+			<div class="btn-group fund-options">
+				<a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#">BID</a>
+			</div>
+		</div>
 	</div>
 </li>
 {% endwith %}
