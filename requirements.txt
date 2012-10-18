@@ -1,12 +1,50 @@
-# project.txt is a pip requirements file which describes the distributions
-# required by your project to run.
-
---requirement=requirements_local.txt
-
-# Put project-specific requirements here.
-# See http://pip-installer.org/requirement-format.html for more information.
-
-psycopg2
-dj-database-url
+BeautifulSoup==3.2.1
+Cython==0.17.1
+Django==1.3
+PIL==1.1.7
+Pinax==0.9b1.dev10
+South==0.7.6
+ajaxuploader==0.2.3
+argparse==1.2.1
+boto==2.6.0
+dj-database-url==0.2.1
+django-announcements==0.1.2
+django-annoying==0.7.6
+django-appconf==0.5
+-e git+https://github.com/jezdez/django_compressor.git@c46e52a20c83a1aa552490266c8b2fa942828211#egg=django_compressor-dev
+django-countries==1.3
+django-crispy-forms==1.2.0
+django-debug-toolbar==0.9.4
+django-email-confirmation==0.2.dev6
+django-facebook==0.1
+django-mailer==0.2a1.dev3
+django-notification==0.2a1.dev4
+django-openid==0.2.3.dev1
+django-pagination==1.0.7
 django-pylibmc-sasl==0.2.4
-
+django-social-auth==0.7.6
+django-staticfiles==1.0.1
+django-storages==1.1.5
+django-timezones==0.2.dev2
+django-tinymce==1.5.1b2
+django-uni-form==0.7.0
+easy-thumbnails==1.1
+facebook-sdk==0.3.2
+gdata==2.0.17
+-e git+https://github.com/SiteSupport/gevent.git@60fd53be34e2e8f83cbd99ba39a319ef41697cf0#egg=gevent-dev
+-e git+https://github.com/abourget/gevent-socketio.git@8428cf739aa06e519c3f6f97364ce6abef4a246a#egg=gevent_socketio-dev
+gevent-websocket==0.3.6
+greenlet==0.4.0
+gunicorn==0.14.6
+httplib2==0.7.6
+ipython==0.13
+lxml==3.0.1
+oauth2==1.5.211
+psycopg2==2.4.5
+pylibmc==1.2.2
+python-cjson==1.0.5
+python-memcached==1.48
+python-openid==2.2.5
+pytz==2010h
+simplejson==2.6.2
+wsgiref==0.1.2
