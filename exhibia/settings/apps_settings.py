@@ -57,9 +57,12 @@ AWS_PRELOAD_METADATA = True
 # django-compressor
 COMPRESS = True
 COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
+# COMPRESS_OFFLINE = True
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+from datetime import date, timedelta
+tenyrs = date.today() + timedelta(days=365*10)
+
 AWS_HEADERS = {
-    'Expires': 'Sun, 19 Jul 2020 18:06:32 GMT'
+    'Expires': tenyrs.strftime('%a, %d %b %Y 20:00:00 GMT')
 }
 
