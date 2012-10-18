@@ -4991,7 +4991,7 @@ a.badge:hover {
 /* Home items title */
 .row.items .thumbnail .h3 {
 	text-align: center;
-	padding: 10px 0;
+	padding: 10px 0 0 5px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;

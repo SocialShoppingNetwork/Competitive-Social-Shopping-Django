@@ -2,9 +2,11 @@
 <li data-id="{{ a.id }}" data-type="util" data-types="camera" class="span3 showcase">
 	<div class="thumbnail">
 		<div class="h3 fund-title"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
-      	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
-			<img class="product" src="{{ a.item.image.img }}" />
-		</a>
+        <div align="center">
+          	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
+    			<img class="product" src="{{ a.item.image.img.url }}"/>
+    		</a>
+        </div>
         <div class="caption">
         	<div class="h2 time" align="center" id="timer_{{ a.id }}">{{ a.time_left }} seconds</div>
           	<h6 align="center">Tick time: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} seconds</span></h6>
@@ -15,7 +17,7 @@
         </div>
 		<div class="panel">
 			<div class="btn-group fund-options">
-				<a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#">BID</a>
+				<a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#" >BID</a>
 			</div>
 		</div>
 	</div>
