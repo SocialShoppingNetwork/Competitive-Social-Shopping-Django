@@ -59,10 +59,14 @@ COMPRESS = True
 COMPRESS_ENABLED = True
 # COMPRESS_OFFLINE = True
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-from datetime import date, timedelta
-tenyrs = date.today() + timedelta(days=365*10)
-
-AWS_HEADERS = {
-    'Expires': tenyrs.strftime('%a, %d %b %Y 20:00:00 GMT')
-}
+# from time import time
+# max_age = 315360000 # year
+# from django.utils.http import http_date
+# AWS_HEADERS = [
+#     ('.*', {
+#         'x-amz-acl': 'public-read',
+#         'Expires': http_date(time() + max_age),
+#         'Cache-Control': 'public, max-age=' + str(max_age)
+#     })
+# ]
 
