@@ -119,13 +119,13 @@ class AuctionItemManager(models.Manager):
 
 class Brand(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.CharField(max_length=250, unique=True)
+    slug = models.SlugField(max_length=250, unique=True)
     def __unicode__(self):
         return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.CharField(max_length=250, unique=True)
+    slug = models.SlugField(max_length=250, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -310,7 +310,7 @@ class Auction(models.Model):
         unixtime = time()
         if self.status == 'w':
             self.status = 'p'
-        b = AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
+        AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
         self.last_bidder = username
         self.last_bidder_member = bidder
         self.last_bid_type = bid_type
@@ -357,12 +357,17 @@ class AuctionItemImages(models.Model):
             self.item.image = self
             self.item.save()
 
+    class Meta:
+        verbose_name = u'auction item image'
+        verbose_name_plural = u'auction item images'
+
 
 class AuctionPlegde(models.Model):
     auction = models.ForeignKey(Auction)
     member = models.ForeignKey('profiles.Member')
     amount = models.PositiveIntegerField()
     created = models.DateTimeField(auto_now_add=True)
+
     def __unicode__(self):
         return '%s %s' % (self.auction, self.member)
 
