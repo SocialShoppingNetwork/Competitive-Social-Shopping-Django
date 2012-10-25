@@ -35,7 +35,7 @@ gdata==2.0.17
 -e git+https://github.com/abourget/gevent-socketio.git@8428cf739aa06e519c3f6f97364ce6abef4a246a#egg=gevent_socketio-dev
 gevent-websocket==0.3.6
 greenlet==0.4.0
-gunicorn==0.14.6
+gunicorn==0.15.0
 httplib2==0.7.6
 ipython==0.13
 lxml==3.0.1
