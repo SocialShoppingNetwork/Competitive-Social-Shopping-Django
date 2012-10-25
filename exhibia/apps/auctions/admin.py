@@ -25,6 +25,7 @@ class AutciotnBidAdmin(admin.ModelAdmin):
     list_display = ('auction', 'bidder', 'price')
     list_filter = ('created', )
     date_hierarchy = 'created'
+    raw_id_fields = ('auction', 'bidder')
 
 
 class AuctionPlegdeAdmin(admin.ModelAdmin):
@@ -38,6 +39,7 @@ class AuctionAdmin(admin.ModelAdmin):
     list_display = ('item', 'status', 'backers', 'current_offer', )
     list_filter = ('status', 'created', )
     date_hierarchy = 'created'
+    raw_id_fields = ('item', 'last_bidder_member', )
 
 
 class CategoryAdmin(PrepAdmin, admin.ModelAdmin):
