@@ -22,7 +22,7 @@ urlpatterns = patterns("",
     #url(r"^bid/(\d+)/$", "auctions.views.bid", name="auction-item"),
     url(r"^bid/(\d+)/$", "auctions.views.auction_bid", name="auction_bid"),
 
-    url(r'^item/(?P<slug>\S+).html$', 'auctions.views.view_item', {},
+    url(r'^item/(?P<slug>\S+)/$', 'auctions.views.view_item', {},
                      name='auction_item'),
 
     url(r"^buycredits/$", "payments.views.buycredits", name="buycredits"),

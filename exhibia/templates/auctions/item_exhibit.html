@@ -18,76 +18,83 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row item">
-        <div class="span9" style="width: auto!important;">
-            <h1 class="title" style="font-size: 20px;">{{ item.name }}</h1>
-            <div class="tabbable" style="margin-top: 50px;"> <!-- Only required for left/right tabs -->
-                <div class="itemsocial">
-                    <div class="itemfb">
-                        <div class="socialtip"></div>
-                        <div class="fb-like" data-href="http://www.aphexthemes.com/demo/html/exhibiastraped/fb/item_exhibit.html" data-send="false" data-layout="box_count" data-width="100" data-show-faces="false"></div> </div>
-                </div>
-                <ul class="nav nav-tabs" id="nav2" style="padding-left: 20px">
-                    <li class="active"><a href="#tab1" data-toggle="tab">Item Description</a></li>
-                        <li><a href="#tab2" data-toggle="tab">Bidding History<span>{{ bidding_history.count }}</span></a></a></li>
-                    <li><a href="#tab3" data-toggle="tab">Funding History<span>{{ backers.count }}</span></a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
-                        <p><img border="0" alt="{{ item.name }}" src="{{ item.default_image.img.url }}"></p>
-                        <h3 class="productDescriptionSource">From the Manufacturer</h3>
-                        <p>{{ item.description|safe }}</p>
-                    </div>
-                    <div class="tab-pane" id="tab2">
-                        <p>
-                        {% for bid in bidding_history%}
-                            <div class="bidbacklist" style="width: auto!important; border-bottom: 1px dashed silver">
-                                <p><a href=""><img src="{{ bid.bidder.img_url }}" />{{ bid.bidder.user.username }}</a><br/>Apr 12</p>
-                            </div>
-                        {% endfor %}
-                        </p>
-                    </div>
-                    <div class="tab-pane" id="tab3">
-                        {% for backer in backers|slice:":20" %}
-                            <div class="bidbacklist" style="width: auto!important; border-bottom: 1px dashed silver">
-                                <p><a href=""><img src="{{ backer.img_url }}" />{{ backer.user.username }}</a><br />{{ backer.pledge_date }}</p>
-                            </div>
-                        {% endfor %}
+<div class="row item">
+    <div class="span9" style="width: auto!important;">
+        <h1 class="title" style="font-size: 20px;">{{ item.name }}</h1>
+        {% if auction.is_waiting_pledge %}
+        {% with auction as a %}
+            <div class="fundtm row">
+                <div class="ticktm span5">
+                    <div class="progress progress-info progress-striped active" style="clear: both">
+                        <div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
                     </div>
                 </div>
             </div>
-            <!-- HH -->
+            <div class='row'>
+                <div class="span2">
+                    <p class="fundha"><span>${{ a.amount_pleged }}</span> FUNDED</p>
+                    <p class="fundhb"><span id="backers_{{ a.id }}">{{ a.backers }} </span>BACKERS</p>
+                </div>
+                <div class="span2 offset2"><a data-toggle="modal" href="#fundModal" id="btn-fund" class="btn fund btn-success btn-big">FUND</a></div>
+            </div>
+
+        {% endwith %}
+        {% endif %}
+        <div class="tabbable" style="margin-top: 50px;"> <!-- Only required for left/right tabs -->
+            <div class="itemsocial">
+                <div class="itemfb">
+                    <div class="socialtip"></div>
+                    <div class="fb-like" data-href="http://www.aphexthemes.com/demo/html/exhibiastraped/fb/item_exhibit.html" data-send="false" data-layout="box_count" data-width="100" data-show-faces="false"></div> </div>
+            </div>
+            <ul class="nav nav-tabs" id="nav2" style="padding-left: 20px">
+                <li class="active"><a href="#tab1" data-toggle="tab">Item Description</a></li>
+                <li><a href="#tab2" data-toggle="tab">Bidding History<span>
+                    {% if bidding_history %}({{ bidding_history.count }}){% endif %}</span></a>
+                </li>
+                <li><a href="#tab3" data-toggle="tab">Funding History<span>
+                    {% if backers %}({{ backers.count }}){% endif %}</span></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <p><img border="0" alt="{{ item.name }}" src="{{ item.default_image.img.url }}"></p>
+                    <h3 class="productDescriptionSource">From the Manufacturer</h3>
+                    <p>{{ item.description|safe }}</p>
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <p>
+                    {% for bid in bidding_history%}
+                        <div class="bidbacklist" style="width: auto!important; border-bottom: 1px dashed silver">
+                            <p><a href=""><img src="{{ bid.bidder.img_url }}" />{{ bid.bidder.user.username }}</a><br/>Apr 12</p>
+                        </div>
+                    {% endfor %}
+                    </p>
+                </div>
+                <div class="tab-pane" id="tab3">
+                    {% for backer in backers|slice:":20" %}
+                        <div class="bidbacklist" style="width: auto!important; border-bottom: 1px dashed silver">
+                            <p><a href=""><img src="{{ backer.img_url }}" />{{ backer.user.username }}</a><br />{{ backer.pledge_date }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
+        <!-- HH -->
     </div>
+</div>
 
-    {% if auction.is_processing %}
-        {% with auction as a %}
-        <div class="bidtm">
-            <div class="avtm"><div class="avatar next-to"><img src="{{ STATIC_URL }}img/avatar-twitter.png" /></div></div>
-            <div class="ticktm"><span style="font-size: 11px;" id="last_bidder_{{ auction.id }}">{{ auction.last_bidder }}</span><span id="timer_{{ a.id }}">21 seconds</span><span id="bidding_time_{{ a.id }}">TICK TIME: 30 SECONDS</span></div>
-            <div class="biddtm" id="bid-btn">BID</div>
-        {% endwith %}
-        </div>
-    {% endif %}
+{% if auction.is_processing %}
+    {% with auction as a %}
+    <div class="bidtm">
+        <div class="avtm"><div class="avatar next-to"><img src="{{ STATIC_URL }}img/avatar-twitter.png" /></div></div>
+        <div class="ticktm"><span style="font-size: 11px;" id="last_bidder_{{ auction.id }}">{{ auction.last_bidder }}</span><span id="timer_{{ a.id }}">21 seconds</span><span id="bidding_time_{{ a.id }}">TICK TIME: 30 SECONDS</span></div>
+        <div class="biddtm" id="bid-btn">BID</div>
+    {% endwith %}
+    </div>
+{% endif %}
 
-    {% if auction.is_waiting_pledge %}
-        {% with auction as a %}
-        <div class="fundtm">
-            <div class="ticktm">
-                <div class="progress progress-info progress-striped active" style="clear: both">
-                    <div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
-                </div>
-                <div style="margin-top: -32px;z-index: 999  ">
-                    <h7 class="fundha"><span>${{ a.amount_pleged }}</span>FUNDED</h7>
-                    <h7 class="fundhb"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</h7>
-                </div>
-            </div>
-            <div class="biddtm"><a data-toggle="modal" href="#fundModal" id="btn-fund">FUND</a></div>
-        </div>
-        {% endwith %}
-    {% endif %}
 
-    <hr>
+
 {% endblock %}
 {% block extra_body %}
     <script>
