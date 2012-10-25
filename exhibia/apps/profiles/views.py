@@ -142,12 +142,11 @@ def account(request):
 @login_required
 @render_to('profiles/manage_shipping.html')
 def manage_shipping(request):
-    member = request.user.get_profile()
-    shipping_profiles = member.shippingaddress_set.filter(deleted=False)
+    shipping_profiles = request.user.shipping_adddresses.filter(deleted=False)
     shipping = None
     id = request.GET.get('id')
     if 'delete' in request.GET:
-        shipping = get_object_or_404(ShippingAddress, id=id, member=member)
+        shipping = get_object_or_404(ShippingAddress, id=id, user=request.user)
         shipping.deleted = True
         shipping.save()
         return HttpResponseRedirect(reverse('account_shipping'))
@@ -157,7 +156,7 @@ def manage_shipping(request):
         if form.is_valid():
             data = form.cleaned_data
             if id:
-                shipping = get_object_or_404(ShippingAddress, id=id, member=member)
+                shipping = get_object_or_404(ShippingAddress, id=id, user=request.user)
                 shipping.first_name =  data['first_name']
                 shipping.last_name = data['last_name']
                 shipping.address1 = data['address1']
@@ -171,12 +170,12 @@ def manage_shipping(request):
                 return HttpResponseRedirect(reverse('account_shipping'))
             else:
                 shipping = form.save(commit=False)
-                shipping.member = member
+                shipping.user = request.user
                 shipping.save()
                 return HttpResponseRedirect(reverse('account_shipping'))
     else:
         if id:
-            shipping = get_object_or_404(ShippingAddress, id=id, member=member)
+            shipping = get_object_or_404(ShippingAddress, id=id, user=request.user)
             form = ShippingForm(initial=shipping.__dict__)
         else:
             form = ShippingForm()
@@ -190,12 +189,11 @@ def manage_shipping(request):
 @login_required
 @render_to('profiles/manage_billing.html')
 def manage_billing(request):
-    member = request.user.get_profile()
-    billing_profiles = member.billingaddress_set.filter(deleted=False)
+    billing_profiles = request.user.billing_addresses.filter(deleted=False)
     billing = None
     id = request.GET.get('id')
     if 'delete' in request.GET:
-        billing = get_object_or_404(BillingAddress, id=id, member=member, deleted=False)
+        billing = get_object_or_404(BillingAddress, id=id, user=request.user, deleted=False)
         billing.deleted = True
         billing.save()
         return HttpResponseRedirect(reverse('profile_account'))
@@ -205,7 +203,8 @@ def manage_billing(request):
         if form.is_valid():
             data = form.cleaned_data
             if id:
-                billing = get_object_or_404(BillingForm, id=id, member=member, deleted=False)
+                billing = get_object_or_404(BillingForm, id=id, user=request.user,
+                             deleted=False)
                 billing.first_name =  data['first_name']
                 billing.last_name = data['last_name']
                 billing.address1 = data['address1']
@@ -218,12 +217,13 @@ def manage_billing(request):
                 billing.save()
             else:
                 billing = form.save(commit=False)
-                billing.member = member
+                billing.user = request.user
                 billing.save()
             return HttpResponseRedirect(reverse('profile_account'))
     else:
         if id:
-            billing = get_object_or_404(BillingAddress, id=id, member=member, deleted=False)
+            billing = get_object_or_404(BillingAddress, id=id, user=request.user,
+                                     deleted=False)
             form = BillingForm(initial=billing.__dict__)
         else:
             form = BillingForm()
