@@ -82,7 +82,7 @@ def credits_dalpay_handler(request, data, pn, extra):
     assert pn.function == CREDITS
     if pn.confirm == CONFIRMED:
         order = CreditPackageOrder(buyer=buyer,
-                                   amount_paid=float(pn.mc_gross),
+                                   amount_paid=pn.mc_gross,
                                    status=pn.status,
                                    pn=pn)
                                    #TODO item = models.ForeignKey('auctions.AuctionItem', blank=True, null=True)
@@ -99,7 +99,7 @@ def auction_dalpay_handler(request, data, pn, extra):
         order.save()
         #f.write('auction_order_plimus_handler: order: %s %s, float(pn.mc_gross) >= order.total? %s\n' % (order, order.status, float(pn.mc_gross) >= order.total))
         # AUCTION ORDER
-        if float(pn.mc_gross) >= order.auction.item.shipping_fee:
+        if pn.mc_gross >= order.auction.item.shipping_fee:
             if order.status != ORDER_PAID:
                 order.auction.status = "d" #AUCTION_PAID
                 order.auction.save()

@@ -1,9 +1,13 @@
-from django_countries import CountryField
+# -*- coding: utf-8 -*-
+
+from decimal import Decimal
 
 from django.db import models
 from django.db.models import F
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
+
+from django_countries import CountryField
 
 from auctions.constants import *
 from payments.constants import *
@@ -20,9 +24,9 @@ class PaymentNotification(models.Model):
     item_name = models.CharField(max_length=50, blank=True)
     item_number = models.CharField(max_length=15)
     quantity = models.SmallIntegerField(null=True, blank=True)
-    shipping = models.FloatField(null=True, blank=True)
+    shipping = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     payer_email = models.CharField(blank=True, max_length=150)
-    mc_gross = models.FloatField(null=True, blank=True)
+    mc_gross = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     custom1 = models.CharField(max_length=20, blank=True, null=True) #Token to identify the order
     custom2 = models.CharField(max_length=20, blank=True, null=True) #Token to identify the order
     request_log = models.TextField(blank=True)
@@ -38,7 +42,7 @@ class PaymentNotification(models.Model):
 class CreditPackageOrder(models.Model):
     buyer = models.ForeignKey('profiles.Member', related_name='orders', editable=False)
     item = models.ForeignKey('auctions.AuctionItem', blank=True, null=True)
-    amount_paid = models.FloatField(default=0)
+    amount_paid = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal(0))
     pn = models.ForeignKey(PaymentNotification)
     created = models.DateTimeField(auto_now_add=True)
     class Meta:
@@ -77,7 +81,7 @@ class AuctionOrder(models.Model):
     )
     auction = models.ForeignKey("auctions.Auction")
     winner = models.ForeignKey("auth.User", editable=False, related_name='auction_order')
-    amount_paid = models.FloatField(default=0)
+    amount_paid = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal(0))
     method = models.CharField(max_length=3, choices=PAYMENT_METHOD, default=PLIMUS)
     status = models.CharField(max_length=3, choices=AUCTION_ORDER_STATUS, default=ORDER_NOT_PAID)
     pn = models.ForeignKey(PaymentNotification, blank=True, null=True)
