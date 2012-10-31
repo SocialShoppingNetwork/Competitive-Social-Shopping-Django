@@ -3,16 +3,11 @@ import cjson
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
-from django.core.cache import cache
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
-from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseGone
-from annoying.functions import get_object_or_None
 from annoying.decorators import render_to, ajax_request
 
 from auctions.models import Auction, AuctionItem
@@ -125,7 +120,7 @@ def get_auctions(request):
 
 @csrf_exempt
 def fund(request, auction_id):
-
+    # not used anymore. see streamer.namespaces
     if not request.user.is_authenticated():
         if request.is_ajax():
             response = {'error':"AUTH_REQUIRED"}

@@ -147,7 +147,7 @@ class AuctionItem(models.Model):
 
     name = models.CharField(max_length=150)
     slug_name = models.CharField(max_length=200, unique=True)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     amount = models.SmallIntegerField()
     brand = models.ForeignKey(Brand, blank=True, null=True)
     category = models.ForeignKey(Category, blank=True, null=True)
@@ -157,7 +157,7 @@ class AuctionItem(models.Model):
     showcase_time = models.PositiveIntegerField(default=3600)
 
     bidding_time = models.SmallIntegerField(default=120)
-    shipping_fee = models.FloatField()
+    shipping_fee = models.DecimalField(max_digits=5, decimal_places=2)
     description = tinymce_models.HTMLField(blank='', null=True)
 
     notes = models.TextField(default='', blank=True, null=True)
@@ -201,7 +201,7 @@ class Auction(models.Model):
 
     amount_pleged = models.PositiveIntegerField(default=0)
     backers = models.PositiveIntegerField(default=0)
-    current_offer = models.FloatField(default=0.0)
+    current_offer = models.DecimalField(max_digits=7, decimal_places=2)
     pledge_time =  models.PositiveIntegerField(default=43200)
 
     deadline_time = models.FloatField(db_index=True)
@@ -333,7 +333,7 @@ class Auction(models.Model):
 class AuctionBid(models.Model):
     auction = models.ForeignKey(Auction)
     bidder = models.ForeignKey('profiles.Member')
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     unixtime = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
 
@@ -365,7 +365,7 @@ class AuctionItemImages(models.Model):
 class AuctionPlegde(models.Model):
     auction = models.ForeignKey(Auction)
     member = models.ForeignKey('profiles.Member')
-    amount = models.PositiveIntegerField()
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):

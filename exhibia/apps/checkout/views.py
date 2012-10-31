@@ -31,7 +31,7 @@ from profiles.models import BillingAddress
 def select_shipping_address(request, auction_id):
     member = request.user.get_profile()
     auction = get_object_or_404(member.items_won.filter(order=None), id=auction_id)
-    shipping_profiles = member.shippingaddress_set.filter(deleted=False)
+    shipping_profiles = request.user.shipping_adddresses.filter(deleted=False)
     next_url = request.REQUEST.get('next')
 
     id = request.POST.get('id')
