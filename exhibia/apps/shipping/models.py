@@ -32,15 +32,15 @@ class ShippingFee(models.Model):
     item = models.ForeignKey('auctions.AuctionItem')
     country = CountryField()
     shipping = models.CharField(choices=SHIPPING_OPTIONS, max_length=3)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return '%s - %s - %s' % (self.item, self.shipping, self.price)
+
     @property
     def name(self):
-        d = dict(SHIPPING_OPTIONS)
-        return d[self.shipping]
+        return dict(SHIPPING_OPTIONS)[self.shipping]
 
 class ShippingRequest(models.Model):
     user = models.ForeignKey("auth.User")
