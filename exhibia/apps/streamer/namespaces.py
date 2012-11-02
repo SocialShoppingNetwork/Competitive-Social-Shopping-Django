@@ -19,7 +19,11 @@ from auctions.models import Auction
 from auctions.exceptions import *
 from auctions import constants
 
-redis_pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
+
+redis_pool = redis.ConnectionPool(host=settings.REDIS['host'],
+                                  port=settings.REDIS['port'],
+                                  password=settings.REDIS['password'],
+                                  db=0, max_connections=3)
 
 def listener():
     r = redis.StrictRedis(connection_pool=redis_pool)
@@ -53,7 +57,7 @@ class RedisBroadcast(object):
         self.instances.append(weakref.ref(self))
 
     def publish(self, event, *args):
-        r = redis.Redis()
+        r = redis.Redis(connection_pool=redis_pool)
         msg = {'event':event, 'args':args}
         r.publish(self.channel, dumps(msg))
 

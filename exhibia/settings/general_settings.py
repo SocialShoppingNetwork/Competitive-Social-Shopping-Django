@@ -256,3 +256,9 @@ SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
 
 SITE_NAME = 'testing.exhibia.com'
 
+REDIS = {
+    'username':'redistogo',
+    'password':'04970af27e1eb8cbaaca6243e0b730d4',
+    'host':'grouper.redistogo.com',
+    'port':'9134'
+}
