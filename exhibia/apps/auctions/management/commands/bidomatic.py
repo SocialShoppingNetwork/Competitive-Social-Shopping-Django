@@ -29,26 +29,26 @@ def auctions_to_json(auctions):
     return result
 
 
-class UpdateCache(threading.Thread):
-    def __init__(self):
-        print settings.CACHES
-        threading.Thread.__init__(self)
-        self.kill_received = False
+# class UpdateCache(threading.Thread):
+#     def __init__(self):
+#         print settings.CACHES
+#         threading.Thread.__init__(self)
+#         self.kill_received = False
 
-    def run(self):
-        while not self.kill_received:
-            auctions = Auction.objects.live().order_by('id').select_related('item', 'item__image')
-            cache.set('auctions', auctions)
-            auctions = auctions_to_json(auctions)
-            d = {}
-            for k,v in auctions.items():
-                cache.set(k, cjson.encode({k:v}), 30)
-            auctions_json = cjson.encode(auctions)
-            print 'updating cache'
-            cache.set('auctions_json', auctions_json, 30)
+#     def run(self):
+#         while not self.kill_received:
+#             auctions = Auction.objects.live().order_by('id').select_related('item', 'item__image')
+#             cache.set('auctions', auctions)
+#             auctions = auctions_to_json(auctions)
+#             d = {}
+#             for k,v in auctions.items():
+#                 cache.set(k, cjson.encode({k:v}), 30)
+#             auctions_json = cjson.encode(auctions)
+#             print 'updating cache'
+#             cache.set('auctions_json', auctions_json, 30)
 
-            cache.get('auctions_json')
-            sleep(0.5)
+#             cache.get('auctions_json')
+#             sleep(0.5)
 
 class KickOff(threading.Thread):
     def __init__(self):
@@ -148,7 +148,7 @@ class Bidomatic(threading.Thread):
                                 bidomatic.bid(auction)
                 #else:
                 #    bidomatic.bid(auction)
-                
+
                 if auction.time_left < 0:
                     if bidomatic.win:
                         if  auction.last_bid_type == 'n':
@@ -173,13 +173,13 @@ class Command(BaseCommand):
             b.start()
             d = Dispatcher()
             d.start()
-            c = UpdateCache()
-            c.start()
+            # c = UpdateCache()
+            # c.start()
             #threads.extend([k, c, b])
-            threads.extend([c, b, d])
+            threads.extend([b, d])
             while True:
                 r = raw_input()
         except KeyboardInterrupt:
             for t in threads:
                 t.kill_received = True
-                
+

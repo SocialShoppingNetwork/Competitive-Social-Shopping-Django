@@ -1,5 +1,5 @@
 {% with auction as a %}
-<li data-id="{{ a.id }}" data-type="util" data-types="camera" class="span3 showcase">
+<li data-timeleft="{{ a.time_left }}" data-bidtime="{{a.bidding_time}}" data-type="util" data-types="camera" class="span3 showcase" id="{{ a.id }}">
 	<div class="thumbnail">
 		<div class="h3 fund-title"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
         <div align="center">
@@ -10,9 +10,15 @@
         <div class="caption">
         	<div class="h2 time" align="center" id="timer_{{ a.id }}">{{ a.time_left }} seconds</div>
           	<h6 align="center">Tick time: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} seconds</span></h6>
-			<div class="h5 well" align="center">
-				<img class="social" width="24" height="24" id="last_bidder_img_{{ a.id }}" src="{{ STATIC_URL }}img/facebook-16x16.png" />
-				<span style="font-size: 11px;" id="last_bidder_{{ a.id }}">{{ a.last_bidder }}</span>
+			<div class="h5 well bidder" align="center">
+                {% if a.last_bidder %}
+                    <img class="social" width="24" height="24" src="{{ STATIC_URL }}img/facebook-16x16.png" />
+                    <span style="font-size: 11px;" id="last_bidder_{{ a.id }}">{{ a.last_bidder }}</span>
+                {% else %}
+                    <img class="social" width="24" height="24" src="" style="display:none;"/>
+                    <span style="font-size: 11px;">Be the first bidder</span>
+                {% endif %}
+
 			</div>
         </div>
 		<div class="panel">

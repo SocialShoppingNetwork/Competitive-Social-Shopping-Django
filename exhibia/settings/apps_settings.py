@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from decimal import Decimal
 
 # debug toolbar
 INTERNAL_IPS = [
@@ -20,7 +21,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 # custom apps settings
-PRICE_INTERVAL = 0.01
+PRICE_INTERVAL = Decimal(0.01)
 MAX_AUCTIONS = 12
 MAX_TIME_HOMEPAGE = 30
 
@@ -63,8 +64,8 @@ from time import time
 max_age = 315360000 # year
 from django.utils.http import http_date
 AWS_QUERYSTRING_AUTH = False
-AWS_HEADERS = {
-        'x-amz-acl': 'public-read',
-        'Expires': http_date(time() + max_age),
-        'Cache-Control': 'public, max-age=' + str(max_age)
-    }
+# AWS_HEADERS = {
+#         'x-amz-acl': 'public-read',
+#         'Expires': time() + max_age,
+#         'Cache-Control': 'public, max-age=' + str(max_age)
+#     }

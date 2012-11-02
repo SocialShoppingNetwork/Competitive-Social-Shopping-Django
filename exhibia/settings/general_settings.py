@@ -197,6 +197,7 @@ INSTALLED_APPS = [
     # ndevs apps
     "socials",
     'referrals',
+    'streamer',
 
 ]
 
@@ -254,3 +255,4 @@ SESSION_COOKIE_AGE = 15552000
 SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
 
 SITE_NAME = 'testing.exhibia.com'
+

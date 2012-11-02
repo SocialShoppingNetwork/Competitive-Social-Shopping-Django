@@ -4473,6 +4473,7 @@ input[type="submit"].btn.btn-mini {
   float: left;
   margin-bottom: 18px;
   margin-left: 20px;
+  min-height: 320px;
 }
 
 .thumbnail {

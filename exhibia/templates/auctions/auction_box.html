@@ -1,5 +1,5 @@
 {% with auction as a %}
-<li data-id="{{ a.id }}" data-type="app" data-types="camera" class="span3 funding">
+<li data-id="{{ a.id }}" data-type="app" data-types="camera" class="span3 funding" id="{{a.pk}}">
 	<div class="thumbnail">
 		<div class="h3 fund-title">
             <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a>
@@ -14,13 +14,15 @@
                 <div class="bar" style="width: {{ a.funded|floatformat:0 }}%;">{{ a.funded|floatformat:0 }}%</div>
             </div>
           	<div class="row funded">
-				<div class="span1"><span id="amount_pleged_{{ a.id }}">${{ a.amount_pleged }}</span>FUNDED</div>
-				<div class="span1"><span id="backers_{{ a.id }}">{{ a.backers }}</span>BACKERS</div>
+				<div class="span1"><span id="amount_pleged_{{ a.id }}" class="amount_pleged">${{ a.amount_pleged }}</span>FUNDED</div>
+				<div class="span1"><span id="backers_{{ a.id }}" class="bakers">{{ a.backers }}</span>BACKERS</div>
 			</div>
         </div>
         <div class="panel">
         	<div class="btn-group fund-options">
-        		<a class="btn fund btn-success btn-big" data-uri="{% url auction_fund a.id %}" data-toggle="modal" href="#fundModal"><i class="icon-leaf icon-white"></i> FUND</a>
+        		<a class="btn fund btn-success btn-big" data-uri="{% url auction_fund a.id %}" data-toggle="modal" href="#fundModal" data-pk="{{a.pk}}">
+                    <i class="icon-leaf icon-white"></i> FUND
+                </a>
         	</div>
         </div>
 	</div>

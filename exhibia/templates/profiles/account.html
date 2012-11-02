@@ -14,7 +14,7 @@
 	   		 		{% if member.verified %}
         				<span class="badge badge-success">{% trans "Verified" %}</span>
     				{% else %}
-        				<span class="badge badge-inverse">{% trans "No Verified" %}</span>
+        				<span class="badge badge-inverse">{% trans "Not Verified" %}</span>
     				{% endif %}</h3></li>
 				<li>{{ member.user.username }}</li>
 				<li>{% trans "Bids" %}: {{ member.credits }}</li>
@@ -34,21 +34,20 @@
 			<thead>
                 <tr>
                   <th>Product Name</th>
+                  <th></th>
                   <th>Actions</th>
                 </tr>
               </thead>
             <tbody>
 	 		{% for auction in auctions_waiting_payment %}
 				<tr>
-				    <th>
-				    	<div class="row">
-				    		<div class="span1"><img width="64" height="64" src="{{ auction.item.image.img.url }}"></div>
-				    		<div class="span3">{{ auction.item.name }}</div>
-				    	</div>
-				    </th>
-				    <th>
+				    <td>
+			    		<div class="span1"><img width="64" height="64" src="{{ auction.item.image.img.url }}"></div>
+				    </td>
+                    <td><div class="span3"><b>{{ auction.item.name }}</b></div></td>
+				    <td>
 				    	<a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a>
-				    </th>
+				    </td>
 				</tr>
 			{% endfor %}
 			</tbody>

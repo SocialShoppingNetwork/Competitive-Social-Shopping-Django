@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import settings
 
 from time import time
@@ -157,7 +159,7 @@ class AuctionItem(models.Model):
     showcase_time = models.PositiveIntegerField(default=3600)
 
     bidding_time = models.SmallIntegerField(default=120)
-    shipping_fee = models.DecimalField(max_digits=5, decimal_places=2)
+    shipping_fee = models.DecimalField(max_digits=7, decimal_places=2)
     description = tinymce_models.HTMLField(blank='', null=True)
 
     notes = models.TextField(default='', blank=True, null=True)
@@ -201,7 +203,7 @@ class Auction(models.Model):
 
     amount_pleged = models.PositiveIntegerField(default=0)
     backers = models.PositiveIntegerField(default=0)
-    current_offer = models.DecimalField(max_digits=7, decimal_places=2)
+    current_offer = models.DecimalField(max_digits=7, decimal_places=2, default=0)
     pledge_time =  models.PositiveIntegerField(default=43200)
 
     deadline_time = models.FloatField(db_index=True)

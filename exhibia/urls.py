@@ -8,6 +8,7 @@ admin.autodiscover()
 from pinax.apps.account.openid_consumer import PinaxConsumer
 from profiles.decorators import required, check_for_ip
 from profiles.forms import ExhibiaSignupForm
+import streamer.urls
 
 handler500 = "pinax.views.server_error"
 
@@ -88,6 +89,7 @@ urlpatterns = patterns("",
                         name='logout'),
     url(r'', include('social_auth.urls')),
     url(r'^ref/(?P<ref_id>\d+?)/$', 'referrals.views.refferal', name='refferal_url'),
+    url("^socket\.io", 'streamer.views.socketio', name='socketio'),
 
 )
 
@@ -103,4 +105,6 @@ urlpatterns += required(check_for_ip, patterns('',
 if settings.SERVE_MEDIA:
     urlpatterns += patterns("",
         url(r"", include("staticfiles.urls")),
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT, }),
     )
