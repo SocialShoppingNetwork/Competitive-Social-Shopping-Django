@@ -31,8 +31,8 @@ django-uni-form==0.7.0
 easy-thumbnails==1.1
 facebook-sdk==0.3.2
 gdata==2.0.17
--e git+https://github.com/SiteSupport/gevent.git@60fd53be34e2e8f83cbd99ba39a319ef41697cf0#egg=gevent-dev
--e git+https://github.com/abourget/gevent-socketio.git@8428cf739aa06e519c3f6f97364ce6abef4a246a#egg=gevent_socketio-dev
+gevent==1.0dev
+gevent-socketio==0.3.5-rc2
 gevent-websocket==0.3.6
 greenlet==0.4.0
 gunicorn==0.15.0
