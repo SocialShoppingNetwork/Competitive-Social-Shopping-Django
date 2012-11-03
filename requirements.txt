@@ -31,7 +31,7 @@ django-uni-form==0.7.0
 easy-thumbnails==1.1
 facebook-sdk==0.3.2
 gdata==2.0.17
-gevent==1.0dev
+gevent==0.13.8
 gevent-socketio==0.3.5-rc2
 gevent-websocket==0.3.6
 greenlet==0.4.0
