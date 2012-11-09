@@ -13,10 +13,16 @@ import streamer.urls
 handler500 = "pinax.views.server_error"
 
 
-urlpatterns = patterns("",
-    #url(r"^$", direct_to_template, {
-    #    "template": "homepage.html",
-    #}, name="home"),
+urlpatterns = patterns('',
+    url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user",
+                         name="admin_invite_user"),
+    url(r"^admin/", include(admin.site.urls)),
+    url(r"^adminx/", include("matic.urls")),
+)
+
+
+urlpatterns += patterns("",
+    url(r'^tracking/', include('tracking.urls')),
     url(r"^$", "auctions.views.index", name="home"),
 
     url(r"^bid/ajax/(\d+)/$", "auctions.views.bid_ajax", name="auction_bid_ajax"),
@@ -69,10 +75,7 @@ urlpatterns = patterns("",
     url(r"^checkout/", include("checkout.urls")),
 
 
-    url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user",
-                         name="admin_invite_user"),
-    url(r"^admin/", include(admin.site.urls)),
-    url(r"^adminx/", include("matic.urls")),
+
     url(r"^about/", include("about.urls")),
 
     # url(r"^account/login/$", "profiles.views.check_for_ip", name="acct_login"),
@@ -84,7 +87,7 @@ urlpatterns = patterns("",
     url(r'^uploader/', include('uploader.urls')),
     url(r'^socials/', include('socials.urls')),
     url(r'^chat/', include('chat.urls')),
-    (r'^tinymce/', include('tinymce.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'},
                         name='logout'),
     url(r'', include('social_auth.urls')),

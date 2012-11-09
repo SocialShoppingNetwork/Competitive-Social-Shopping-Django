@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns("",
-    url(r"^index/$", "matic.views.admin_index", name="matic_admin"),
+    url(r"^$", "matic.views.admin_index", name="matic_admin"),
     url(r"^status/$", "matic.views.auctions_status", name="matic_status"),
     url(r"^change/status/(\d+)/$", "matic.views.pause_resume", name="matic_change_status"),
     url(r"^change/time/(\d+)/(\d+)/$", "matic.views.change_bidding_time", name="matic_change_bidding_time"),

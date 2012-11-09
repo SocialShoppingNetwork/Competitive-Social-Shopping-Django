@@ -5,7 +5,7 @@ import posixpath
 import pinax
 
 PINAX_ROOT = path.abspath(path.dirname(pinax.__file__))
-PROJECT_ROOT = path.join(path.abspath(path.dirname(__file__)), '../')
+PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 
 # tells Pinax to use the default theme
 PINAX_THEME = "default"
@@ -101,11 +101,17 @@ TEMPLATE_LOADERS = [
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.gzip.GZipMiddleware',
+
+    'tracking.middleware.BannedIPMiddleware',
+
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django_openid.consumer.SessionConsumer",
+
+    'tracking.middleware.VisitorTrackingMiddleware',
+
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "pinax.apps.account.middleware.LocaleMiddleware",
@@ -114,6 +120,7 @@ MIDDLEWARE_CLASSES = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "utils.middleware.MemberMiddleware",
     "referrals.middlewares.RefererMiddleware",
+    'tracking.middleware.VisitorCleanUpMiddleware',
 ]
 
 ROOT_URLCONF = "exhibia.urls"
@@ -182,6 +189,7 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "gunicorn",
     "storages",
+    'tracking',
 
     # project
     "about",
@@ -262,3 +270,8 @@ REDIS = {
     'host':'grouper.redistogo.com',
     'port':9134
 }
+
+
+# geoip
+GEOIP_PATH = path.join(path.dirname(PROJECT_ROOT), 'geoip')
+TRACKING_USE_GEOIP = True
