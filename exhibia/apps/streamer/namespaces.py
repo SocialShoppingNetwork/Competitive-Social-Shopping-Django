@@ -2,6 +2,7 @@
 
 from decimal import Decimal
 from json import dumps, loads
+from collections import deque
 import weakref
 
 import redis
@@ -61,6 +62,9 @@ class RedisBroadcast(object):
         msg = {'event':event, 'args':args}
         r.publish(self.channel, dumps(msg))
 
+chat_history = deque(maxlen=15)
+
+
 class ChatNamespace(RedisBroadcast, BaseNamespace):
     instances = []
     channel = 'chat'
@@ -73,13 +77,17 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
         else:
             self.session['username'] = u'guest'
             self.session['avatar'] = '' # pick default avatar
+        for i in chat_history:
+            self.emit('user_message', *i)
+
 
     def on_send_chat_message(self, msg):
         r = redis.Redis(connection_pool=redis_pool)
         if r.sinter('banned_users', self.session['username']):
             return
-        self.publish('user_message',self.session['username'],
-                    msg[:200], self.session['avatar'] )
+        message = [self.session['username'], msg[:200], self.session['avatar']]
+        chat_history.append(message)
+        self.publish('user_message',  *message)
 
 
 class AuctionNamespace(RedisBroadcast, BaseNamespace):
