@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'BannedIPAddress.IPAddress'
         db.add_column('profiles_bannedipaddress', 'IPAddress',
-                      self.gf('django.db.models.fields.IPAddressField')(max_length=15),
+                      self.gf('django.db.models.fields.IPAddressField')(max_length=15, default='127.0.0.1'),
                       keep_default=False)
 
 

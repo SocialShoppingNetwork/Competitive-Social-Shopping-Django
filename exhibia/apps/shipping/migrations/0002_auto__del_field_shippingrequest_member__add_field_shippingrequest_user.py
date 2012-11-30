@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'ShippingRequest.user'
         db.add_column('shipping_shippingrequest', 'user',
-                      self.gf('django.db.models.fields.related.ForeignKey')( to=orm['auth.User']),
+                      self.gf('django.db.models.fields.related.ForeignKey')( to=orm['auth.User'], default=1),
                       keep_default=False)
 
         # Adding unique constraint on 'ShippingRequest', fields ['auction', 'user']
@@ -27,7 +27,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'ShippingAddress.user'
         db.add_column('shipping_shippingaddress', 'user',
-                      self.gf('django.db.models.fields.related.ForeignKey')( to=orm['auth.User']),
+                      self.gf('django.db.models.fields.related.ForeignKey')( to=orm['auth.User'], default=1),
                       keep_default=False)
 
 
