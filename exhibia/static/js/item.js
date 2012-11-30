@@ -50,6 +50,7 @@ $(document).ready(function() {
         var block = $('li#'+auction_pk);
         block.find('img.social').attr('src', avatar).attr('title', username).show();
         block.find('span').text(username);
+        block.reset_timer();
     });
 
     var update_timers = function(){
@@ -57,15 +58,26 @@ $(document).ready(function() {
             var self = $(this);
             var time_left = self.data('timeleft');
             if (time_left > 0) {
+
                 self.data('timeleft', time_left-1);
                 self.find('div.time').text(''+time_left -1 +' Seconds');
             } else{
                 if (self.find('img.social').attr('src').length>0) {
                     // auction has a bid
-                    self.slideUp('slow', function(){ $(this).remove();});
+                    var obj = {
+                        self:self,
+                        func: function(){
+                            this.self.slideUp('slow');
+                        }};
+                    setTimeout(function(){ obj.func() }, 60000);
+                    var panel = self.find('.fund-options');
+                    if (!panel.find('span').length){
+                        panel.find(".bid-btn").addClass('disabled');
+                        $("<span>this auction has ended</span>").appendTo(panel);
+                    }
                 } else {
                     // no bid so far so reset timer
-                    self.data('timeleft', self.data('bidtime'));
+                    self.reset_timer();
                 }
             }
         });
@@ -79,9 +91,12 @@ $(document).ready(function() {
         $('#fundModal').modal('hide');
     });
     $('ul#items').on('click', '.bid-btn', function(event){
-            auction_id = $(this).attr('data-auctionid');
+        var self = $(this);
+        if (!self.hasClass('disabled')){
+            auction_id = self.attr('data-auctionid');
             auction_socket.emit('bid', auction_id);
-            return false;
+        }
+        return false;
     });
 	/* Quick sand sorting */
 	// var $items_container = $('#items');
@@ -127,6 +142,10 @@ $(document).ready(function() {
             }
         });
         return $(arr);
+    };
+    $.fn.reset_timer = function(){
+        var self = $(this);
+        self.data('timeleft', self.data('bidtime'));
     };
 })(jQuery);
 
