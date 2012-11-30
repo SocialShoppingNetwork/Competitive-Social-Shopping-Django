@@ -12,7 +12,7 @@ from django.contrib.localflavor.uk import forms as forms_uk
 class ShippingForm(forms.ModelForm):
     class Meta:
         model = ShippingAddress
-        exclude = ('member','deleted',)
+        exclude = ('user','deleted', )
 
 class MemberInfoFormUS(forms.Form):
     first_name = forms.CharField(max_length=60)

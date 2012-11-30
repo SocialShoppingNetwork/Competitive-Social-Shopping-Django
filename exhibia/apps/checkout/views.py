@@ -38,7 +38,7 @@ def select_shipping_address(request, auction_id):
     action = request.POST.get('action')
     shipping = None
     if id:
-        shipping = get_object_or_404(ShippingAddress, id=id, member=member, deleted=False)
+        shipping = get_object_or_404(ShippingAddress, id=id, user=request.user, deleted=False)
     session_shipping = 'auction_%s_shipping' % auction_id
 
     if 'delete' in request.POST:
@@ -80,7 +80,7 @@ def select_shipping_address(request, auction_id):
                 else:
                     #Create new Shipping address, SAVE
                     shipping = form.save(commit=False)
-                    shipping.member = member
+                    shipping.user = request.user
                     shipping.save()
                     request.session[session_shipping] = shipping.id
                     return HttpResponseRedirect(reverse('checkout_select_shipping_address', args=[auction_id]))
@@ -205,7 +205,7 @@ def request_shipping_fee(request, auction_id):
     session_shipping = 'auction_%s_shipping' % auction_id
     shipping_id = request.session.get(session_shipping)
     auction = get_object_or_404(member.items_won.filter(order=None), id=auction_id)
-    shipping = get_object_or_None(ShippingAddress, id=shipping_id, member=member, deleted=False)
+    shipping = get_object_or_None(ShippingAddress, id=shipping_id, user=request.user, deleted=False)
 
     try:
         if auction.order:
@@ -226,7 +226,7 @@ def request_shipping_fee(request, auction_id):
             shipping_request.delete()
         shipping_request = ShippingRequest.objects.create(
             auction=auction,
-            member=member,
+            user=request.user,
             first_name=shipping.first_name,
             last_name=shipping.last_name,
             address1=shipping.address1,

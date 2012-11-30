@@ -12,7 +12,7 @@ from referrals.models import ReferralLink
 class BillingForm(forms.ModelForm):
     class Meta:
         model = BillingAddress
-        exclude = ('member','deleted','shipping')
+        exclude = ('user','deleted','shipping')
 
 class DateRangeForm(forms.Form):
     """Form for selection date range """

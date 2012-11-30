@@ -40,7 +40,7 @@ class PaymentNotification(models.Model):
         ordering = ['-created']
 
 class CreditPackageOrder(models.Model):
-    buyer = models.ForeignKey('profiles.Member', related_name='orders', editable=False)
+    buyer = models.ForeignKey('auth.User', related_name='orders', editable=False)
     item = models.ForeignKey('auctions.AuctionItem', blank=True, null=True)
     amount_paid = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal(0))
     pn = models.ForeignKey(PaymentNotification)
@@ -99,7 +99,7 @@ class AuctionOrder(models.Model):
         ordering = ["-id"]
 
 class Card(models.Model):
-    member = models.ForeignKey("profiles.Member")
+    user = models.ForeignKey("auth.User")
     number = models.CharField(max_length=30)
     holder_name = models.CharField(max_length=70)
     expiration_month = models.PositiveSmallIntegerField()

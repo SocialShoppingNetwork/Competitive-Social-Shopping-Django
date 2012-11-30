@@ -1,14 +1,10 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.template.defaultfilters import slugify
 from django.template import RequestContext
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
 
-from annoying.functions import get_object_or_None
-from annoying.decorators import render_to, ajax_request
+from annoying.decorators import render_to
 
 from auctions.models import Auction
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
@@ -110,16 +106,14 @@ ORDER_PROCESSING_ORDER = 'op'
 ORDER_PAID = 'pd' # Processing Order
 ORDER_DELIVERED = 'dl'
 ORDER_WAITING_TESTIMONIAL = 'wt'
-from django.db.models import Q
-
 
 from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED, ORDER_PROCESSING
+
+
 @login_required
 @render_to('profiles/account.html')
 def account(request):
     member = request.user.get_profile()
-    print member
-    print '-----'
     #auctions_waiting_payment = member.items_won.filter(Q(shippingorder=None) |
     #                                            Q(shippingorder__status=ORDER_WAITING_PAYMENT) |
     #                                            Q(shippingorder__status=ORDER_SHIPPING_FEE_REQUESTED))
@@ -128,11 +122,8 @@ def account(request):
 
     #orders processing and shipped
     auctions_processing = member.items_won.filter(order__status=ORDER_PROCESSING)
-    print auctions_processing
 
     auctions_shipped = member.items_won.filter(order__status=ORDER_SHIPPED)
-    print '--------'
-    print auctions_shipped
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
             'auctions_processing':auctions_processing,

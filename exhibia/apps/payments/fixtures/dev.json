@@ -8,7 +8,7 @@
             "created": "2012-08-16 14:19:14",
             "deleted": false,
             "number": "555554444333221",
-            "member": 1
+            "user": 1
         }
     },
     {
@@ -20,7 +20,7 @@
             "created": "2012-08-16 14:36:38",
             "deleted": false,
             "number": "33322110",
-            "member": 1
+            "user": 1
         }
     },
     {
@@ -32,7 +32,7 @@
             "created": "2012-08-16 14:36:49",
             "deleted": false,
             "number": "33322110",
-            "member": 1
+            "user": 1
         }
     },
     {
@@ -44,7 +44,7 @@
             "created": "2012-08-17 12:00:11",
             "deleted": false,
             "number": "4444333221",
-            "member": 2
+            "user": 2
         }
     },
     {
@@ -56,7 +56,7 @@
             "created": "2012-08-17 13:04:31",
             "deleted": false,
             "number": "8888888888",
-            "member": 2
+            "user": 2
         }
     }
 ]

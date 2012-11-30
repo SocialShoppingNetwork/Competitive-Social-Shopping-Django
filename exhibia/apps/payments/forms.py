@@ -13,4 +13,4 @@ class PledgeForm(forms.Form):
 class CardForm(forms.ModelForm):
     class Meta:
         model = Card
-        exclude = ('member','deleted',)
+        exclude = ('user','deleted',)
