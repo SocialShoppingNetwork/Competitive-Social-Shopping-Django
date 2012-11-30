@@ -62,6 +62,8 @@ urlpatterns += patterns("",
                         name="account_billing"),
     url(r'^account/payments/$', 'profiles.views.manage_payments', {},
                         name="account_payments"),
+     url(r'^account/payments/delete_card/$', 'profiles.views.delete_card', {},
+                        name="account_delete_card"),
 
 
     url(r"^items/", include("auctions.urls")),
