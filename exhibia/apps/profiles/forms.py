@@ -34,3 +34,7 @@ class ExhibiaSignupForm(SignupForm):
             except: pass
         profile.save()
         return user
+
+
+class DeleteCardForm(forms.Form):
+    card_pk = forms.IntegerField()

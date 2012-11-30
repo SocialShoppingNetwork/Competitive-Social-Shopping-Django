@@ -1,21 +1,37 @@
 {% extends 'site_base.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
-    <form action=".?action=delete" method="POST">
-        {% csrf_token %}
-        {% for card in cards %}
-            <input type="radio" name="card" value="{{ card.id }}"/> {{ card.number }}  | {{card.expiration_month }}/{{ card.expiration_year}}<br/>
-        {% endfor %}
-        <input type="hidden" name="select" value="1"/>
-        <input type="submit" value="Delete" />
-        <p>(You can review this order before it's final.)</p>
-    </form>
+    {% for card in cards %}
+        {% if forloop.first %}
+        <table class="table table-striped">
+            <th>Card number</th>
+            <th>Holder's name</th>
+            <th>Expires</th>
+            <th></th>
+        {% endif %}
+        <tr>
+            <td>{{card.number}}</td>
+            <td>{{card.holder_name}}</td>
+            <td>{{card.expiration_month}}/{{card.expiration_year}}</td>
+            <td>
+                <form action="{% url account_delete_card %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{card.pk}}" name="card_pk"/>
+                    <input type="submit" class="btn btn-danger" value="Delete this card"/>
+                </form>
+            </td>
+        </tr>
+
+        {% if forloop.last %}
+            </table>
+        {% endif %}
+    {% endfor %}
 
     <h2>Add new card</h2>
     <form action="." method="post" class="uniForm">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Save"/>
+        <input type="submit" value="Add" class="btn btn-primary"/>
     </form>
 
 {% endblock %}

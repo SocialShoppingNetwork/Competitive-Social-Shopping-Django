@@ -1,4 +1,6 @@
-from django.http import HttpResponse, HttpResponseRedirect
+# -*- coding: utf-8 -*-
+
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -16,7 +18,7 @@ from payments.forms import CardForm
 from shipping.forms import ShippingForm
 from shipping.models import ShippingAddress
 from profiles.models import BillingAddress
-from profiles.forms import BillingForm
+from profiles.forms import BillingForm, DeleteCardForm
 
 @login_required
 def auctions_won(request, template_name='profiles/auctions_won.html'):
@@ -228,39 +230,32 @@ def manage_billing(request):
 @login_required
 @render_to('profiles/manage_payments.html')
 def manage_payments(request):
-    member = request.user.get_profile()
-    cards = member.card_set.filter(deleted=False)
-    card = None
-    id = request.GET.get('card')
-    if 'delete' in request.GET:
-        card = get_object_or_404(Card, id=id, member=member, deleted=False)
-        card.deleted = True
+    cards = request.user.card_set.filter(deleted=False)
+    form = CardForm(request.POST or None)
+    if form.is_valid():
+        card = form.save(commit=False)
+        card.user = request.user
         card.save()
         return HttpResponseRedirect(reverse('profile_account'))
-
-    if request.method == 'POST':
-        form = CardForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            if id:
-                data = form.cleaned_data
-                card = form.save(commit=False)
-                card.member = member
-                card.save()
-                cards = member.card_set.filter(deleted=False)
-                form = CardForm()
-
-            return HttpResponseRedirect(reverse('profile_account'))
-    else:
-        if id:
-            card = get_object_or_404(Card, id=id, member=member, deleted=False)
-            form = CardForm(initial=billing.__dict__)
-        else:
-            form = CardForm()
 
     return {
         'form':form,
         'cards':cards,
-        'card':card
     }
+
+
+@login_required
+def delete_card(request):
+    if not request.method == 'POST':
+        raise Http404()
+    form = DeleteCardForm(request.POST or None)
+    if form.is_valid():
+        try:
+            card = Card.objects.get(pk=form.cleaned_data['card_pk'], user=request.user)
+            card.deleted = True
+            card.save()
+        except Card.DoesNotExist:
+            pass
+    return HttpResponseRedirect(reverse('account_payments'))
+
 
