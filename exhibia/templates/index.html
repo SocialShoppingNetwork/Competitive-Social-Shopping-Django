@@ -1,4 +1,5 @@
 {% extends 'site_base.html' %}
+{% load compress %}
 {% block body %}
 	<div class="btn-group sorting" data-toggle="buttons-radio">
 		<button class="btn btn-mini active" id="sort_by_name">All</button>
@@ -25,6 +26,12 @@
 
 {% endblock %}
 {% block extra_js %}
+    {% compress js %}
+        <script type="text/javascript" src="{{ STATIC_URL }}js/socket.io.js"></script>
+        <script type="text/javascript">$.exhibia = {};</script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/winnina.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/item.js"></script>
+    {% endcompress %}
     <script>
     $(document).ready(function() {
         socket = io.connect('/chat');
