@@ -209,6 +209,8 @@ INSTALLED_APPS = [
 
 ]
 
+TEST_RUNNER = 'coverage_runner.CaverageTestSuiteRunner'
+COVERAGE_REPORT_PATH = path.join(PROJECT_ROOT, 'coverage_report')
 FIXTURE_DIRS = [
     path.join(PROJECT_ROOT, "fixtures"),
 ]
