@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.core.urlresolvers import reverse
+from django.test import TestCase
 
-import unittest
-
-class ProvileViewsTest(unittest.TestCase):
+class ProvileViewsTest(TestCase):
     fixtures = ['dev.json']
 
     def test_manage_payments(self):
