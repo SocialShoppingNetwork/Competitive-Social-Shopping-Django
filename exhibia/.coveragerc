@@ -1,0 +1,12 @@
+
+[html]
+directory = coverage
+
+[run]
+include = apps/*
+branch = True
+
+
+[report]
+omit = *__init__*
+       */migrations/*
