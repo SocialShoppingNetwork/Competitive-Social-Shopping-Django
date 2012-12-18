@@ -36,7 +36,7 @@ $(document).ready(function() {
         li.find('.bakers').text(backers);
         li.find('.amount_pleged').text('$' + amount_pleged);
         li.find('div.bar').attr('style', 'width: ' + funded + '%;').text(funded+"%");
-        insert_notification(li.find('.fund-title a').text() + ' funded');
+        insert_notification(li.find('.fund-title a').text() + ' has been funded');
     });
     auction_socket.on('auction_fund_ended', function(auction_pk, time_left, html){
         // item have been funded for a full price so convert it to auction
@@ -45,7 +45,7 @@ $(document).ready(function() {
             html = $(html);
         html.insertAfter(block);
         block.slideUp('slow', function(){$(this).remove();});
-        insert_notification(li.find('.fund-title a').text() + ' fund period ended');
+        insert_notification(li.find('.fund-title a').text() + ' has been opened for bidding');
     });
     auction_socket.on('auction_bid', function(auction_pk, time_left, username, avatar){
         // user made a bid on auction
@@ -72,7 +72,7 @@ $(document).ready(function() {
                         func: function(){
                             this.self.slideUp('slow');
                         }};
-                    setTimeout(function(){ obj.func() }, 60000);
+                    setTimeout(function(){ obj.func(); }, 60000);
                     var panel = self.find('.fund-options');
                     if (!panel.find('span').length){
                         panel.find(".bid-btn").addClass('disabled');
