@@ -4,11 +4,11 @@ var getKeys = function(obj){
       keys.push(key);
    }
    return keys;
-}
+};
 
 var unit_plural = function(n){
 	return n==1?"":"s";
-}
+};
 
 var get_time = function(seconds){
 	if (isNaN(seconds)) {
@@ -35,7 +35,7 @@ var get_time = function(seconds){
 	} else {
 		return "--:--:--";
 	}
-}
+};
 
 function minus(a, b){
     result = [];
@@ -63,7 +63,7 @@ function Auctions(info){
 
     this.ids = function(){
         return get_real_keys(this.auctions);
-    }
+    };
 }
 
 function Items(info){
@@ -73,7 +73,7 @@ function Items(info){
     };
     this.ids = function(){
         return get_real_keys(this.auctions);
-    }
+    };
 }
 
 
@@ -98,14 +98,14 @@ function update_auctions_ui(auctions){
         }
         // Update Bidding time
         $('#bidding_time_' + auction.id).html(get_time(auction.bidding_time));
-        if (auction.last_bidder == ''){
+        if (auction.last_bidder === ''){
             $('#last_bidder_' + auction.id).html("Be the first bidder");
         }else{
             $('#last_bidder_' + auction.id).html(auction.last_bidder);
         }
         if (auction.last_bidder_img){
             console.log(auction.last_bidder_img);
-            $('#last_bidder_img_' + auction.id).attr('src', auction.last_bidder_img)
+            $('#last_bidder_img_' + auction.id).attr('src', auction.last_bidder_img);
         }
         //$('#current_offer_' + auction.id).html(auction.current_offer);
     }
@@ -116,11 +116,11 @@ function update_items_ui(items){
         auction = items[a_id];
         $('#backers_' + auction.id).html(auction.backers);
     }
-};
+}
 
 function add_remove_auctions(){
     all_items_ui_ids = $.map($('.item'), function(value,i){ return parseInt($(value).attr('data-id')) });
-    ids = get_all_ids()
+    ids = get_all_ids();
 
     items_to_delete = minus(all_items_ui_ids, ids);
     items_to_add = minus(ids, all_items_ui_ids);
@@ -164,21 +164,18 @@ function fill_payment_form(item_description, item_price, custom_value){
     if (custom_value) $('#paynow_custom_field2').attr('value', custom_value);
 }
 
-function send_message(message){
-    $.ajax({
-        type: "POST",
-        url: "/chat/send-message/",
-        data: JSON.stringify({'message':message}),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function(data){alert(data);},
-        failure: function(errMsg) {
-            alert(errMsg);
-        }
-    });
-}
-
 
 function ban_user(username){
     $.post("/chat/send-message/",{'username':username});
+}
+
+
+function insert_notification(text){
+    if (text.length) {
+        var line = $('<li />').addClass('row').hide();
+        var block = $('.social-stream ul');
+        line.html('<div class="span1"></div><div class="span2">'+text+'</div>');
+        $('.social-stream ul').prepend(line);
+        line.show();
+    }
 }

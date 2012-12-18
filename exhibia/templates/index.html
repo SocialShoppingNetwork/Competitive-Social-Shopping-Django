@@ -16,10 +16,6 @@
     <div id="chat" class="tabbed">
         <div class="social-stream">
             <ul class="unstyled stream">
-                <li class="row">
-                    <div class="span1"></div>
-                    <div class="span2">This is a notification</div>
-                </li>
             </ul>
         </div>
         <div class="divisor"></div>
@@ -55,12 +51,6 @@
 			$('#chat .container').toggle();
 		});
 
-        socket.on('update', function(data){
-            //  updates auctions running
-            auctions = $.parseJSON(data['auctions']);
-            $.exhibia['auctions'] = new Auctions(auctions);
-            update_auctions_ui(auctions);
-        });
 
         // User hits enter
         $('#chat-msg').keyup(function(e){
@@ -78,7 +68,6 @@
             var video_stream_height = (!$('.video-stream').is(':visible')) ? 0 : $('.video-stream').height();
             var chat_content_height = $('.chat-content').outerHeight();
             var divisors            = $('#chat .divisor').length;
-            console.log(video_stream_height);
             var diff = (chat_height - (video_stream_height + chat_content_height + (8 * divisors)));
             $('.social-stream').css('height', diff - 70);
         }

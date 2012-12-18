@@ -1,3 +1,4 @@
+auction_socket = io.connect('/auction');
 $(document).ready(function() {
     /*
 	$el = $('#description_box');
@@ -11,7 +12,6 @@ $(document).ready(function() {
 		}
 	});
 	*/
-    auction_socket = io.connect('/auction');
 	// var aucion_uri = '';
     var auction_pk = '';
 	$('.fund').click(function() {
@@ -36,14 +36,16 @@ $(document).ready(function() {
         li.find('.bakers').text(backers);
         li.find('.amount_pleged').text('$' + amount_pleged);
         li.find('div.bar').attr('style', 'width: ' + funded + '%;').text(funded+"%");
+        insert_notification(li.find('.fund-title a').text() + ' funded');
     });
     auction_socket.on('auction_fund_ended', function(auction_pk, time_left, html){
-        // item have been funded for a full price so comvert it to auction
+        // item have been funded for a full price so convert it to auction
         var block = $('li#'+auction_pk),
             next_id = block.prev().attr('id');
             html = $(html);
         html.insertAfter(block);
         block.slideUp('slow', function(){$(this).remove();});
+        insert_notification(li.find('.fund-title a').text() + ' fund period ended');
     });
     auction_socket.on('auction_bid', function(auction_pk, time_left, username, avatar){
         // user made a bid on auction
@@ -51,6 +53,7 @@ $(document).ready(function() {
         block.find('img.social').attr('src', avatar).attr('title', username).show();
         block.find('span').text(username);
         block.reset_timer();
+        insert_notification(username +' made a bid on' + block.find('.fund-title a').text());
     });
 
     var update_timers = function(){
