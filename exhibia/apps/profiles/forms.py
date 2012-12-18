@@ -36,5 +36,6 @@ class ExhibiaSignupForm(SignupForm):
         return user
 
 
-class DeleteCardForm(forms.Form):
-    card_pk = forms.IntegerField()
+class DeleteForm(forms.Form):
+    pk = forms.IntegerField()
+

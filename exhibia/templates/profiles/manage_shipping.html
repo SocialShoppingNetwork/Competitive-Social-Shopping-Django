@@ -1,35 +1,71 @@
 {% extends 'site_base.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
-    {% for shipping in shipping_profiles %}
-        <div>
-            <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
-            <p>{{ shipping.address1 }}</p>
-            <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
-            <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
-            <p>Phone: {{ shipping.phone }}</p>
-            <p>
-                <a href="{% url account_shipping %}?id={{ shipping.id }}">Edit</a>
-                <a href="{% url account_shipping %}?id={{ shipping.id }}&delete=1">Delete</a>
-            </p>
-        </div>
-    {% endfor %}
-    {% if shipping %}
-        <p>Edit</p>
-    {% else %}
-        <p>Enter a new shipping  address</p>
+    {% for shipping in objects %}
+    {% if forloop.first %}
+        <table class="table table-striped">
+                <th>Name</th>
+                <th>Address</th>
+                <th>Region</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>Actions</th>
     {% endif %}
-    <form {% if shipping %}
-            action=".?id={{ shipping.id }}"
-          {% else %}
-            action="."
-          {% endif %}
-          method="post" class="uniForm">
+    <tr>
+        <td>{{ shipping.first_name }} {{ shipping.last_name }}</td>
+        <td>{{ shipping.address1 }}</td>
+        <td>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</td>
+        <td>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}" alt="{{shipping.country.name}}"></td>
+        <td>{{ shipping.phone }}</td>
+        <td>
+            <div class="btn-group">
+                <a class="btn" href="{% url account_shipping_edit pk=shipping.pk%}">Edit</a>
+                <form action="{% url account_shipping_delete %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{shipping.pk}}" name="pk"/>
+                        <input type="submit" class="btn" value="Delete"/>
+                </form>
+            </div>
+        </td>
+    </tr>
+    {% if forloop.last %}
+        </table>
+    {% endif %}
+    {% endfor %}
+    {% if objects %}
+        <div class="row">
+            <button class="pull-right btn btn-large new_address">new shipping address</button>
+        </div>
+        <div class="row new_address" style="display:none;">
+    {% else %}
+    <div class="row new_address">
+    {% endif %}
+
+    <div class="span4 offset4">
+        <legend>
+        {% if edit_form %}
+            Change
+        {% else %}
+            Enter a new
+        {% endif %}
+         shipping address
+        </legend>
+    <form method="post" class="uniForm">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Save">
+        <input type="submit" value="{% if edit_form %}Save{% else %} Add{% endif %}">
     </form>
-
+    </div>
+    </div>
 {% endblock %}
-{% block extra_body %}
+{% block extra_js %}
+{{ block.super }}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('button.new_address').on('click',function(){
+        $('div.new_address').show();
+        return false;
+    });
+});
+</script>
 {% endblock %}

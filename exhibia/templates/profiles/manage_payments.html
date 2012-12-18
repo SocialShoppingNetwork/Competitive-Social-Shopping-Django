@@ -16,7 +16,7 @@
             <td>
                 <form action="{% url account_delete_card %}" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" value="{{card.pk}}" name="card_pk"/>
+                    <input type="hidden" value="{{card.pk}}" name="pk"/>
                     <input type="submit" class="btn btn-danger" value="Delete this card"/>
                 </form>
             </td>

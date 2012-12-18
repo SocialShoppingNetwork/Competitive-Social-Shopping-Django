@@ -1,35 +1,69 @@
 {% extends 'site_base.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
-    {% for billing in billing_profiles %}
-        <div>
-            <p>{{ billing.first_name }} {{ billing.last_name }}</p>
-            <p>{{ billing.address1 }}</p>
-            <p>{{ billing.city }},{{ billing.state }} {{ billing.zip_code }}</p>
-            <p>{{ billing.country.name }} <img src="{{ billing.country.flag }}"></p>
-            <p>Phone: {{ billing.phone }}</p>
-            <p>
-                <a href="{% url account_billing %}?id={{ billing.id }}">Edit</a>
-                <a href="{% url account_billing %}?id={{ billing.id }}&delete=1">Delete</a>
-            </p>
-        </div>
+    {% for shipping in objects %}
+    {% if forloop.first %}
+        <table class="table table-striped">
+                <th>Name</th>
+                <th>Address</th>
+                <th>Region</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>Actions</th>
+    {% endif %}
+    <tr>
+        <td>{{ shipping.first_name }} {{ shipping.last_name }}</td>
+        <td>{{ shipping.address1 }}</td>
+        <td>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</td>
+        <td>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}" alt="{{shipping.country.name}}"></td>
+        <td>{{ shipping.phone }}</td>
+        <td>
+            <a class="btn" href="{% url account_billing_edit pk=shipping.pk%}">Edit</a>
+            <form action="{% url account_billing_delete %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{shipping.pk}}" name="pk"/>
+                    <input type="submit" class="btn" value="Delete"/>
+            </form>
+        </td>
+    </tr>
+    {% if forloop.last %}
+        </table>
+    {% endif %}
     {% endfor %}
-    {% if billing %}
-        <p>Edit</p>
+    {% if objects %}
+        <div class="row">
+            <button class="pull-right btn btn-large new_address">new billing address</button>
+        </div>
+        <div class="row new_address" style="display:none;">
     {% else %}
-        <p>Enter a new billing  address</p>
+    <div class="row new_address">
     {% endif %}
-    <form {% if billing %}
-        action=".?id={{ billing.id }}"
-    {% else %}
-        action="."
-    {% endif %}
-        method="post" class="uniForm">
+
+    <div class="span4 offset4">
+        <legend>
+        {% if edit_form %}
+            Change
+        {% else %}
+            Enter a new
+        {% endif %}
+         billing address
+        </legend>
+    <form method="post" class="uniForm">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Save">
+        <input type="submit" value="{% if edit_form %}Save{% else %} Add{% endif %}">
     </form>
-
+    </div>
+    </div>
 {% endblock %}
-{% block extra_body %}
+{% block extra_js %}
+{{ block.super }}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('button.new_address').on('click',function(){
+        $('div.new_address').show();
+        return false;
+    });
+});
+</script>
 {% endblock %}

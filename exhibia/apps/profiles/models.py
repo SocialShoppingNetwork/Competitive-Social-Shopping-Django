@@ -134,7 +134,7 @@ def create_user_profile(sender, instance, created, raw,**kwargs):
 @receiver(user_logged_in)
 def save_ip(sender, request, user, *args, **kwargs):
     obj, created = IPAddress.objects.get_or_create(user=user,
-        IPAddress=request.META.get('X-Real-IP') or request.META['REMOTE_ADDR'])
+        IPAddress=request.META.get('X-Real-IP') or request.META.get('REMOTE_ADDR') or '127.0.0.1')
     if not created:
         obj.last_login = datetime.now()
         obj.save()

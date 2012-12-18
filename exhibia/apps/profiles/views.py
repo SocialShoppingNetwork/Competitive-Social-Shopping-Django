@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
+from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response, redirect, render
 
 from annoying.decorators import render_to
 
@@ -18,7 +18,7 @@ from payments.forms import CardForm
 from shipping.forms import ShippingForm
 from shipping.models import ShippingAddress
 from profiles.models import BillingAddress
-from profiles.forms import BillingForm, DeleteCardForm
+from profiles.forms import BillingForm, DeleteForm
 
 @login_required
 def auctions_won(request, template_name='profiles/auctions_won.html'):
@@ -132,130 +132,63 @@ def account(request):
             'auctions_shipped': auctions_shipped,
     }
 
+
+
 @login_required
-@render_to('profiles/manage_shipping.html')
-def manage_shipping(request):
-    shipping_profiles = request.user.shipping_adddresses.filter(deleted=False)
-    shipping = None
-    id = request.GET.get('id')
-    if 'delete' in request.GET:
-        shipping = get_object_or_404(ShippingAddress, id=id, user=request.user)
-        shipping.deleted = True
+def manage_addresses(request, form_class=ShippingForm, redirect_url='account_shipping',
+                    template='manage_shipping.html', user_attr='shipping_adddresses'):
+    form = form_class(request.POST or None,
+        initial={'first_name':request.user.first_name, 'last_name':request.user.last_name})
+    if form.is_valid():
+        shipping = form.save(False)
+        shipping.user = request.user
         shipping.save()
-        return HttpResponseRedirect(reverse('account_shipping'))
-
-    if request.method == 'POST':
-        form = ShippingForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            if id:
-                shipping = get_object_or_404(ShippingAddress, id=id, user=request.user)
-                shipping.first_name =  data['first_name']
-                shipping.last_name = data['last_name']
-                shipping.address1 = data['address1']
-                shipping.address2 = data['address2']
-                shipping.city = data['city']
-                shipping.zip_code = data['zip_code']
-                shipping.country = data['country']
-                shipping.state = data['state']
-                shipping.phone = data['phone']
-                shipping.save()
-                return HttpResponseRedirect(reverse('account_shipping'))
-            else:
-                shipping = form.save(commit=False)
-                shipping.user = request.user
-                shipping.save()
-                return HttpResponseRedirect(reverse('account_shipping'))
-    else:
-        if id:
-            shipping = get_object_or_404(ShippingAddress, id=id, user=request.user)
-            form = ShippingForm(initial=shipping.__dict__)
-        else:
-            form = ShippingForm()
-
-    return {
-        'form':form,
-        'shipping_profiles':shipping_profiles,
-        'shipping':shipping
-    }
+        return redirect(reverse(redirect_url))
+    return render(request, "profiles/"+template,
+                  {'form':form,
+                  'objects':getattr(request.user, user_attr).filter(deleted=False),
+                  })
 
 @login_required
-@render_to('profiles/manage_billing.html')
-def manage_billing(request):
-    billing_profiles = request.user.billing_addresses.filter(deleted=False)
-    billing = None
-    id = request.GET.get('id')
-    if 'delete' in request.GET:
-        billing = get_object_or_404(BillingAddress, id=id, user=request.user, deleted=False)
-        billing.deleted = True
-        billing.save()
-        return HttpResponseRedirect(reverse('profile_account'))
+def manage_delete(request, model=ShippingAddress, redirect_url='account_shipping'):
+    if request.method != 'POST':
+        raise Http404()
+    form = DeleteForm(request.POST or None)
+    if form.is_valid():
+        try:
+            obj = model.objects.get(user=request.user, pk=form.cleaned_data['pk'])
+            obj.deleted = True
+            obj.save()
+        except Exception, e:print e
+    return redirect(reverse(redirect_url))
 
-    if request.method == 'POST':
-        form = BillingForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            if id:
-                billing = get_object_or_404(BillingForm, id=id, user=request.user,
-                             deleted=False)
-                billing.first_name =  data['first_name']
-                billing.last_name = data['last_name']
-                billing.address1 = data['address1']
-                billing.address2 = data['address2']
-                billing.city = data['city']
-                billing.zip_code = data['zip_code']
-                billing.country = data['country']
-                billing.state = data['state']
-                billing.phone = data['phone']
-                billing.save()
-            else:
-                billing = form.save(commit=False)
-                billing.user = request.user
-                billing.save()
-            return HttpResponseRedirect(reverse('profile_account'))
-    else:
-        if id:
-            billing = get_object_or_404(BillingAddress, id=id, user=request.user,
-                                     deleted=False)
-            form = BillingForm(initial=billing.__dict__)
-        else:
-            form = BillingForm()
 
-    return {
-        'form':form,
-        'billing_profiles':billing_profiles,
-        'billing':billing
-    }
+@login_required
+def manage_edit(request, pk, model=ShippingAddress, form=ShippingForm,
+        redirect_url='account_shipping',template='profiles/manage_shipping.html'):
+    obj = get_object_or_404(model, pk=pk)
+    form = form(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+        return redirect(redirect_url)
+    return render(request, template,
+                  {'form':form, 'edit_form':True})
+
 
 @login_required
 @render_to('profiles/manage_payments.html')
-def manage_payments(request):
-    cards = request.user.card_set.filter(deleted=False)
+def manage_payments(request, redirect_url='profile_account'):
+    objects = request.user.card_set.filter(deleted=False)
     form = CardForm(request.POST or None)
     if form.is_valid():
-        card = form.save(commit=False)
-        card.user = request.user
-        card.save()
+        instance = form.save(commit=False)
+        instance.user = request.user
+        instance.save()
         return HttpResponseRedirect(reverse('profile_account'))
 
     return {
         'form':form,
-        'cards':cards,
+        'cards':objects,
     }
-
-
-@login_required
-def delete_card(request):
-    if not request.method == 'POST':
-        raise Http404()
-    form = DeleteCardForm(request.POST or None)
-    if form.is_valid():
-        try:
-            card = Card.objects.get(pk=form.cleaned_data['card_pk'], user=request.user)
-            card.deleted = True
-            card.save()
-        except Card.DoesNotExist:
-            pass
-    return HttpResponseRedirect(reverse('account_payments'))
 
 
