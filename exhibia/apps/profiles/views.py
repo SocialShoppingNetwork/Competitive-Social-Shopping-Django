@@ -159,7 +159,7 @@ def manage_delete(request, model=ShippingAddress, redirect_url='account_shipping
             obj = model.objects.get(user=request.user, pk=form.cleaned_data['pk'])
             obj.deleted = True
             obj.save()
-        except Exception, e:print e
+        except:pass
     return redirect(reverse(redirect_url))
 
 

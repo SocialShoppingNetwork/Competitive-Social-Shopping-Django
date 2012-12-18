@@ -32,7 +32,7 @@
         </table>
     {% endif %}
     {% endfor %}
-    {% if objects %}
+    {% if objects and not form.errors%}
         <div class="row">
             <button class="pull-right btn btn-large new_address">new shipping address</button>
         </div>
