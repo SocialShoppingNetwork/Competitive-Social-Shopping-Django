@@ -23,6 +23,6 @@ urlpatterns = patterns("profiles.views",
     url(r'^billing/delete/$', partial(manage_delete, model=BillingAddress, redirect_url='account_billing'),
                               name="account_billing_delete"),
     url(r'^payments/$', 'manage_payments', name="account_payments"),
-     url(r'^payments/delete_card/$', partial(manage_delete, model=Card, redirect_url='account_payments'),
+    url(r'^payments/delete_card/$', partial(manage_delete, model=Card, redirect_url='account_payments'),
       name="account_delete_card"),
 )

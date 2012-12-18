@@ -5,6 +5,7 @@ import pytest
 from django.core.urlresolvers import reverse
 from profiles.models import BillingAddress
 from shipping.models import ShippingAddress
+from payments.models import Card
 
 def test_login(client, django_settings):
     login_page = client.get(reverse('acct_login'))
@@ -30,6 +31,17 @@ def test_shipping(logged_client):
 def test_billing(logged_client):
     res = logged_client.get(reverse('account_billing'))
     assert res.status_code == 200
+
+def test_payments(logged_client):
+    res = logged_client.get(reverse('account_payments'))
+    assert res.status_code == 200
+
+def test_payments_delete(logged_client):
+    qs = Card.objects.filter(deleted=False)
+    card_count = qs.count()
+    res = logged_client.post(reverse('account_delete_card'), {'pk':qs[0].pk})
+    assert res.status_code == 302
+    assert card_count != qs.count()
 
 
 @pytest.mark.parametrize(('model', 'url'), ((ShippingAddress, 'account_shipping_delete'),
