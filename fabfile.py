@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from fabric import local as _
+from fabric.api import local as _
 
 def deploy():
     _('git push')

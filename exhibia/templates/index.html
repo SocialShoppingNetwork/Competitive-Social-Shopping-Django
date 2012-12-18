@@ -14,15 +14,26 @@
     </div>
 
     <div id="chat" class="tabbed">
-		<h3 class="tab-title">Chat</h3>
-		<div class="container">
-			<ul class="unstyled chat-container"></ul>
-			<div class="input-prepend type-message">
-				<span class="add-on"><i class="icon-envelope"></i></span>
-				<input id="chat-msg" type="text" class="span2" />
-			</div>
-		</div>
-	</div>
+        <div class="social-stream">
+            <ul class="unstyled stream">
+                <li class="row">
+                    <div class="span1"></div>
+                    <div class="span2">This is a notification</div>
+                </li>
+            </ul>
+        </div>
+        <div class="divisor"></div>
+        <div class="video-stream">
+        </div>
+        <h3 class="tab-title">Chat</h3>
+        <div class="container chat-content">
+            <ul class="unstyled chat-container"></ul>
+            <div class="input-prepend type-message">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                <input id="chat-msg" type="text" class="span2">
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 {% block extra_js %}
@@ -57,10 +68,34 @@
 
 			if(code==13) {
                 socket.emit('send_chat_message', $(this).val());
-				// send_message($(this).val());
 				$(this).val('');
 			}
 		});
+
+        var adaptSidebar = function() {
+            // Chat is displayed as a sidebar
+            var chat_height         = $('#chat').outerHeight();
+            var video_stream_height = (!$('.video-stream').is(':visible')) ? 0 : $('.video-stream').height();
+            var chat_content_height = $('.chat-content').outerHeight();
+            var divisors            = $('#chat .divisor').length;
+            console.log(video_stream_height);
+            var diff = (chat_height - (video_stream_height + chat_content_height + (8 * divisors)));
+            $('.social-stream').css('height', diff - 70);
+        }
+
+        var body_width = $('body').outerWidth();
+        if(body_width > 1000) {
+            adaptSidebar();
+        }
+
+        $(window).on('resize', adaptSidebar);
+
+        $('#chat .divisor').click(function() {
+            $('.video-stream').toggle();
+            $('.chat-content').toggleClass('no-video');
+            adaptSidebar();
+        });
+
 
         socket.on('user_message', function(username, message, picture){
         	var chat_msg = $('<li />').addClass('row').hide();

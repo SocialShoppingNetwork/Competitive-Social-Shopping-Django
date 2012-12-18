@@ -163,7 +163,7 @@ body {
   color: #333333;
   background-color: #ffffff;
   padding-top: 70px;
-  background-image: url(../img/dot-background-2.jpg);
+  background-image: url('http://s3.amazonaws.com/exhibia/img/dot-background-2.jpg?2049d3617b4e');
 }
 
 a {
@@ -1783,7 +1783,7 @@ table .span24 {
   *margin-right: .3em;
   line-height: 14px;
   vertical-align: text-top;
-  background-image: url("../img/glyphicons-halflings.png");
+  background-image: url('http://s3.amazonaws.com/exhibia/img/glyphicons-halflings.png?2049d3617b4e');
   background-position: 14px 14px;
   background-repeat: no-repeat;
 }
@@ -1794,7 +1794,7 @@ table .span24 {
 }
 
 .icon-white {
-  background-image: url("../img/glyphicons-halflings-white.png");
+  background-image: url('http://s3.amazonaws.com/exhibia/img/glyphicons-halflings-white.png?2049d3617b4e');
 }
 
 .icon-glass {
@@ -3623,7 +3623,7 @@ input[type="submit"].btn.btn-mini {
 	font-weight: 200;
 	line-height: 1;
 	color: #999;
-	background: url(../img/exhibia_logo.png) no-repeat center;
+	background: url('http://s3.amazonaws.com/exhibia/img/exhibia_logo.png?2049d3617b4e') no-repeat center;
 	width: 207px;
 	height: 38px;
 	text-indent: -5000px;
@@ -5057,25 +5057,25 @@ a.badge:hover {
 }
 
 /* Chat when is a tab on bottom */
-#chat.tabbed {
+#chat {
 	position: fixed;
 	bottom: 0; right: 30px;
 	width: 220px;
 }
 
-#chat.tabbed > .container {
+#chat > .container {
 	background: white;
 	height: 220px;
 	border: 1px solid #EAEAEA;
 	width: auto;
 }
-#chat.tabbed h3.tab-title {
+#chat h3.tab-title {
 	background: #333;
 	color: white;
 	padding: 0px 10px;
 	font-size: 12px;
 }
-#chat.tabbed .type-message {
+#chat .type-message {
 	position: absolute;
 	bottom: -5px;
 	left: 0;
@@ -5083,27 +5083,124 @@ a.badge:hover {
 	padding: 3px 27px;
 	border-top: 1px solid #EAEAEA;
 }
-#chat.tabbed .type-message > input {
+#chat .type-message > input {
 	margin-left: -6px;
 }
-#chat.tabbed .chat-container {
+#chat .chat-container {
 	height: 185px;
 	overflow-y: auto;
 }
-#chat.tabbed .chat-container li {
+#chat .chat-container li {
 	padding: 10px 0;
 	border-bottom: 1px solid #F8F8F8;
 }
-#chat.tabbed .chat-container li .span1 {
+#chat .chat-container li .span1 {
 	width: 30px; height: 30px;
 }
-#chat.tabbed .user-name {
+#chat .user-name {
 	font-weight: bold;
 	margin-right: 5px;
 }
-#chat.tabbed [class*="span"] {
+#chat [class*="span"] {
 	margin-left: 8px;
 }
+
+#chat .chat-container, #chat .video-stream {
+	display: none;
+}
+
+#chat .divisor {
+	display: none;
+	width: 100%;
+	border-top: 1px solid #eaeaea;
+	border-bottom: 1px solid #eaeaea;
+	background-color: #F4F4F4;
+	background-image: -moz-linear-gradient(top, white, #F4F4F4);
+	background-image: -ms-linear-gradient(top, white, #F4F4F4);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(white), to(#F4F4F4));
+	background-image: -webkit-linear-gradient(top, white, #F4F4F4);
+	background-image: -o-linear-gradient(top, white, #F4F4F4);
+	background-image: linear-gradient(top, white, #F4F4F4);
+	background-repeat: repeat-x;
+	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#f4f4f4', GradientType=0);
+}
+
+#chat .divisor {
+	height: 8px;
+}
+
 .showcase .well { padding: 5px; margin: 4px 0; }
 .showcase .h2.time { line-height: 22px; }
 .showcase .caption { padding-bottom: 0; padding-top: 8px; }
+
+.social-stream {
+	padding-top: 70px;
+}
+.video-stream {
+	width: 100%;
+	height:150px;
+	background-color: black;		
+}
+ul.stream { 
+	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 100%;
+}
+ul.stream li {
+	background-color: #FFFDFD;
+	-webkit-box-shadow: inset 0 0 10px #F7F7F7;
+	   -moz-box-shadow: inset 0 0 10px #F7F7F7;
+		 -o-box-shadow: inset 0 0 10px #F7F7F7;
+		   -box-shadow: inset 0 0 10px #F7F7F7;
+	height: 25px;
+	padding: 5px;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #EBE8E8;
+}
+	
+/*
+ * Responsive sidebar
+ */
+@media screen and (min-width:1260px) {
+	.container.main {
+		width: 1000px;
+		padding-right: 140px;
+	}
+	#chat {
+		height: 100%;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		background-color: white;
+		z-index: 999;
+	}
+	#chat .tab-title { display: none } 
+	#chat .chat-content {
+		bottom: 0;
+		position: absolute;
+		width: 100%;
+		height: 40%;
+	}
+	#chat .chat-content.no-video {
+		height: 50%;
+	}
+	#chat .chat-container {
+		height: 100%;
+		overflow-y: auto;
+	}
+	#chat .type-message [class*="span"] {
+		margin-left: -4px;
+	}
+	
+	#chat .chat-container,
+	#chat .video-stream,
+	#chat .divisor,
+	#chat ul.stream li {
+		display: block;
+	}
+	
+	.btn-group.sorting {
+		right: 197px;
+	}
+}

@@ -6,4 +6,6 @@ site_media/
 *.db
 exhibia/cache
 exhibia/settings/local_settings.py
-exhibia/coverage_report
+
+# coverage
+exhibia/.coverage
