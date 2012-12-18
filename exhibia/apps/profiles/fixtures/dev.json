@@ -1,41 +1,5 @@
 [
-    {
-        "pk": 1,
-        "model": "auth.user",
-        "fields": {
-            "username": "luisjorge.guzman",
-            "first_name": "Luis Jorge",
-            "last_name": "Guzman",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": true,
-            "last_login": "2012-08-17 21:14:50",
-            "groups": [],
-            "user_permissions": [],
-            "password": "!",
-            "email": "jorge_x2k@hotmail.com",
-            "date_joined": "2012-07-27 00:42:30"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "auth.user",
-        "fields": {
-            "username": "vhsalazar",
-            "first_name": "Victor",
-            "last_name": "Salazar",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-08-17 21:14:03",
-            "groups": [],
-            "user_permissions": [],
-            "password": "!",
-            "email": "xtealc@gmail.com",
-            "date_joined": "2012-07-27 00:51:28"
-        }
-    },
-    {
+{
         "pk": 3,
         "model": "auth.user",
         "fields": {
@@ -51,24 +15,6 @@
             "password": "!",
             "email": "shaanaexhibia@gmail.com",
             "date_joined": "2012-07-27 00:58:14"
-        }
-    },
-    {
-        "pk": 4,
-        "model": "auth.user",
-        "fields": {
-            "username": "creahq",
-            "first_name": "Miko",
-            "last_name": "Mighty",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-07-27 19:00:00",
-            "groups": [],
-            "user_permissions": [],
-            "password": "!",
-            "email": "creahq@gmail.com",
-            "date_joined": "2012-07-27 19:00:00"
         }
     },
     {
@@ -90,132 +36,6 @@
         }
     },
     {
-        "pk": 6,
-        "model": "auth.user",
-        "fields": {
-            "username": "justinrohrbach",
-            "first_name": "Justin",
-            "last_name": "Rohrbach",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-07-29 18:24:43",
-            "groups": [],
-            "user_permissions": [],
-            "password": "!",
-            "email": "justinrohrbach@gmail.com",
-            "date_joined": "2012-07-29 18:24:43"
-        }
-    },
-    {
-        "pk": 7,
-        "model": "auth.user",
-        "fields": {
-            "username": "nachito",
-            "first_name": "",
-            "last_name": "",
-            "is_active": false,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-07-30 10:07:20",
-            "groups": [],
-            "user_permissions": [],
-            "password": "sha1$e59e8$cfd664cbd9a3c9c497618a1d88cc1a08a6f25de6",
-            "email": "nachito@gmail.com",
-            "date_joined": "2012-07-30 10:07:20"
-        }
-    },
-    {
-        "pk": 8,
-        "model": "auth.user",
-        "fields": {
-            "username": "chonin",
-            "first_name": "",
-            "last_name": "",
-            "is_active": false,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-07-30 10:08:33",
-            "groups": [],
-            "user_permissions": [],
-            "password": "sha1$7be3b$8c46f6df586a855adfab6934c07ce203a69d9754",
-            "email": "chonin@gmail.com",
-            "date_joined": "2012-07-30 10:08:33"
-        }
-    },
-    {
-        "pk": 9,
-        "model": "auth.user",
-        "fields": {
-            "username": "chinin",
-            "first_name": "",
-            "last_name": "",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-07-30 10:09:17",
-            "groups": [],
-            "user_permissions": [],
-            "password": "sha1$37bc8$d08590e514ff06c9c2e74f2fbccfd3e3238c92e4",
-            "email": "chinin@gmail.com",
-            "date_joined": "2012-07-30 10:09:17"
-        }
-    },
-    {
-        "pk": 10,
-        "model": "auth.user",
-        "fields": {
-            "username": "coachforyou",
-            "first_name": "Jim",
-            "last_name": "Rohrbach",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-07-30 12:38:25",
-            "groups": [],
-            "user_permissions": [],
-            "password": "!",
-            "email": "jimr@mentorusa.com",
-            "date_joined": "2012-07-30 12:38:25"
-        }
-    },
-    {
-        "pk": 11,
-        "model": "auth.user",
-        "fields": {
-            "username": "vh5",
-            "first_name": "",
-            "last_name": "",
-            "is_active": true,
-            "is_superuser": true,
-            "is_staff": true,
-            "last_login": "2012-08-17 11:52:09",
-            "groups": [],
-            "user_permissions": [],
-            "password": "sha1$3b6d8$37ffc498ff0b98a355c875b28bac8420cf978353",
-            "email": "a@a.com",
-            "date_joined": "2012-08-17 11:43:35"
-        }
-    },
-    {
-        "pk": 12,
-        "model": "auth.user",
-        "fields": {
-            "username": "alguien",
-            "first_name": "",
-            "last_name": "",
-            "is_active": true,
-            "is_superuser": false,
-            "is_staff": false,
-            "last_login": "2012-09-05 10:09:26",
-            "groups": [],
-            "user_permissions": [],
-            "password": "sha1$6893d$6abfddee7a200e67afb8f14c41100fc283434eb5",
-            "email": "alguien@algo.com",
-            "date_joined": "2012-08-26 16:22:42"
-        }
-    },
-    {
         "pk": 13,
         "model": "auth.user",
         "fields": {
@@ -234,45 +54,39 @@
         }
     },
     {
-        "pk": 1,
-        "model": "profiles.member",
+        "pk": 14,
+        "model": "auth.user",
         "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 1003,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 1,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
+            "username": "test",
+            "first_name": "test",
+            "last_name": "user",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-12-18 10:07:14",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$89e7f$6aa8024f0b0cca13f6e4bdb81c52674dba584cf1",
+            "email": "test@example.com",
+            "date_joined": "2012-12-18 10:07:14"
         }
     },
     {
-        "pk": 2,
-        "model": "profiles.member",
+        "pk": 15,
+        "model": "auth.user",
         "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 2,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
+            "username": "admin",
+            "first_name": "admin",
+            "last_name": "user",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-12-18 10:07:50",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$450e9$5276961a3c5181acbc9e9902d38fb948b1fb1e6b",
+            "email": "admin@example.com",
+            "date_joined": "2012-12-18 10:07:50"
         }
     },
     {
@@ -297,27 +111,6 @@
         }
     },
     {
-        "pk": 4,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 4,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
         "pk": 5,
         "model": "profiles.member",
         "fields": {
@@ -333,153 +126,6 @@
             "birthday": null,
             "referer": null,
             "user": 5,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 6,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 6,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 7,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 7,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 8,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 8,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 9,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 9,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 10,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 10,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 11,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 11,
-            "is_banned": false,
-            "zip_code": "",
-            "location": null
-        }
-    },
-    {
-        "pk": 12,
-        "model": "profiles.member",
-        "fields": {
-            "website": null,
-            "city": "",
-            "about": null,
-            "phone": null,
-            "address1": "",
-            "address2": "",
-            "referral_url": null,
-            "credits": 3,
-            "state": null,
-            "birthday": null,
-            "referer": null,
-            "user": 12,
             "is_banned": false,
             "zip_code": "",
             "location": null
@@ -507,137 +153,45 @@
         }
     },
     {
-        "pk": 1,
-        "model": "profiles.billingaddress",
+        "pk": 14,
+        "model": "profiles.member",
         "fields": {
-            "city": "Santa Cruz",
-            "first_name": "Victor",
-            "last_name": "Salazar",
-            "created": "2012-08-17 14:41:09",
-            "deleted": false,
+            "website": null,
+            "city": "",
+            "about": null,
+            "phone": null,
             "address1": "",
             "address2": "",
-            "user": 2,
-            "phone": "1-1231280",
-            "state": "Santa Cruz",
-            "country": "BO",
-            "zip_code": "0000"
+            "referral_url": null,
+            "credits": 3,
+            "state": null,
+            "birthday": null,
+            "referer": null,
+            "user": 14,
+            "is_banned": false,
+            "zip_code": "",
+            "location": null
         }
     },
     {
-        "pk": 2,
-        "model": "profiles.billingaddress",
+        "pk": 15,
+        "model": "profiles.member",
         "fields": {
-            "city": "Miami",
-            "first_name": "Mikko",
-            "last_name": "Filpulla",
-            "created": "2012-08-17 14:49:59",
-            "deleted": false,
+            "website": null,
+            "city": "",
+            "about": null,
+            "phone": null,
             "address1": "",
             "address2": "",
-            "user": 2,
-            "phone": "5618893101",
-            "state": "Florida",
-            "country": "US",
-            "zip_code": "33131"
-        }
-    },
-    {
-        "pk": 3,
-        "model": "profiles.billingaddress",
-        "fields": {
-            "city": "Miami",
-            "first_name": "Justin",
-            "last_name": "Rorhbach",
-            "created": "2012-08-17 15:26:42",
-            "deleted": false,
-            "address1": "",
-            "address2": "",
-            "user": 2,
-            "phone": "5618893101",
-            "state": "Florida",
-            "country": "US",
-            "zip_code": "33131"
-        }
-    },
-    {
-        "pk": 1,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "100000241420315",
-            "extra_data": "{\"access_token\": \"AAACAwZCmtWAwBAHDIu1WIWkoqhVeZAFAKjXWAoVGil20dGAg2uaXFOo6Qp8nU7fMBoxzGckifWZAk9FSlfvwKFQQO8tDcQ79CFOUQFDTQZDZD\", \"expires\": null, \"id\": \"100000241420315\"}",
-            "user": 1,
-            "provider": "facebook"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "788473209",
-            "extra_data": "{\"access_token\": \"AAACAwZCmtWAwBAHZC1tyJ7snYPTvMnZBoAeERIiqk7Hi05QmZAKaiNMVrIz3fZBVyWwgDNP0zrLw5j7FATfZCW3XIZB1DfQuBWixBdEZCHaTfAZDZD\", \"expires\": \"6358\", \"id\": \"788473209\"}",
-            "user": 2,
-            "provider": "facebook"
-        }
-    },
-    {
-        "pk": 3,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "100004098797836",
-            "extra_data": "{\"access_token\": \"AAACAwZCmtWAwBAOYzeDFXUONqdN74p6QZCzN1M811y5qcRYPsbmkG1rH2ZCikSZA4BYF3ZC71bxVt5blVwBrZA6GS04btMkZCSlMP2fby2wTvj9c8OomqaN\", \"expires\": \"4929\", \"id\": \"100004098797836\"}",
-            "user": 3,
-            "provider": "facebook"
-        }
-    },
-    {
-        "pk": 4,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "xtealc@gmail.com",
-            "extra_data": "{\"access_token\": \"ya29.AHES6ZSK8-O7N9aYQQZQXYIuW4Q6tn_bZ3gwQn7DluAP7pWgpjwZiw\", \"expires\": 3600}",
-            "user": 1,
-            "provider": "google-oauth2"
-        }
-    },
-    {
-        "pk": 5,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "creahq@gmail.com",
-            "extra_data": "{\"access_token\": \"ya29.AHES6ZS0j3FR6Tbp4L0MVu8xbuaFF_2gwY9-6qn1qeB5L5Z--1ZT\", \"expires\": 3600}",
-            "user": 4,
-            "provider": "google-oauth2"
-        }
-    },
-    {
-        "pk": 6,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "1319667127",
-            "extra_data": "{\"access_token\": \"AAACAwZCmtWAwBALFnDrtGe2pdVU1t1XP2mwMZBhplUOFDj3WqMvrJ9pbKmZC68Hj0rCcJTPb1uwZAJmHGXwt2ZAYhLMSPGszKUW5FZBFxUqZBN89WK8FQwu\", \"expires\": \"4480\", \"id\": \"1319667127\"}",
-            "user": 5,
-            "provider": "facebook"
-        }
-    },
-    {
-        "pk": 7,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "10716298",
-            "extra_data": "{\"access_token\": \"AAACAwZCmtWAwBAKnJt4sDcOQjLajZBoeEOdeBF4NZAf4OwM4ZABBoiaMiiaV31dngWZCqDsWyGo13QUCrFZC3HfOXRQGZBsOKuheXwBEzxHjwZDZD\", \"expires\": \"5718\", \"id\": \"10716298\"}",
-            "user": 6,
-            "provider": "facebook"
-        }
-    },
-    {
-        "pk": 8,
-        "model": "social_auth.usersocialauth",
-        "fields": {
-            "uid": "1376407897",
-            "extra_data": "{\"access_token\": \"AAACAwZCmtWAwBAKfuK1HxcZChsJfZB88f8V7XVBqmXPbCEOcpBMPClp0m9I2QeZBlmoreqZAAK9zC2kIeotcEGrItmkvmx3atPgZCyYrwFKPLZAQsEnvBay\", \"expires\": \"4894\", \"id\": \"1376407897\"}",
-            "user": 10,
-            "provider": "facebook"
+            "referral_url": null,
+            "credits": 3,
+            "state": null,
+            "birthday": null,
+            "referer": null,
+            "user": 15,
+            "is_banned": false,
+            "zip_code": "",
+            "location": null
         }
     }
 ]

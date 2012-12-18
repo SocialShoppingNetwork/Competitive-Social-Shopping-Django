@@ -1,62 +1,15 @@
 [
     {
-        "pk": 1,
+        "pk": 6,
         "model": "payments.card",
         "fields": {
-            "expiration_month": 5,
+            "holder_name": "test user",
             "expiration_year": 2015,
-            "created": "2012-08-16 14:19:14",
+            "created": "2012-12-18 10:25:07",
             "deleted": false,
-            "number": "555554444333221",
-            "user": 1
-        }
-    },
-    {
-        "pk": 2,
-        "model": "payments.card",
-        "fields": {
-            "expiration_month": 5,
-            "expiration_year": 2015,
-            "created": "2012-08-16 14:36:38",
-            "deleted": false,
-            "number": "33322110",
-            "user": 1
-        }
-    },
-    {
-        "pk": 3,
-        "model": "payments.card",
-        "fields": {
-            "expiration_month": 5,
-            "expiration_year": 2015,
-            "created": "2012-08-16 14:36:49",
-            "deleted": false,
-            "number": "33322110",
-            "user": 1
-        }
-    },
-    {
-        "pk": 4,
-        "model": "payments.card",
-        "fields": {
-            "expiration_month": 5,
-            "expiration_year": 2015,
-            "created": "2012-08-17 12:00:11",
-            "deleted": false,
-            "number": "4444333221",
-            "user": 2
-        }
-    },
-    {
-        "pk": 5,
-        "model": "payments.card",
-        "fields": {
-            "expiration_month": 1,
-            "expiration_year": 2013,
-            "created": "2012-08-17 13:04:31",
-            "deleted": false,
-            "number": "8888888888",
-            "user": 2
+            "number": "123456789",
+            "expiration_month": 12,
+            "user": 14
         }
     }
 ]
