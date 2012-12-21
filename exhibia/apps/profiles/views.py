@@ -11,11 +11,10 @@ from annoying.decorators import render_to
 from auctions.models import Auction
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 
-#from profiles.forms import MemberInfoFormUS
+from shipping.forms import MemberInfoFormUS
 from payments.constants import *
 from payments.models import Card
 from payments.forms import CardForm
-from shipping.forms import ShippingForm
 from shipping.models import ShippingAddress
 from profiles.models import BillingAddress
 from profiles.forms import BillingForm, DeleteForm
@@ -57,42 +56,6 @@ def order_pay(request, order_id):
     })
     return render_to_response('order_pay.html', context_instance=c)
 
-@login_required
-def member_info(request, template_name='profiles/member_info.html'):
-    next_page = request.REQUEST.get('next')
-    shipping = request.member.shippingprofile
-    form_class = MemberInfoFormUS
-    if request.POST:
-        f = form_class(request.POST)
-        if f.is_valid():
-            data = f.cleaned_data
-            shipping.first_name =  data['first_name']
-            shipping.last_name = data['last_name']
-            shipping.address1 = data['address1']
-            shipping.address2 = data['address2']
-            shipping.city = data['city']
-            shipping.zip_code = data['zip_code']
-            shipping.state = data['state']
-            shipping.phone = data['phone']
-            shipping.save()
-            #member.user.save()
-            if next_page:
-                return HttpResponseRedirect(next_page)
-            return HttpResponseRedirect(reverse('home'))
-    else:
-        f = form_class(initial={'first_name' : shipping.first_name,
-                                'last_name' : shipping.last_name,
-                                'address1' : shipping.address1,
-                                'address2' : shipping.address2,
-                                'city': shipping.city,
-                                'zip_code' : shipping.zip_code,
-                                'state' : shipping.state,
-                                'phone' : shipping.phone
-                                })
-    c = RequestContext(request,{'f': f,
-                                'member': request.member,
-                                'next_page':next_page})
-    return render_to_response(template_name, context_instance=c)
 
 def member_bids(request):
     """ returns the number of bid of the current user """
@@ -135,7 +98,7 @@ def account(request):
 
 
 @login_required
-def manage_addresses(request, form_class=ShippingForm, redirect_url='account_shipping',
+def manage_addresses(request, form_class=MemberInfoFormUS, redirect_url='account_shipping',
                     template='manage_shipping.html', user_attr='shipping_adddresses'):
     form = form_class(request.POST or None,
         initial={'first_name':request.user.first_name, 'last_name':request.user.last_name})
@@ -164,7 +127,7 @@ def manage_delete(request, model=ShippingAddress, redirect_url='account_shipping
 
 
 @login_required
-def manage_edit(request, pk, model=ShippingAddress, form=ShippingForm,
+def manage_edit(request, pk, model=ShippingAddress, form=MemberInfoFormUS,
         redirect_url='account_shipping',template='profiles/manage_shipping.html'):
     obj = get_object_or_404(model, pk=pk)
     form = form(request.POST or None, instance=obj)

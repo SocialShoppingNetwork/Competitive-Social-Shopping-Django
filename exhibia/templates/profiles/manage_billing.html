@@ -18,12 +18,14 @@
         <td>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}" alt="{{shipping.country.name}}"></td>
         <td>{{ shipping.phone }}</td>
         <td>
-            <a class="btn" href="{% url account_billing_edit pk=shipping.pk%}">Edit</a>
-            <form action="{% url account_billing_delete %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{shipping.pk}}" name="pk"/>
-                    <input type="submit" class="btn" value="Delete"/>
-            </form>
+            <div class="btn-group">
+                <a class="btn" href="{% url account_billing_edit pk=shipping.pk%}">Edit</a>
+                <form action="{% url account_billing_delete %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{shipping.pk}}" name="pk"/>
+                        <input type="submit" class="btn" value="Delete"/>
+                </form>
+            </div>
         </td>
     </tr>
     {% if forloop.last %}

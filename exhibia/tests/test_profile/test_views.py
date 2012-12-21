@@ -54,15 +54,32 @@ def test_address_delete(logged_client, user, model, url):
     assert res.status_code == 302
     assert address_num != qs.count()
 
-@pytest.mark.parametrize(('model', 'url'), ((ShippingAddress, 'account_shipping_delete'),
-             (BillingAddress, 'account_billing_delete')))
+@pytest.mark.parametrize(('model', 'url'), ((ShippingAddress, 'account_shipping'),
+             (BillingAddress, 'account_billing')))
 def test_address_create(logged_client, user, model, url):
-    qs = ShippingAddress.objects.filter(deleted=False, user=user)
+    qs = model.objects.filter(deleted=False, user=user)
     address_num = qs.count()
-    res = logged_client.post(reverse('account_shipping'),
+    res = logged_client.post(reverse(url),
                 {'first_name':'test', 'last_name':'last name', 'address1':'address1',
-                'address2':'address2','city':'some city', 'state':'some_state',
-                'country':'US','zip_code':'123', 'phone':'123456789'})
+                'address2':'address2','city':'some city', 'state':'AL',
+                'country':'US','zip_code':'12345', 'phone':'123-456-7890', })
     assert res.status_code == 302
-    assert address_num != qs.count()
+    assert address_num != qs.count(), 'not saved'
+
+
+def test_deleting_get(logged_client):
+    assert logged_client.get(reverse('account_billing_delete')).status_code == 404
+
+
+@pytest.mark.parametrize(('url', 'model'), (
+                         ('account_shipping_edit',ShippingAddress),
+                         ('account_billing_edit', BillingAddress),))
+def test_manage_edit(logged_client, url, model, user):
+    address = model.objects.filter(user=user)[0]
+    res = logged_client.get(reverse(url, kwargs={'pk':address.pk}))
+    data = res.context['form'].initial
+    data['first_name'] ='new first name'
+    res = logged_client.post(reverse(url, kwargs={'pk':address.pk}), data)
+    assert res.status_code == 302
+    assert address.first_name != model.objects.get(pk=address.pk).first_name
 

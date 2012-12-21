@@ -14,13 +14,12 @@ class ShippingForm(forms.ModelForm):
         model = ShippingAddress
         exclude = ('user','deleted', )
 
-class MemberInfoFormUS(forms.Form):
-    first_name = forms.CharField(max_length=60)
-    last_name = forms.CharField(max_length=60)
-    address1 = forms.CharField(max_length=200)
-    address2 = forms.CharField(max_length=200, required=False)
-    city = forms.CharField(max_length=60)
-    phone = forms.CharField(max_length=50)
+class MemberInfoFormUS(forms.ModelForm):
+
     zip_code = forms_us.USZipCodeField(help_text='format XXXXX or XXXXX-XXXX')
     state = forms_us.USStateField(widget=forms_us.USStateSelect())
     phone = forms_us.USPhoneNumberField(help_text='format XXX-XXX-XXXX')
+
+    class Meta:
+        model = ShippingAddress
+        exclude = ('user','deleted', )

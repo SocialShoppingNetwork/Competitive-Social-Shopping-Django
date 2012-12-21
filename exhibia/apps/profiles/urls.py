@@ -4,6 +4,7 @@ from django.conf.urls.defaults import *
 from functools import partial
 
 from payments.models import Card
+from shipping.forms import MemberInfoFormUS
 from .forms import DeleteForm, BillingForm
 from .views import manage_delete, manage_edit, manage_addresses
 from .models import BillingAddress
@@ -16,9 +17,9 @@ urlpatterns = patterns("profiles.views",
     url(r'^shipping/(?P<pk>\d+)/$', manage_edit, name="account_shipping_edit"),
     url(r'^shipping/delete/$', manage_delete,name="account_shipping_delete"),
     url(r'^billing/$', partial(manage_addresses, template='manage_billing.html',
-                    user_attr='billing_addresses', form_class=BillingForm), name="account_billing"),
+                    user_attr='billing_addresses', form_class=MemberInfoFormUS), name="account_billing"),
     url(r'^billing/(?P<pk>\d+)/$', partial(manage_edit, model=BillingAddress,
-                                redirect_url='account_billing', form=BillingForm),
+                                redirect_url='account_billing', form=MemberInfoFormUS),
                          name="account_billing_edit"),
     url(r'^billing/delete/$', partial(manage_delete, model=BillingAddress, redirect_url='account_billing'),
                               name="account_billing_delete"),

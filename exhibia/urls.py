@@ -48,8 +48,6 @@ urlpatterns += patterns("",
                         'profiles.views.auction_won', {}, name='auction_won'),
     url(r'^accounts/profile/pay/(?P<order_id>\d+).html$',
                  'profiles.views.order_pay', {}, name="order_pay"),
-    url(r'^accounts/profile/info/$', 'profiles.views.member_info', {}, name='member_info'),
-    url(r'^accounts/profile/bids/$', 'profiles.views.member_bids', {}, name='member_bids'),
     url(r'^accounts/profile/bids/$', 'profiles.views.member_bids', {}, name='member_bids'),
     url(r'^accounts/profile/$', 'profiles.views.account', {}, name="profile_account"),
 
