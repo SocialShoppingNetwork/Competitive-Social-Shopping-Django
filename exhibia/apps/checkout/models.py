@@ -10,7 +10,7 @@ ORDER_STATUS = (
 )
 
 class Order(models.Model):
-    member = models.ForeignKey("profiles.Member")
+    user = models.ForeignKey("auth.User")
 
     auction = models.OneToOneField('auctions.Auction', unique=True) #TODO check this
     card = models.ForeignKey("payments.Card") #Replace it with paymentIPN
