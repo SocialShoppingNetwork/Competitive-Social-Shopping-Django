@@ -45,5 +45,5 @@ class Order(models.Model):
         return SHIPPING_COMPANIES_DICT.get(self.shipping_company)
 
     def __unicode__(self):
-        return '%s | %s - %s' % (self.auction.item.name, self.member, self.created)
+        return '%s | %s - %s' % (self.auction.item.name, self.user, self.created)
 
