@@ -84,6 +84,7 @@ def buy_now(request, item_id):
     return {}
 
 def auction_bid(request, auction_id=None):
+    "not used"
     if not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('acct_login')) #TODO redirect to register
     #member = request.member

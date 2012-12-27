@@ -52,6 +52,25 @@ def listener():
 
 gevent.spawn(listener)
 
+def automessage():
+    while True:
+        try:
+            for ref in ChatNamespace.instances:
+                instance = ref()
+                if instance.request.user.is_authenticated:
+                    message = "Invite your Facebook friends to join and receive points.<br>"\
+                            "Collect points by being socially active on Exhibia, "\
+                            "and use points to redeem prizes on Exhibia Reward Store"
+                else:
+                    message = 'Welcome to Exhibia! Signup now and receive free bids.'
+                instance.emit('notification', message)
+        except SystemExit:
+            break
+        except Exception, e:
+            print e
+        gevent.sleep(settings.AUTOMESSAGE_DELAY)
+
+gevent.spawn(automessage)
 
 class RedisBroadcast(object):
 

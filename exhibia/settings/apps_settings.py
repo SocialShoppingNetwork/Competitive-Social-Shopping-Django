@@ -69,3 +69,7 @@ AWS_QUERYSTRING_AUTH = False
 #         'Expires': time() + max_age,
 #         'Cache-Control': 'public, max-age=' + str(max_age)
 #     }
+
+
+# notification broadcast
+AUTOMESSAGE_DELAY = 60 * 5 # every 5 minutes
