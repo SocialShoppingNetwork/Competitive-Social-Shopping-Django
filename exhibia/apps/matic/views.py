@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import json
 from random import randint, choice
 import cjson
 from django.http import HttpResponse, HttpResponseRedirect
@@ -45,7 +47,7 @@ from utils import auction_to_dict, auctions_to_dict, admin_auctions_to_dict
 @csrf_exempt
 def auctions_status(request):
     auctions = Auction.objects.public()
-    return HttpResponse(cjson.encode(admin_auctions_to_dict(auctions)))
+    return HttpResponse(json.dumps(admin_auctions_to_dict(auctions)))
 @staff_member_required
 @csrf_exempt
 def change_tick_time(request, auction_id):
