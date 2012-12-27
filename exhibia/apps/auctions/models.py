@@ -39,19 +39,19 @@ AUCTION_STATUS = (
 )
 
 
-ORDER_WAITING_PAYMENT = 'wp'
-ORDER_SHIPPING_FEE_REQUESTED = 'rf'
-ORDER_PROCESSING_ORDER = 'rf'
-ORDER_DELIVERED = 'dl'
-ORDER_WAITING_TESTIMONIAL = 'wt'
+# ORDER_WAITING_PAYMENT = 'wp'
+# ORDER_SHIPPING_FEE_REQUESTED = 'rf'
+# ORDER_PROCESSING_ORDER = 'rf'
+# ORDER_DELIVERED = 'dl'
+# ORDER_WAITING_TESTIMONIAL = 'wt'
 
-ORDER_STATUS = (
-    (ORDER_WAITING_PAYMENT, "Waiting Payment"),
-    (ORDER_SHIPPING_FEE_REQUESTED, "Shipping fee Requested"),
-    (ORDER_PROCESSING_ORDER, "Processing order"), #PAID
-    (ORDER_DELIVERED, "Delivered"),
-    (ORDER_WAITING_TESTIMONIAL, "Waiting Testimonial"),
-)
+# ORDER_STATUS = (
+#     (ORDER_WAITING_PAYMENT, "Waiting Payment"),
+#     (ORDER_SHIPPING_FEE_REQUESTED, "Shipping fee Requested"),
+#     (ORDER_PROCESSING_ORDER, "Processing order"), #PAID
+#     (ORDER_DELIVERED, "Delivered"),
+#     (ORDER_WAITING_TESTIMONIAL, "Waiting Testimonial"),
+# )
 
 BID_TYPE_CHOICES = (
     ("n", "Normal"),
@@ -209,7 +209,7 @@ class Auction(models.Model):
     deadline_time = models.FloatField(db_index=True)
     bidding_time = models.PositiveSmallIntegerField()
     last_bidder = models.CharField(max_length=30, default='', db_index=True)
-    last_bidder_member = models.ForeignKey('profiles.Member', blank=True, null=True, related_name='items_won')  #winner
+    last_bidder_member = models.ForeignKey('auth.User', blank=True, null=True, related_name='items_won')  #winner
 
     last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True, null=True) #Todo remove this field
     last_unixtime = models.FloatField(null=True, blank=True, db_index=True)
