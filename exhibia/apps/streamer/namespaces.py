@@ -66,7 +66,6 @@ def automessage():
                                 "and use points to redeem prizes on Exhibia Reward Store"
                     else:
                         message = 'Welcome to Exhibia! Signup now and receive free bids.'
-                    print ref, message
                     instance.emit('notification', message)
                 else:
                     empty_refs.add(ref)
@@ -80,7 +79,7 @@ def automessage():
             break
         except Exception, e:
             print e
-        gevent.sleep(10 or settings.AUTOMESSAGE_DELAY)
+        gevent.sleep(settings.AUTOMESSAGE_DELAY)
 
 gevent.spawn(automessage)
 
