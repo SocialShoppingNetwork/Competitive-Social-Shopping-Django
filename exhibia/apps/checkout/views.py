@@ -22,9 +22,13 @@ from profiles.forms import BillingForm
 from profiles.models import BillingAddress
 
 
+@login_required
+def view_order(request, order_pk):
+    return render(request, 'checkout/view_order.html',
+                  {'order':get_object_or_404(Order, user=request.user, pk=order_pk)})
 
 @login_required
-def review_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
+def confirm_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
     auction = get_object_or_404(request.user.items_won, pk=auction_pk)
     card = get_object_or_404(Card, user=request.user, pk=card_pk)
     shipping = get_object_or_404(ShippingAddress, user=request.user, pk=shipping_pk)
@@ -394,11 +398,11 @@ def select_billing(request, auction_id):
         'billing':billing,
     }
 
-@login_required
-@render_to('checkout/view_order.html')
-def view_order(request, order_id):
-    member = request.user.get_profile()
-    order = get_object_or_404(member.order_set.all(), id=order_id)
-    return {
-        'order':order,
-    }
+# @login_required
+# @render_to('checkout/view_order.html')
+# def view_order(request, order_id):
+#     member = request.user.get_profile()
+#     order = get_object_or_404(member.order_set.all(), id=order_id)
+#     return {
+#         'order':order,
+#     }

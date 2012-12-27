@@ -18,7 +18,7 @@
             <td>{{card.expiration_month}}/{{card.expiration_year}}</td>
             <td>
                 {% if choose_card %}
-                    <a class="btn" href="{% url checkout_review kwargs.auction_pk kwargs.shipping_pk kwargs.billing_pk card.pk%}">use this card</a>
+                    <a class="btn" href="{% url checkout_confirm_order kwargs.auction_pk kwargs.shipping_pk kwargs.billing_pk card.pk%}">use this card</a>
                 {% else %}
                     <form action="{% url account_delete_card %}" method="POST">
                         {% csrf_token %}

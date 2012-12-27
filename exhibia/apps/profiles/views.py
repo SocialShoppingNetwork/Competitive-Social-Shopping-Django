@@ -128,7 +128,7 @@ def account(request):
     #auctions_waiting_payment = member.items_won.filter(Q(shippingorder=None) |
     #                                            Q(shippingorder__status=ORDER_WAITING_PAYMENT) |
     #                                            Q(shippingorder__status=ORDER_SHIPPING_FEE_REQUESTED))
-    auctions_waiting_payment = request.user.items_won.filter(order=None)
+    auctions_waiting_payment = request.user.items_won.all()#.filter(order=None)
 
 
     #orders processing and shipped
@@ -142,27 +142,6 @@ def account(request):
     }
 
 
-
-@login_required
-def manage_addresses(request, auction_pk=None, form_class=MemberInfoFormUS, redirect_url='account_shipping',
-                    template='manage_shipping.html', user_attr='shipping_adddresses', choose_address=False):
-    form = form_class(request.POST or None)
-    if auction_pk:
-        auction = get_object_or_404(Auction, pk=auction_pk)
-        if auction.last_bidder_member != request.user:
-            raise Http404()
-
-    if form.is_valid():
-        shipping = form.save(False)
-        shipping.user = request.user
-        shipping.save()
-        return redirect(reverse(redirect_url))
-    return render(request, "profiles/"+template,
-                  {'form':form,
-                  'objects':getattr(request.user, user_attr).filter(deleted=False),
-                  'choose_address':choose_address,
-                  'auction_pk': auction_pk,
-                  })
 
 @login_required
 def manage_delete(request, model=ShippingAddress, redirect_url='account_shipping'):

@@ -4,11 +4,11 @@
     <div>
         <img class="product" src="{{ order.auction.item.image.img.url }}" />
         <h3>Shipping Information</h3>
-        <p>Status: {% if order.status == "op" %} processing {% else %} shipped{% endif %}</p>
+        <p>Status: {% if order.is_processing %} processing {% else %} shipped{% endif %}</p>
         {% if order.tracking_number %}
             <p>{{ order.shipping_company_name }} : {{ order.tracking_number }}</p>
         {% endif %}
-        <p>{{ order.shipping_first_name }} order.shipping_last_lame</p>
+        <p>{{ order.shipping_first_name }} {{order.shipping_last_name}}</p>
         <p>{{ order.shipping_address1 }}</p>
         <p>{{ order.shipping_address2 }}</p>
         <p>{{ order.shipping_city }}</p>
@@ -17,7 +17,7 @@
         <p>{{ order.shipping_zip_code }}</p>
         <p>{{ order.shipping_phone }}</p>
         <h3>Billing Information</h3>
-        <p>{{ order.billing_first_name }} order.billing_last_lame</p>
+        <p>{{ order.billing_first_name }} {{order.billing_last_name}}</p>
         <p>{{ order.billing_address1 }}</p>
         <p>{{ order.billing_address2 }}</p>
         <p>{{ order.billing_city }}</p>

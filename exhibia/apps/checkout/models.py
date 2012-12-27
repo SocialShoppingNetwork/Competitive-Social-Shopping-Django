@@ -44,6 +44,12 @@ class Order(models.Model):
     def shipping_company_name(self):
         return SHIPPING_COMPANIES_DICT.get(self.shipping_company)
 
+    def is_shipped(self):
+        return self.status == ORDER_SHIPPED
+
+    def is_processing(self):
+        return self.status == ORDER_PROCESSING
+
     def __unicode__(self):
         return '%s | %s - %s' % (self.auction.item.name, self.user, self.created)
 

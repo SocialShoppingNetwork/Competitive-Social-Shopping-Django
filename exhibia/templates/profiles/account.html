@@ -10,7 +10,7 @@
 		</div>
 		<div class="span4">
 			<ul class="unstyled">
-	   		 	<li><h3>User Name{{ member.user.first_name }} {{ member.user.last_name }}
+	   		 	<li><h3>{{ member.user.first_name }} {{ member.user.last_name }}
 	   		 		{% if member.verified %}
         				<span class="badge badge-success">{% trans "Verified" %}</span>
     				{% else %}
@@ -46,8 +46,11 @@
 				    </td>
                     <td><div class="span3"><b>{{ auction.item.name }}</b></div></td>
 				    <td>
-                        <a href="{% url checkout_shipping auction_pk=auction.pk %}">Select Shipping address</a>
-				    	{# <a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a> #}
+                        {% if auction.order and auction.order.is_processing %}
+                            <a href="{% url checkout_review_order auction.order.pk %}">Review order</a>
+                        {% else %}
+                            <a href="{% url checkout_shipping auction_pk=auction.pk %}">Order shipping</a>
+                        {% endif %}
 				    </td>
 				</tr>
 			{% endfor %}
