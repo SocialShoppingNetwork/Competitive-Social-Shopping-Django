@@ -50,32 +50,44 @@ def listener():
                 pkt['endpoint'] = instance.ns_name
                 instance.socket.send_packet(pkt)
 
+
 gevent.spawn(listener)
 
 def automessage():
     while True:
         try:
+            empty_refs = set()
             for ref in ChatNamespace.instances:
                 instance = ref()
-                if instance.request.user.is_authenticated:
-                    message = "Invite your Facebook friends to join and receive points.<br>"\
-                            "Collect points by being socially active on Exhibia, "\
-                            "and use points to redeem prizes on Exhibia Reward Store"
+                if instance is not None:
+                    if instance.request.user.is_authenticated:
+                        message = "Invite your Facebook friends to join and receive points.<br>"\
+                                "Collect points by being socially active on Exhibia, "\
+                                "and use points to redeem prizes on Exhibia Reward Store"
+                    else:
+                        message = 'Welcome to Exhibia! Signup now and receive free bids.'
+                    print ref, message
+                    instance.emit('notification', message)
                 else:
-                    message = 'Welcome to Exhibia! Signup now and receive free bids.'
-                instance.emit('notification', message)
+                    empty_refs.add(ref)
+            # clean up empty refs
+            if empty_refs:
+                for ref in empty_refs:
+                    ChatNamespace.instances.remove(ref)
+                empty_refs = set()
+
         except SystemExit:
             break
         except Exception, e:
             print e
-        gevent.sleep(settings.AUTOMESSAGE_DELAY)
+        gevent.sleep(10 or settings.AUTOMESSAGE_DELAY)
 
 gevent.spawn(automessage)
 
 class RedisBroadcast(object):
 
     def initialize(self):
-        self.instances.append(weakref.ref(self))
+        self.instances.add(weakref.ref(self))
 
     def publish(self, event, *args):
         r = redis.Redis(connection_pool=redis_pool)
@@ -86,7 +98,7 @@ chat_history = deque(maxlen=15)
 
 
 class ChatNamespace(RedisBroadcast, BaseNamespace):
-    instances = []
+    instances = set()
     channel = 'chat'
 
     def initialize(self):
@@ -111,7 +123,7 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
 
 
 class AuctionNamespace(RedisBroadcast, BaseNamespace):
-    instances = []
+    instances = set()
     channel = 'auction'
 
     @login_required
