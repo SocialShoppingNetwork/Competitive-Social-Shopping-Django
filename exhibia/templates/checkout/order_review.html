@@ -1,34 +1,46 @@
 {% extends 'site_base.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
+    <div class="page-header"><h1>Review your order details</h1></div>
+    <div class="row-fluid">
+        <div class="span4"><img class="product" src="{{ auction.item.image.img.url }}" /></div>
+        <div class="span4 offset4">
+            <h3>{{ auction.item.name }}</h3>
+            {{auction.item.description|safe}}
+        </div>
+    </div>
+    <div class="page-header"></div>
+    <div class="row-fluid">
+        <div class="span5">
+            <h3>Shipping Address: </h3>
+            <address>
+            {{ shipping.first_name }} {{ shipping.last_name }}<br>
+            {{ shipping.address1 }}<br>
+            {{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}<br>
+            {{ shipping.country.name }} <img src="{{ shipping.country.flag }}"><br>
+            Phone: {{ shipping.phone }}<br>
+            </address>
+            {# <small><a href="{% url checkout_shipping auction_pk=auction.pk %}?next={% url checkout_review auction.id %}">change</a></small> #}
+        </div>
+        <div class="span5 offset=5">
+            <h3>Billing Information:</h3>
+            <address>
+            {{ billing.first_name }} {{ billing.last_name }}<br>
+            {{ billing.address1 }}<br>
+            {{ billing.city }},{{ billing.state }} {{ billing.zip_code }}<br>
+            {{ billing.country.name }} <img src="{{ billing.country.flag }}"><br>
+            Phone: {{ billing.phone }}<br>
+            </address>
+            {# <span><a href="{% url checkout_select_billing auction.id %}">change</a></span> #}
+        </div>
+    </div>
+    <div class="page-header"></div>
+    <p>Card: {{ card.number }} {# <a href="{% url checkout_select_payment auction.id %}">change</a></p> #}
+    {# <p>Shipping:{{ shipping_option.name }}: ${{ shipping_option.price }}<span><a href="{% url checkout_select_shipping auction.id %}?next={% url checkout_review auction.id %}">change</a></span> #}
+    <div class="page-header"></div>
     <div>
-        <img class="product" src="{{ auction.item.image.img.url }}" />
-
-        <h1>{{ auction.item.name }}</h1>
-        <h3>Shipping Address:</h3>
-        <span><a href="{% url checkout_select_shipping_address auction.id %}?next={% url checkout_review auction.id %}">change</a></span>
-
-        <p>{{ shipping.first_name }} {{ shipping.last_name }}</p>
-        <p>{{ shipping.address1 }}</p>
-        <p>{{ shipping.city }},{{ shipping.state }} {{ shipping.zip_code }}</p>
-        <p>{{ shipping.country.name }} <img src="{{ shipping.country.flag }}"></p>
-        <p>Phone: {{ shipping.phone }}</p>
-
-        <h3>Shipping:</h3>
-        <span><a href="{% url checkout_select_shipping auction.id %}?next={% url checkout_review auction.id %}">change</a></span>
-        <p>{{ shipping_option.name }}: ${{ shipping_option.price }}</p>
-
-        <h3>Billing Information:</h3>
-        <span><a href="{% url checkout_select_billing auction.id %}">change</a></span>
-        <p>Card: {{ card.number }} <a href="{% url checkout_select_payment auction.id %}">change</a></p>
-        <p>{{ billing.first_name }} {{ billing.last_name }}</p>
-        <p>{{ billing.address1 }}</p>
-        <p>{{ billing.city }},{{ billing.state }} {{ billing.zip_code }}</p>
-        <p>{{ billing.country.name }} <img src="{{ billing.country.flag }}"></p>
-        <p>Phone: {{ billing.phone }}</p>
-
         <h2>Order Summary</h2>
-        <p>Item:  $0.00 </p>
+        <p>Item:  ${{auction.item.price}} </p>
         <p>Shipping & handling:  ${{ shipping_option.price }} </p>
         <p>Total: ${{ shipping_option.price }}</p>
         <form action="." method="post">

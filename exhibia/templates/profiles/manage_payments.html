@@ -1,6 +1,9 @@
 {% extends 'site_base.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
+    <div class="page-header">
+        <h1>{{headline}}</h1>
+    </div>
     {% for card in cards %}
         {% if forloop.first %}
         <table class="table table-striped">
@@ -14,11 +17,15 @@
             <td>{{card.holder_name}}</td>
             <td>{{card.expiration_month}}/{{card.expiration_year}}</td>
             <td>
-                <form action="{% url account_delete_card %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{card.pk}}" name="pk"/>
-                    <input type="submit" class="btn btn-danger" value="Delete this card"/>
-                </form>
+                {% if choose_card %}
+                    <a class="btn" href="{% url checkout_review kwargs.auction_pk kwargs.shipping_pk kwargs.billing_pk card.pk%}">use this card</a>
+                {% else %}
+                    <form action="{% url account_delete_card %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{card.pk}}" name="pk"/>
+                        <input type="submit" class="btn btn-danger" value="Delete this card"/>
+                    </form>
+                {% endif %}
             </td>
         </tr>
 

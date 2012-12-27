@@ -23,3 +23,8 @@ class MemberInfoFormUS(forms.ModelForm):
     class Meta:
         model = ShippingAddress
         exclude = ('user','deleted', )
+
+
+def get_shipping_form(request=None):
+    if request is None:
+        return MemberInfoFormUS

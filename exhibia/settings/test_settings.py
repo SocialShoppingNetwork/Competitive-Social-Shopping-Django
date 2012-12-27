@@ -2,3 +2,5 @@
 
 
 TEST_USER_PASSWORD = 'IMLpYcUPIUzUA'
+
+KEY_PREFIX = 'test|'

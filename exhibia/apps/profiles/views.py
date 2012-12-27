@@ -4,25 +4,67 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response, redirect, render
+from django.shortcuts import get_object_or_404, render_to_response, redirect, render
 
 from annoying.decorators import render_to
 
 from auctions.models import Auction
-from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 
 from shipping.forms import MemberInfoFormUS
 from payments.constants import *
-from payments.models import Card
 from payments.forms import CardForm
+from payments.models import Card
 from shipping.models import ShippingAddress
-from profiles.models import BillingAddress
-from profiles.forms import BillingForm, DeleteForm
+from profiles.forms import DeleteForm
+
+
+from django.views.generic import CreateView
+from braces.views import LoginRequiredMixin, SetHeadlineMixin
+
+class AddressView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
+    headline = "Select your shipping address"
+    model = ShippingAddress
+    template_name = 'profiles/manage_address.html'
+    form_class = MemberInfoFormUS
+    choose_address = False
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AddressView, self).get_context_data(**kwargs)
+        ctx['kwargs'] = self.kwargs
+        ctx['choose_address'] = self.choose_address
+        ctx['objects'] = self.model.objects.filter(deleted=False, user=self.request.user)
+        return ctx
+
+    def form_valid(self, form):
+        instance = form.save(False)
+        instance.user = self.request.user
+        instance.save()
+        return redirect(self.request.path)
+
+class CardCreateView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
+    model = Card
+    headline = "Manage your plastic cards"
+    template_name = "profiles/manage_payments.html"
+    form_class = CardForm
+    choose_card = False
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(CardCreateView, self).get_context_data(*args, **kwargs)
+        ctx['cards'] = self.model.objects.filter(deleted=False, user=self.request.user)
+        ctx['kwargs'] = self.kwargs
+        ctx['choose_card'] = self.choose_card
+        return ctx
+
+    def form_valid(self, form):
+        instance = form.save(False)
+        instance.user = self.request.user
+        instance.save()
+        return redirect(self.request.path)
 
 @login_required
 def auctions_won(request, template_name='profiles/auctions_won.html'):
     member = request.member
-    auctionorders_unpaid = AuctionOrder.objects.filter(status=ORDER_NOT_PAID, winner=member)
+    auctionorders_unpaid = AuctionOrder.objects.filter(status=ORDER_NOT_PAID, winner=request.user)
     auctions_won = Auction.objects.filter(status="f", last_bidder_member=member).order_by("-last_unixtime")
     c = RequestContext(request, {
         "member": member,
@@ -35,26 +77,30 @@ from payments.models import AuctionOrder
 @login_required
 def auction_won(request, auction_id, template_name='profiles/auction_won.html'):
     member = request.member
-    auction = get_object_or_404(Auction, id=auction_id, last_bidder=member.user.username, status="f")
+    auction = get_object_or_404(Auction, id=auction_id, last_bidder=request.user.username, status="f")
     if request.POST:
         confirm = request.POST.get('confirm', 'no')
         if confirm == "yes":
-            order = AuctionOrder.objects.create_order(auction, member)
+            order = AuctionOrder.objects.create_order(auction, request.user)
             return HttpResponseRedirect('/accounts/profile/won/')
     c = RequestContext(request, {"a": auction,
                                  "member": member,
-                                 'shipping':member.shippingprofile,})
+                                 'shipping':request.user.shipping_adddresses.all()[0],})
     return render_to_response(template_name, context_instance=c)
+
 
 @login_required
 def order_pay(request, order_id):
-    member = request.member
-    order = get_object_or_404(AuctionOrder, id=order_id, winner=member, auction__status="m")
-    c = RequestContext(request, {
-        "order": order,
-        "dalpay_form": auction_form(request, 'dalpay', order_id),
-    })
-    return render_to_response('order_pay.html', context_instance=c)
+    print order_id
+    # import pdb
+    # pdb.set_trace()
+    order = get_object_or_404(AuctionOrder, id=order_id, winner=request.user, auction__status="m")
+    return render(request,'order_pay.html',{
+                "order": order,
+                "dalpay_form":None,
+                # "dalpay_form": auction_form(request, 'dalpay', order_id),
+            }
+        )
 
 
 def member_bids(request):
@@ -82,13 +128,13 @@ def account(request):
     #auctions_waiting_payment = member.items_won.filter(Q(shippingorder=None) |
     #                                            Q(shippingorder__status=ORDER_WAITING_PAYMENT) |
     #                                            Q(shippingorder__status=ORDER_SHIPPING_FEE_REQUESTED))
-    auctions_waiting_payment = member.items_won.filter(order=None)
+    auctions_waiting_payment = request.user.items_won.filter(order=None)
 
 
     #orders processing and shipped
-    auctions_processing = member.items_won.filter(order__status=ORDER_PROCESSING)
+    auctions_processing = request.user.items_won.filter(order__status=ORDER_PROCESSING)
 
-    auctions_shipped = member.items_won.filter(order__status=ORDER_SHIPPED)
+    auctions_shipped = request.user.items_won.filter(order__status=ORDER_SHIPPED)
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
             'auctions_processing':auctions_processing,
@@ -98,10 +144,14 @@ def account(request):
 
 
 @login_required
-def manage_addresses(request, form_class=MemberInfoFormUS, redirect_url='account_shipping',
-                    template='manage_shipping.html', user_attr='shipping_adddresses'):
-    form = form_class(request.POST or None,
-        initial={'first_name':request.user.first_name, 'last_name':request.user.last_name})
+def manage_addresses(request, auction_pk=None, form_class=MemberInfoFormUS, redirect_url='account_shipping',
+                    template='manage_shipping.html', user_attr='shipping_adddresses', choose_address=False):
+    form = form_class(request.POST or None)
+    if auction_pk:
+        auction = get_object_or_404(Auction, pk=auction_pk)
+        if auction.last_bidder_member != request.user:
+            raise Http404()
+
     if form.is_valid():
         shipping = form.save(False)
         shipping.user = request.user
@@ -110,6 +160,8 @@ def manage_addresses(request, form_class=MemberInfoFormUS, redirect_url='account
     return render(request, "profiles/"+template,
                   {'form':form,
                   'objects':getattr(request.user, user_attr).filter(deleted=False),
+                  'choose_address':choose_address,
+                  'auction_pk': auction_pk,
                   })
 
 @login_required

@@ -23,13 +23,13 @@
         <td>
             {% if choose_address %}
                 {% if 'shipping_pk' in kwargs %}
-                    <a class="btn" href="{% url checkout_select_payment kwargs.auction_pk %}">Use this Address</a>
+                    <a class="btn" href="{% url checkout_payment auction_pk=kwargs.auction_pk shipping_pk=kwargs.shipping_pk billing_pk=shipping.pk %}">Use this Address</a>
                 {% else %}
                     <a class="btn" href="{% url checkout_billing auction_pk=kwargs.auction_pk shipping_pk=shipping.pk %}">Use this Address</a>
                 {% endif %}
             {% else %}
             <div class="btn-group">
-                <a class="btn" href="{% url account_shipping_edit pk=shipping.pk%}">Edit</a>
+                <button class="btn" href="{% url account_shipping_edit pk=shipping.pk%}">Edit</button>
                 <form action="{% url account_shipping_delete %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" value="{{shipping.pk}}" name="pk"/>

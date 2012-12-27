@@ -46,7 +46,8 @@
 				    </td>
                     <td><div class="span3"><b>{{ auction.item.name }}</b></div></td>
 				    <td>
-				    	<a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a>
+                        <a href="{% url checkout_shipping auction_pk=auction.pk %}">Select Shipping address</a>
+				    	{# <a href="{% url checkout_select_shipping_address auction.id %}">Pay Shipping</a> #}
 				    </td>
 				</tr>
 			{% endfor %}

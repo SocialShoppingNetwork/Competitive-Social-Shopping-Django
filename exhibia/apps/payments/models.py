@@ -55,17 +55,17 @@ class OnlyFinishedAuctionCanCreateOrder(Exception):
     pass
 
 class AuctionOrderManager(models.Manager):
-    def create_order(self, auction, member, method=PLIMUS):
-        if auction.status == AUCTION_FINISHED and auction.last_bidder_member == member:
-            order =  self.get_query_set().create(auction=auction,
-                winner=member,
-                status=ORDER_NOT_PAID,
-                address=member.address1,
-                shipping_fee=auction.item.shipping_fee,
-                total=auction.item.price+auction.item.shipping_fee,
-            )
-            #auction.status = AUCTION_WAITING_PAYMENT
-            auction.save()
+    def create_order(self, auction, user, method=PLIMUS):
+        print auction.status, AUCTION_FINISHED
+        if auction.status == AUCTION_FINISHED and auction.last_bidder_member == user:
+            created, order =  self.get_query_set().get_or_create(auction=auction,
+                winner=user)
+            if created:
+                order.status=ORDER_NOT_PAID,
+                order.amount_paid=auction.item.price+auction.item.shipping_fee,
+                order.method=method
+                auction.status = AUCTION_WAITING_PAYMENT
+                auction.save()
             return order
         else:
             raise OnlyFinishedAuctionCanCreateOrder
