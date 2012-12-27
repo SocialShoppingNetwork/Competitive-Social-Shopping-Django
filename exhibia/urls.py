@@ -42,14 +42,14 @@ urlpatterns += patterns("",
 
     #url(r'^auction_winners/$', 'bidin.views.auction_winners', {}, name='auction_winners'),
 
-    url(r'^accounts/profile/won/$', 'profiles.views.auctions_won', {},
-                        name="auctions_won"),
-    url(r'^accounts/profile/won/(?P<auction_id>\d+).html$',
-                        'profiles.views.auction_won', {}, name='auction_won'),
-    url(r'^accounts/profile/pay/(?P<order_id>\d+).html$',
-                 'profiles.views.order_pay', {}, name="order_pay"),
-    url(r'^accounts/profile/bids/$', 'profiles.views.member_bids', {}, name='member_bids'),
-    url(r'^accounts/profile/$', 'profiles.views.account', {}, name="profile_account"),
+    # url(r'^accounts/profile/won/$', 'profiles.views.auctions_won', {},
+    #                     name="auctions_won"),
+    # url(r'^accounts/profile/won/(?P<auction_id>\d+).html$',
+    #                     'profiles.views.auction_won', {}, name='auction_won'),
+    # url(r'^accounts/profile/pay/(?P<order_id>\d+).html$',
+    #              'profiles.views.order_pay', {}, name="order_pay"),
+    # url(r'^accounts/profile/bids/$', 'profiles.views.member_bids', {}, name='member_bids'),
+    # url(r'^accounts/profile/$', 'profiles.views.account', {}, name="profile_account"),
 
     url(r"^account/", include('profiles.urls')),
 
