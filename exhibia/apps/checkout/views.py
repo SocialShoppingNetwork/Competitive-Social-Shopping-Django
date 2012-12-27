@@ -30,6 +30,21 @@ def review_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
     shipping = get_object_or_404(ShippingAddress, user=request.user, pk=shipping_pk)
     billing = get_object_or_404(BillingAddress, user=request.user, pk=billing_pk)
     if request.method == "POST":
+        # created shipping request so admin can review it and set a fee
+        ShippingRequest.objects.create(
+            auction=auction,
+            user=request.user,
+            first_name=shipping.first_name,
+            last_name=shipping.last_name,
+            address1=shipping.address1,
+            address2=shipping.address2,
+            city=shipping.city,
+            state=shipping.state,
+            country=shipping.country,
+            zip_code=shipping.zip_code,
+            phone=shipping.phone,
+        )
+        # order itself
         Order.objects.create(
             auction=auction,
             card=card,
