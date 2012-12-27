@@ -8,7 +8,7 @@ $(document).ready(function(){
         var code = e.which;
 
         if(code==13) {
-            socket.emit('send_chat_message', $(this).val());
+            chat_socket.emit('send_chat_message', $(this).val());
             $(this).val('');
         }
     });
