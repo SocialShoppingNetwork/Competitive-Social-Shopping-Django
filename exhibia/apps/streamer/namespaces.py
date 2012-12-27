@@ -27,6 +27,7 @@ redis_pool = redis.ConnectionPool(host=settings.REDIS['host'],
                                   db=0, max_connections=3)
 
 def listener():
+    "listens to redis server for new messages and distributes them to all sockets in current process"
     r = redis.StrictRedis(connection_pool=redis_pool)
     r = r.pubsub()
     r.subscribe('chat')

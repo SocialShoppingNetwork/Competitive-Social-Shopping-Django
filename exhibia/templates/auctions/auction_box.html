@@ -2,10 +2,11 @@
 <li data-id="{{ a.id }}" data-type="app" data-types="camera" class="span3 funding" id="{{a.pk}}">
 	<div class="thumbnail">
 		<div class="h3 fund-title">
-            <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a>
+            <a href="{{auction.get_absolute_url}}">{{ a.item.name }}</a>
+            {# <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a> #}
         </div>
         <div align="center">
-      	<a href="{% url auction_item a.item.slug_name %}?item={{ a.id }}">
+      	<a href="{{auction.get_absolute_url}}">
 			<img class="product" src="{{ a.item.image.img.url }}"/>
 		</a>
         </div>

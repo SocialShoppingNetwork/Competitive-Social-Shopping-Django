@@ -221,6 +221,10 @@ class Auction(models.Model):
     def __unicode__(self):
         return self.item.name
 
+    @models.permalink
+    def get_absolute_url(self):
+        return 'auction_item', (), {'slug':self.item.slug_name}
+
     @property
     def time_to_go(self):
         if self.status != AUCTION_WAITING_PLEDGE:

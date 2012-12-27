@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 import cjson
-
+from operator import attrgetter
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -57,20 +59,16 @@ def xauction_bid(request, auction_id):
     pass
 
 @render_to('auctions/item_exhibit.html')
-def view_item(request, slug=''):
-    auction_id = request.GET.get('item')
+def view_item(request, slug):
+    try:
+        item = AuctionItem.objects.select_related('auctions').get(slug_name=slug)
+    except AuctionItem.DoesNotExist:
+        raise Http404('no such item')
     auction = None
-    item = None
-    if auction_id:
-        try:
-            auction = Auction.objects.select_related('item', 'item__image').get(pk=auction_id)
-            #auction = get_object_or_404(Auction.objects.all(), pk=auction_id)
-        except Auction.DoesNotExist:
-            raise Http404
-        item = auction.item
-    else:
-        item = AuctionItem.objects.select_related('item', 'item__image').get(slug_name__exact=slug)
-
+    auctions = list(item.auctions.all())
+    if auctions:
+        auctions.sort(key=attrgetter('created'))
+        auction = auctions[0]
     result = {'auction': auction,
               'backers':'',
               'item': item,

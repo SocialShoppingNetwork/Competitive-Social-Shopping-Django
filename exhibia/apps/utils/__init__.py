@@ -1,6 +1,8 @@
 import urllib
 import urllib2
+
 from django.contrib.sites.models import Site
+from django.template.defaultfilters import floatformat
 
 def post(url, values):
     data = urllib.urlencode(values)
@@ -19,7 +21,7 @@ def auction_to_dict(auction):
             "status": auction.status,
             "last_bidder": auction.last_bidder,
             "time_left": auction.time_left,
-            "current_offer": auction.current_offer,
+            "current_offer": floatformat(auction.current_offer, 2),
             "bidding_time": auction.bidding_time,
             "backers": auction.backers,
             "amount_pleged": auction.amount_pleged,
@@ -40,7 +42,7 @@ def auctions_to_dict(auctions):
         result['a_%s' % a.id] =  auction_to_dict(a)
     return result
 
-from django.template.defaultfilters import floatformat
+
 def admin_auctions_to_dict(auctions):
     result = {}
     for a in auctions:

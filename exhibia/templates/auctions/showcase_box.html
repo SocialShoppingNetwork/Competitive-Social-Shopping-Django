@@ -1,9 +1,9 @@
 {% with auction as a %}
 <li data-timeleft="{{ a.time_left }}" data-bidtime="{{a.bidding_time}}" data-type="util" data-types="camera" class="span3 showcase" id="{{ a.id }}">
 	<div class="thumbnail">
-		<div class="h3 fund-title"><a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a></div>
+		<div class="h3 fund-title"><a href="{{auction.get_absolute_url}}">{{ a.item.name }}</a></div>
         <div align="center">
-          	<a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">
+          	<a href="{{auction.get_absolute_url}}">
     			<img class="product" src="{{ a.item.image.img.url }}"/>
     		</a>
         </div>
