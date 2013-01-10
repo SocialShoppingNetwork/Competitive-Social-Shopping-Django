@@ -102,7 +102,7 @@ TEMPLATE_LOADERS = [
 MIDDLEWARE_CLASSES = [
     'django.middleware.gzip.GZipMiddleware',
 
-    'tracking.middleware.BannedIPMiddleware',
+    # 'tracking.middleware.BannedIPMiddleware',
 
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -110,7 +110,7 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django_openid.consumer.SessionConsumer",
 
-    'tracking.middleware.VisitorTrackingMiddleware',
+    # 'tracking.middleware.VisitorTrackingMiddleware',
 
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
@@ -120,7 +120,7 @@ MIDDLEWARE_CLASSES = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "utils.middleware.MemberMiddleware",
     "referrals.middlewares.RefererMiddleware",
-    'tracking.middleware.VisitorCleanUpMiddleware',
+    # 'tracking.middleware.VisitorCleanUpMiddleware',
 ]
 
 ROOT_URLCONF = "exhibia.urls"
@@ -149,7 +149,8 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 
     "profiles.context_processors.member",
     "utils.context_processors.settings",
-    'social_auth.context_processors.social_auth_by_type_backends',
+    'social_auth.context_processors.social_auth_by_name_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
 ]
 
 INSTALLED_APPS = [
@@ -189,7 +190,7 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "gunicorn",
     "storages",
-    'tracking',
+    # 'tracking',
     'dbsettings',
 
     # project
@@ -232,6 +233,7 @@ AUTHENTICATION_BACKENDS = [
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
     #"pinax.apps.account.auth_backends.AuthenticationBackend",
+    'social_auth.backends.twitter.TwitterBackend',
     "django.contrib.auth.backends.ModelBackend",
 ]
 
