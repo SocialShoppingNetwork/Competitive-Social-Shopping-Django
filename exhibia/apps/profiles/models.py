@@ -10,7 +10,7 @@ from django.dispatch import receiver
 from django_countries import CountryField
 import dbsettings
 from social_auth.signals import pre_update
-from social_auth.backends import get_backends
+from social_auth.backends import twitter, facebook, google
 
 
 class RewardPoints(dbsettings.Group):
@@ -164,9 +164,12 @@ def save_ip(sender, request, user, *args, **kwargs):
 
 def user_registered(sender, user, response, details, **kwargs):
     profile = user.get_profile()
-    profile.verified = True
-    profile.save()
-    # this is a place to set a avatar correctly
+    if not profile.verified:
+        profile.verified = True
+        # this is a place to get an avatar for profile
+        profile.save()
 
-for backend in get_backends().values():
-    pre_update.connect(user_registered, sender=backend)
+
+pre_update.connect(user_registered, sender=twitter.TwitterBackend)
+pre_update.connect(user_registered, sender=facebook.FacebookBackend)
+pre_update.connect(user_registered, sender=google.GoogleBackend)
