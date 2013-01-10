@@ -190,6 +190,7 @@ INSTALLED_APPS = [
     "gunicorn",
     "storages",
     'tracking',
+    'dbsettings',
 
     # project
     "about",
