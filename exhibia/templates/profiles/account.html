@@ -10,14 +10,14 @@
 		</div>
 		<div class="span4">
 			<ul class="unstyled">
-	   		 	<li><h3>{{ member.user.first_name }} {{ member.user.last_name }}
+	   		 	<li><h3>{{ request.user.first_name }} {{ request.user.last_name }}
 	   		 		{% if member.verified %}
         				<span class="badge badge-success">{% trans "Verified" %}</span>
     				{% else %}
         				<span class="badge badge-inverse">{% trans "Not Verified" %}</span>
     				{% endif %}</h3></li>
-				<li>{{ member.user.username }}</li>
-				<li>{% trans "Bids" %}: {{ member.credits }}</li>
+				<li>{{ request.user.username }}</li>
+				<li>{% trans "Bids left" %}: {{ member.credits }}</li>
 			</ul>
 		</div>
 		<div class="span4">
@@ -25,6 +25,20 @@
 		    	<li><a href="{% url account_shipping %}">Manage your shipping</a></li>
     			<li><a href="{% url account_billing %}">Manage your Billing</a></li>
     			<li><a href="{% url account_payments %}">Manage your payments methods</a></li>
+                {% if not_associated %}
+                    <li>Associate your account with
+                    {% if not social_auth.facebook %}
+                        <a href="{% url socialauth_begin backend="facebook" %}">Facebook</a>
+                    {% endif %}
+                    {% if not social_auth.twitter %}
+                        <a href="{% url socialauth_begin backend="twitter" %}?{{ redirect_querystring }}">Twitter</a>
+                    {% endif %}
+                    {% if not social_auth.google_oauth2 %}
+                    <a href="{% url socialauth_begin backend="google-oauth2" %}">Google+</a>
+                    {% endif %}
+                    and get point reward !
+                    </li>
+                {% endif %}
     		</ul>
     	</div>
 	</div><hr>

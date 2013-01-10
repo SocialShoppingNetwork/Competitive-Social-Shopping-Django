@@ -9,6 +9,9 @@ from django.dispatch import receiver
 
 from django_countries import CountryField
 import dbsettings
+from social_auth.signals import pre_update
+from social_auth.backends import get_backends
+
 
 class RewardPoints(dbsettings.Group):
     bid = dbsettings.PositiveIntegerValue(default=1, help_text='points for bid on auction')
@@ -46,6 +49,7 @@ class Member(models.Model):
     is_banned = models.BooleanField(default=False)
 
     points_amount = models.PositiveIntegerField(default=0)
+    verified = models.BooleanField(default=False)
 
     def __unicode__(self):
         return unicode(self.user)
@@ -157,3 +161,12 @@ def save_ip(sender, request, user, *args, **kwargs):
     if not created:
         obj.last_login = datetime.now()
         obj.save()
+
+def user_registered(sender, user, response, details, **kwargs):
+    profile = user.get_profile()
+    profile.verified = True
+    profile.save()
+    # this is a place to set a avatar correctly
+
+for backend in get_backends().values():
+    pre_update.connect(user_registered, sender=backend)

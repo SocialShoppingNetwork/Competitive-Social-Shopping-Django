@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls.defaults import *
 from functools import partial
+
+from django.conf.urls.defaults import *
+from django.contrib.auth.decorators import login_required
+
+from social_auth.views import auth, complete, disconnect
 
 from payments.models import Card
 from shipping.forms import MemberInfoFormUS
@@ -27,4 +31,21 @@ urlpatterns = patterns("profiles.views",
     url(r'^payments/$', CardCreateView.as_view(), name="account_payments"),
     url(r'^payments/delete_card/$', partial(manage_delete, model=Card, redirect_url='account_payments'),
       name="account_delete_card"),
+)
+
+
+urlpatterns += patterns('',
+    url(r'^associate/(?P<backend>[^/]+)/$',
+        login_required(auth),
+        name='socialauth_begin'),
+    url(r'^associate/complete/(?P<backend>[^/]+)/$',
+        login_required(complete),
+        name='socialauth_complete'),
+
+    url(r'^disconnect/(?P<backend>[^/]+)/$',
+        disconnect,
+        name='socialauth_disconnect'),
+    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$',
+        disconnect,
+        name='socialauth_disconnect_individual'),
 )

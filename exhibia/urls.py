@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from django.conf import settings
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
@@ -8,7 +9,6 @@ admin.autodiscover()
 from pinax.apps.account.openid_consumer import PinaxConsumer
 from profiles.decorators import required, check_for_ip
 from profiles.forms import ExhibiaSignupForm
-import streamer.urls
 
 handler500 = "pinax.views.server_error"
 
@@ -59,9 +59,6 @@ urlpatterns += patterns("",
 
     #url(r"^testimonials/", include("testimonials.urls")),
 
-    #u url(r'', include('social_auth.urls')),
-    #u url(r'', include('social_login.urls')),
-
     url(r"^testimonials/", include("testimonials.urls")),
     url(r"^checkout/", include("checkout.urls")),
 
@@ -69,8 +66,6 @@ urlpatterns += patterns("",
 
     url(r"^about/", include("about.urls")),
 
-    # url(r"^account/login/$", "profiles.views.check_for_ip", name="acct_login"),
-    # url(r"^account/", include("pinax.apps.account.urls")),
     url(r"^openid/", include(PinaxConsumer().urls)),
     url(r"^notices/", include("notification.urls")),
     url(r"^announcements/", include("announcements.urls")),

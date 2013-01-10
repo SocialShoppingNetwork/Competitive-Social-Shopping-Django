@@ -7,9 +7,10 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response, redirect, render
 
 from annoying.decorators import render_to
+from social_auth.backends import get_backends
+from social_auth.models import UserSocialAuth
 
 from auctions.models import Auction
-
 from shipping.forms import MemberInfoFormUS
 from payments.constants import *
 from payments.forms import CardForm
@@ -120,7 +121,6 @@ ORDER_WAITING_TESTIMONIAL = 'wt'
 
 from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED, ORDER_PROCESSING
 
-
 @login_required
 @render_to('profiles/account.html')
 def account(request):
@@ -135,10 +135,15 @@ def account(request):
     auctions_processing = request.user.items_won.filter(order__status=ORDER_PROCESSING)
 
     auctions_shipped = request.user.items_won.filter(order__status=ORDER_SHIPPED)
+    available = set(get_backends().keys())
+    not_associated = available.difference(i.provider for i in
+                         UserSocialAuth.get_social_auth_for_user(request.user))
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
             'auctions_processing':auctions_processing,
             'auctions_shipped': auctions_shipped,
+            'not_associated':not_associated,
+            'available_auth_backends':available,
     }
 
 
