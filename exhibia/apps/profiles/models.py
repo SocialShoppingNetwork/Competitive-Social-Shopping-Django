@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+
+import hashlib
 from datetime import datetime
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
+from django.core.cache import cache
 
 from django_countries import CountryField
 import dbsettings
@@ -75,7 +79,24 @@ class Member(models.Model):
 
     @property
     def img_url(self):
-        return "http://graph.facebook.com/%s/picture?type=square" % (self.user.username)
+        if not self.verified:
+            return "http://www.gravatar.com/avatar/" + hashlib.md5(self.user.email.lower()).hexdigest()
+        avatar_url = cache.get('avatar|%d' % self.pk)
+        if avatar_url:
+            print 'avatar url is in cache'
+            return avatar_url
+
+        backends = self.user.social_auth.all()
+        providers = set(i.provider for i in backends)
+        print providers
+        if 'facebook' in providers:
+            url = "http://graph.facebook.com/%s/picture?type=square" % (self.user.username)
+        elif 'twitter' in providers:
+            # XXX need to set extra params to twitter backend
+            # as we have to get avatar via api call
+            url = ''
+        cache.set('avatar|%d' % self.pk, url , 60*60*24)
+        return url
     """
     def auctionorders_unpaid(self):
         return AuctionOrder.objects.filter(auction__status="m", winner=self)

@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404, render_to_response, redirect, re
 
 from annoying.decorators import render_to
 from social_auth.backends import get_backends
-from social_auth.models import UserSocialAuth
 
 from auctions.models import Auction
 from shipping.forms import MemberInfoFormUS
@@ -137,7 +136,7 @@ def account(request):
     auctions_shipped = request.user.items_won.filter(order__status=ORDER_SHIPPED)
     available = set(get_backends().keys())
     not_associated = available.difference(i.provider for i in
-                         UserSocialAuth.get_social_auth_for_user(request.user))
+                         request.user.social_auth.all())
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
             'auctions_processing':auctions_processing,
