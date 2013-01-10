@@ -8,8 +8,22 @@ from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 
 from django_countries import CountryField
+import dbsettings
+
+class RewardPoints(dbsettings.Group):
+    bid = dbsettings.PositiveIntegerValue(default=1, help_text='points for bid on auction')
+    fund = dbsettings.PositiveIntegerValue(default=1, help_text='points for fund auction')
+    tweet = dbsettings.PositiveIntegerValue(default=1, help_text='points for tweet')
+    like = dbsettings.PositiveIntegerValue(default=1, help_text='points for like in facebook')
+    plus = dbsettings.PositiveIntegerValue(default=1, help_text='points for + in g+')
+    associate = dbsettings.PositiveIntegerValue(default=1, help_text='points for association with some social network')
+    review = dbsettings.PositiveIntegerValue(default=1, help_text='points for review item')
+    invite = dbsettings.PositiveIntegerValue(default=1, help_text='points for invitings user')
+
 
 class Member(models.Model):
+
+    rewards = RewardPoints(verbose_name='Reward points')
 
     user = models.OneToOneField(User, verbose_name=_("user"), related_name='profile')
     about = models.TextField(_("about"), null=True, blank=True)
@@ -31,12 +45,15 @@ class Member(models.Model):
     #chat
     is_banned = models.BooleanField(default=False)
 
+    points_amount = models.PositiveIntegerField(default=0)
+
     def __unicode__(self):
         return unicode(self.user)
 
     def bid(self, auction):
         auction.bid_by(self)
         self.credits -= 1
+        self.points_amount += self.rewards.bid
         self.save()
 
     def incr_credits(self, bids, type='P'):
@@ -49,6 +66,8 @@ class Member(models.Model):
 
     def pledge(self, auction, amount):
         auction.pledge(self, amount)
+        self.points_amount += self.rewards.fund
+        self.save()
 
     @property
     def img_url(self):

@@ -16,6 +16,7 @@ handler500 = "pinax.views.server_error"
 urlpatterns = patterns('',
     url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user",
                          name="admin_invite_user"),
+    url(r'^admin/settings/', include('dbsettings.urls')),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^adminx/", include("matic.urls")),
 )
