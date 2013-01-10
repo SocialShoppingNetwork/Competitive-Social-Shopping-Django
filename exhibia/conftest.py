@@ -26,5 +26,25 @@ def pytest_configure():
 
 @pytest.fixture()
 def logged_client(client, user):
-    print client.login(username=user.username, password='IMLpYcUPIUzUA')
+    client.login(username=user.username, password='IMLpYcUPIUzUA')
     return client
+
+@pytest.fixture()
+def finished_auction(user):
+    from auctions.models import Auction
+    return Auction.objects.finished().get(last_bidder_member=user)
+
+@pytest.fixture()
+def shipping_address(user):
+    from shipping.models import ShippingAddress
+    return ShippingAddress.objects.filter(user=user)[0]
+
+@pytest.fixture()
+def billing_address(user):
+    from profiles.models import BillingAddress
+    return BillingAddress.objects.filter(user=user)[0]
+
+@pytest.fixture()
+def card(user):
+    from payments.models import Card
+    return Card.objects.filter(user=user)[0]

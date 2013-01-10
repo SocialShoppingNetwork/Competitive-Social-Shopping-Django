@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from functools import partial
-from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
