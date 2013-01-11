@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for apps/shipping/models: 0%</title>
+    <title>Coverage for apps/shipping/models: 13%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
@@ -21,14 +21,16 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>apps/shipping/models</b> :
-            <span class='pc_cov'>0%</span>
+            <span class='pc_cov'>13%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
             59 statements &nbsp;
-            <span class='run hide_run shortkey_r button_toggle_run'>0 run</span>
-            <span class='mis shortkey_m button_toggle_mis'>59 missing</span>
+            <span class='run hide_run shortkey_r button_toggle_run'>5 run</span>
+            <span class='mis shortkey_m button_toggle_mis'>54 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
+            
+                <span class='par run hide_run shortkey_p button_toggle_par'>1 partial</span>
             
         </h2>
     </div>
@@ -127,12 +129,12 @@
 <p id='n64' class='stm mis'><a href='#n64'>64</a></p>
 <p id='n65' class='pln'><a href='#n65'>65</a></p>
 <p id='n66' class='stm mis'><a href='#n66'>66</a></p>
-<p id='n67' class='stm mis'><a href='#n67'>67</a></p>
+<p id='n67' class='stm par run hide_run'><a href='#n67'>67</a></p>
 <p id='n68' class='stm mis'><a href='#n68'>68</a></p>
-<p id='n69' class='stm mis'><a href='#n69'>69</a></p>
-<p id='n70' class='stm mis'><a href='#n70'>70</a></p>
+<p id='n69' class='stm run hide_run'><a href='#n69'>69</a></p>
+<p id='n70' class='stm run hide_run'><a href='#n70'>70</a></p>
 <p id='n71' class='pln'><a href='#n71'>71</a></p>
-<p id='n72' class='stm mis'><a href='#n72'>72</a></p>
+<p id='n72' class='stm run hide_run'><a href='#n72'>72</a></p>
 <p id='n73' class='pln'><a href='#n73'>73</a></p>
 <p id='n74' class='pln'><a href='#n74'>74</a></p>
 <p id='n75' class='pln'><a href='#n75'>75</a></p>
@@ -145,7 +147,7 @@
 <p id='n82' class='pln'><a href='#n82'>82</a></p>
 <p id='n83' class='pln'><a href='#n83'>83</a></p>
 <p id='n84' class='pln'><a href='#n84'>84</a></p>
-<p id='n85' class='stm mis'><a href='#n85'>85</a></p>
+<p id='n85' class='stm run hide_run'><a href='#n85'>85</a></p>
 <p id='n86' class='stm mis'><a href='#n86'>86</a></p>
 <p id='n87' class='pln'><a href='#n87'>87</a></p>
                 
@@ -217,12 +219,12 @@
 <p id='t64' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>unicode</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>.</span><span class='nam'>user</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t65' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t66' class='stm mis'><span class='key'>def</span> <span class='nam'>create_billing_address</span><span class='op'>(</span><span class='nam'>sender</span><span class='op'>,</span> <span class='nam'>instance</span><span class='op'>,</span> <span class='nam'>created</span><span class='op'>,</span> <span class='nam'>raw</span><span class='op'>,</span> <span class='op'>**</span><span class='nam'>kwargs</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t67' class='stm mis'>&nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>instance</span> <span class='key'>is</span> <span class='nam'>None</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t67' class='stm par run hide_run'><span class='annotate' title='no jump to this line number'>68</span>&nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>instance</span> <span class='key'>is</span> <span class='nam'>None</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t68' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span><span class='strut'>&nbsp;</span></p>
-<p id='t69' class='stm mis'>&nbsp; &nbsp; <span class='key'>if</span> <span class='key'>not</span> <span class='nam'>created</span> <span class='key'>or</span> <span class='nam'>raw</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t70' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span><span class='strut'>&nbsp;</span></p>
+<p id='t69' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>if</span> <span class='key'>not</span> <span class='nam'>created</span> <span class='key'>or</span> <span class='nam'>raw</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t70' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span><span class='strut'>&nbsp;</span></p>
 <p id='t71' class='pln'>&nbsp; &nbsp; <span class='com'># data = instance.__dict__</span><span class='strut'>&nbsp;</span></p>
-<p id='t72' class='stm mis'>&nbsp; &nbsp; <span class='nam'>data</span> <span class='op'>=</span> <span class='op'>{</span><span class='str'>&#39;user&#39;</span><span class='op'>:</span><span class='nam'>instance</span><span class='op'>.</span><span class='nam'>user</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
+<p id='t72' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>data</span> <span class='op'>=</span> <span class='op'>{</span><span class='str'>&#39;user&#39;</span><span class='op'>:</span><span class='nam'>instance</span><span class='op'>.</span><span class='nam'>user</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t73' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&#39;first_name&#39;</span><span class='op'>:</span><span class='nam'>instance</span><span class='op'>.</span><span class='nam'>first_name</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t74' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&#39;last_name&#39;</span><span class='op'>:</span><span class='nam'>instance</span><span class='op'>.</span><span class='nam'>last_name</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t75' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&#39;city&#39;</span><span class='op'>:</span><span class='nam'>instance</span><span class='op'>.</span><span class='nam'>city</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
@@ -235,7 +237,7 @@
 <p id='t82' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='str'>&#39;state&#39;</span><span class='op'>:</span><span class='nam'>instance</span><span class='op'>.</span><span class='nam'>state</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
 <p id='t83' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='com'># &#39;shipping&#39;:instance</span><span class='strut'>&nbsp;</span></p>
 <p id='t84' class='pln'>&nbsp; &nbsp; <span class='op'>}</span><span class='strut'>&nbsp;</span></p>
-<p id='t85' class='stm mis'>&nbsp; &nbsp; <span class='nam'>BillingAddress</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>create</span><span class='op'>(</span><span class='op'>**</span><span class='nam'>data</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t85' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>BillingAddress</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>create</span><span class='op'>(</span><span class='op'>**</span><span class='nam'>data</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t86' class='stm mis'><span class='nam'>post_save</span><span class='op'>.</span><span class='nam'>connect</span><span class='op'>(</span><span class='nam'>create_billing_address</span><span class='op'>,</span> <span class='nam'>sender</span><span class='op'>=</span><span class='nam'>ShippingAddress</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t87' class='pln'><span class='strut'>&nbsp;</span></p>
                 
@@ -247,7 +249,7 @@
 <div id='footer'>
     <div class='content'>
         <p>
-            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage/3.6b1'>coverage.py v3.6b1</a>
+            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.6</a>
         </p>
     </div>
 </div>

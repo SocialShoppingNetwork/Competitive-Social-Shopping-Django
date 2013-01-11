@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for apps/payments/gateways/dalpay: 0%</title>
+    <title>Coverage for apps/payments/gateways/dalpay: 58%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
@@ -21,14 +21,16 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>apps/payments/gateways/dalpay</b> :
-            <span class='pc_cov'>0%</span>
+            <span class='pc_cov'>58%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
             24 statements &nbsp;
-            <span class='run hide_run shortkey_r button_toggle_run'>0 run</span>
-            <span class='mis shortkey_m button_toggle_mis'>24 missing</span>
+            <span class='run hide_run shortkey_r button_toggle_run'>15 run</span>
+            <span class='mis shortkey_m button_toggle_mis'>9 missing</span>
             <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
+            
+                <span class='par run hide_run shortkey_p button_toggle_par'>0 partial</span>
             
         </h2>
     </div>
@@ -61,24 +63,24 @@
     <table cellspacing='0' cellpadding='0'>
         <tr>
             <td class='linenos' valign='top'>
-<p id='n1' class='stm mis'><a href='#n1'>1</a></p>
-<p id='n2' class='stm mis'><a href='#n2'>2</a></p>
-<p id='n3' class='stm mis'><a href='#n3'>3</a></p>
-<p id='n4' class='stm mis'><a href='#n4'>4</a></p>
-<p id='n5' class='stm mis'><a href='#n5'>5</a></p>
-<p id='n6' class='stm mis'><a href='#n6'>6</a></p>
-<p id='n7' class='stm mis'><a href='#n7'>7</a></p>
+<p id='n1' class='stm run hide_run'><a href='#n1'>1</a></p>
+<p id='n2' class='stm run hide_run'><a href='#n2'>2</a></p>
+<p id='n3' class='stm run hide_run'><a href='#n3'>3</a></p>
+<p id='n4' class='stm run hide_run'><a href='#n4'>4</a></p>
+<p id='n5' class='stm run hide_run'><a href='#n5'>5</a></p>
+<p id='n6' class='stm run hide_run'><a href='#n6'>6</a></p>
+<p id='n7' class='stm run hide_run'><a href='#n7'>7</a></p>
 <p id='n8' class='pln'><a href='#n8'>8</a></p>
-<p id='n9' class='stm mis'><a href='#n9'>9</a></p>
+<p id='n9' class='stm run hide_run'><a href='#n9'>9</a></p>
 <p id='n10' class='pln'><a href='#n10'>10</a></p>
-<p id='n11' class='stm mis'><a href='#n11'>11</a></p>
-<p id='n12' class='stm mis'><a href='#n12'>12</a></p>
-<p id='n13' class='stm mis'><a href='#n13'>13</a></p>
+<p id='n11' class='stm run hide_run'><a href='#n11'>11</a></p>
+<p id='n12' class='stm run hide_run'><a href='#n12'>12</a></p>
+<p id='n13' class='stm run hide_run'><a href='#n13'>13</a></p>
 <p id='n14' class='pln'><a href='#n14'>14</a></p>
-<p id='n15' class='stm mis'><a href='#n15'>15</a></p>
+<p id='n15' class='stm run hide_run'><a href='#n15'>15</a></p>
 <p id='n16' class='stm mis'><a href='#n16'>16</a></p>
 <p id='n17' class='pln'><a href='#n17'>17</a></p>
-<p id='n18' class='stm mis'><a href='#n18'>18</a></p>
+<p id='n18' class='stm run hide_run'><a href='#n18'>18</a></p>
 <p id='n19' class='pln'><a href='#n19'>19</a></p>
 <p id='n20' class='pln'><a href='#n20'>20</a></p>
 <p id='n21' class='pln'><a href='#n21'>21</a></p>
@@ -114,29 +116,29 @@
 <p id='n51' class='stm mis'><a href='#n51'>51</a></p>
 <p id='n52' class='stm mis'><a href='#n52'>52</a></p>
 <p id='n53' class='pln'><a href='#n53'>53</a></p>
-<p id='n54' class='stm mis'><a href='#n54'>54</a></p>
-<p id='n55' class='stm mis'><a href='#n55'>55</a></p>
+<p id='n54' class='stm run hide_run'><a href='#n54'>54</a></p>
+<p id='n55' class='stm run hide_run'><a href='#n55'>55</a></p>
                 
             </td>
             <td class='text' valign='top'>
-<p id='t1' class='stm mis'><span class='key'>from</span> <span class='nam'>payments</span><span class='op'>.</span><span class='nam'>gateways</span> <span class='key'>import</span> <span class='nam'>PaymentGateway</span><span class='strut'>&nbsp;</span></p>
-<p id='t2' class='stm mis'><span class='key'>from</span> <span class='nam'>payments</span><span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>PaymentNotification</span><span class='strut'>&nbsp;</span></p>
-<p id='t3' class='stm mis'><span class='key'>from</span> <span class='nam'>auctions</span><span class='op'>.</span><span class='nam'>constants</span> <span class='key'>import</span> <span class='op'>*</span><span class='strut'>&nbsp;</span></p>
-<p id='t4' class='stm mis'><span class='key'>from</span> <span class='nam'>payments</span><span class='op'>.</span><span class='nam'>constants</span> <span class='key'>import</span> <span class='op'>*</span><span class='strut'>&nbsp;</span></p>
-<p id='t5' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>conf</span> <span class='key'>import</span> <span class='nam'>settings</span><span class='strut'>&nbsp;</span></p>
-<p id='t6' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>utils</span> <span class='key'>import</span> <span class='nam'>simplejson</span><span class='strut'>&nbsp;</span></p>
-<p id='t7' class='stm mis'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>sites</span><span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>Site</span><span class='strut'>&nbsp;</span></p>
+<p id='t1' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>payments</span><span class='op'>.</span><span class='nam'>gateways</span> <span class='key'>import</span> <span class='nam'>PaymentGateway</span><span class='strut'>&nbsp;</span></p>
+<p id='t2' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>payments</span><span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>PaymentNotification</span><span class='strut'>&nbsp;</span></p>
+<p id='t3' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>auctions</span><span class='op'>.</span><span class='nam'>constants</span> <span class='key'>import</span> <span class='op'>*</span><span class='strut'>&nbsp;</span></p>
+<p id='t4' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>payments</span><span class='op'>.</span><span class='nam'>constants</span> <span class='key'>import</span> <span class='op'>*</span><span class='strut'>&nbsp;</span></p>
+<p id='t5' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>conf</span> <span class='key'>import</span> <span class='nam'>settings</span><span class='strut'>&nbsp;</span></p>
+<p id='t6' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>utils</span> <span class='key'>import</span> <span class='nam'>simplejson</span><span class='strut'>&nbsp;</span></p>
+<p id='t7' class='stm run hide_run'><span class='key'>from</span> <span class='nam'>django</span><span class='op'>.</span><span class='nam'>contrib</span><span class='op'>.</span><span class='nam'>sites</span><span class='op'>.</span><span class='nam'>models</span> <span class='key'>import</span> <span class='nam'>Site</span><span class='strut'>&nbsp;</span></p>
 <p id='t8' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t9' class='stm mis'><span class='key'>class</span> <span class='nam'>DalpayGateway</span><span class='op'>(</span><span class='nam'>PaymentGateway</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t9' class='stm run hide_run'><span class='key'>class</span> <span class='nam'>DalpayGateway</span><span class='op'>(</span><span class='nam'>PaymentGateway</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t10' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t11' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>__init__</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>,</span> <span class='op'>*</span><span class='nam'>args</span><span class='op'>,</span> <span class='op'>**</span><span class='nam'>kwargs</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t12' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>super</span><span class='op'>(</span><span class='nam'>DalpayGateway</span><span class='op'>,</span> <span class='nam'>self</span><span class='op'>)</span><span class='op'>.</span><span class='nam'>__init__</span><span class='op'>(</span><span class='op'>*</span><span class='nam'>args</span><span class='op'>,</span> <span class='op'>**</span><span class='nam'>kwargs</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t13' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>contract_id</span> <span class='op'>=</span> <span class='nam'>settings</span><span class='op'>.</span><span class='nam'>DALPAY_MERCHANT_ID</span><span class='strut'>&nbsp;</span></p>
+<p id='t11' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>__init__</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>,</span> <span class='op'>*</span><span class='nam'>args</span><span class='op'>,</span> <span class='op'>**</span><span class='nam'>kwargs</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t12' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>super</span><span class='op'>(</span><span class='nam'>DalpayGateway</span><span class='op'>,</span> <span class='nam'>self</span><span class='op'>)</span><span class='op'>.</span><span class='nam'>__init__</span><span class='op'>(</span><span class='op'>*</span><span class='nam'>args</span><span class='op'>,</span> <span class='op'>**</span><span class='nam'>kwargs</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t13' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>self</span><span class='op'>.</span><span class='nam'>contract_id</span> <span class='op'>=</span> <span class='nam'>settings</span><span class='op'>.</span><span class='nam'>DALPAY_MERCHANT_ID</span><span class='strut'>&nbsp;</span></p>
 <p id='t14' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t15' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>verify</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t15' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>verify</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t16' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>True</span><span class='strut'>&nbsp;</span></p>
 <p id='t17' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t18' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>create_payment_notification</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t18' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>create_payment_notification</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t19' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='com'># transactionType String:</span><span class='strut'>&nbsp;</span></p>
 <p id='t20' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='com'>#&nbsp;&nbsp; AUTH_ONLY - orders that were authorized for a future charge</span><span class='strut'>&nbsp;</span></p>
 <p id='t21' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='com'>#&nbsp;&nbsp; CHARGE - orders that were successfully charged</span><span class='strut'>&nbsp;</span></p>
@@ -172,8 +174,8 @@
 <p id='t51' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>pn</span><span class='op'>.</span><span class='nam'>save</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t52' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>pn</span><span class='strut'>&nbsp;</span></p>
 <p id='t53' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t54' class='stm mis'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>get_url</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t55' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>merchant</span><span class='op'>[</span><span class='str'>&#39;call_url&#39;</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
+<p id='t54' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>get_url</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t55' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>merchant</span><span class='op'>[</span><span class='str'>&#39;call_url&#39;</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
@@ -183,7 +185,7 @@
 <div id='footer'>
     <div class='content'>
         <p>
-            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage/3.6b1'>coverage.py v3.6b1</a>
+            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.6</a>
         </p>
     </div>
 </div>

@@ -9,7 +9,7 @@ ajaxuploader==0.2.3
 argparse==1.2.1
 boto==2.6.0
 cov-core==1.7
-coverage==3.6b2
+coverage==3.6
 dj-database-url==0.2.1
 django-announcements==0.1.2
 django-annoying==0.7.6
