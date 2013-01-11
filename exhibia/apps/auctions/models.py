@@ -318,7 +318,7 @@ class Auction(models.Model):
             self.status = 'p'
         AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
         self.last_bidder = username
-        self.last_bidder_member = bidder
+        self.last_bidder_member = bidder.user
         self.last_bid_type = bid_type
         self.last_unixtime = time()
         self.current_offer = price
