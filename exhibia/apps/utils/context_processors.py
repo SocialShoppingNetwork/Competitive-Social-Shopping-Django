@@ -6,5 +6,5 @@ def member(request):
     return {'member': member}
 
 def settings(request):
-    import settings
-    return {'SOCKETIO_SERVER':settings.SOCKETIO_SERVER}
+    from django.conf import settings
+    return {'SOCKETIO_SERVER':settings.SOCKETIO_SERVER, 'settings':settings}

@@ -3,7 +3,6 @@
 from functools import partial
 
 from django.conf.urls.defaults import *
-from django.contrib.auth.decorators import login_required
 
 from social_auth.views import auth, complete, disconnect
 
@@ -35,17 +34,15 @@ urlpatterns = patterns("profiles.views",
 
 
 urlpatterns += patterns('',
-    url(r'^associate/(?P<backend>[^/]+)/$',
-        login_required(auth),
+    # authentication
+    url(r'^login/(?P<backend>[^/]+)/$', auth,
         name='socialauth_begin'),
-    url(r'^associate/complete/(?P<backend>[^/]+)/$',
-        login_required(complete),
+    url(r'^complete/(?P<backend>[^/]+)/$', 'socials.views.registration_complete',
         name='socialauth_complete'),
 
-    url(r'^disconnect/(?P<backend>[^/]+)/$',
-        disconnect,
+    # disconnection
+    url(r'^disconnect/(?P<backend>[^/]+)/$', disconnect,
         name='socialauth_disconnect'),
     url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$',
-        disconnect,
-        name='socialauth_disconnect_individual'),
+        disconnect, name='socialauth_disconnect_individual'),
 )

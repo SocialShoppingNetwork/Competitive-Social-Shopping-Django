@@ -45,7 +45,7 @@ $(document).ready(function() {
             html = $(html);
         html.insertAfter(block);
         block.slideUp('slow', function(){$(this).remove();});
-        insert_notification(li.find('.fund-title a').text() + ' has been opened for bidding');
+        insert_notification(block.find('.fund-title a').text() + ' has been opened for bidding');
     });
     auction_socket.on('auction_bid', function(auction_pk, time_left, username, avatar){
         // user made a bid on auction
@@ -53,7 +53,7 @@ $(document).ready(function() {
         block.find('img.social').attr('src', avatar).attr('title', username).show();
         block.find('span').text(username);
         block.reset_timer();
-        insert_notification(username +' made a bid on' + block.find('.fund-title a').text());
+        insert_notification(username +' made a bid on ' + block.find('.fund-title a').text());
     });
 
     var update_timers = function(){

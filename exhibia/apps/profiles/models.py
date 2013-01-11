@@ -10,12 +10,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 
 from django_countries import CountryField
 import dbsettings
-from social_auth.signals import pre_update
+from social_auth.signals import socialauth_registered
 from social_auth.backends import twitter, facebook, google
-
+from referrals.models import ReferralLink
 
 class RewardPoints(dbsettings.Group):
     bid = dbsettings.PositiveIntegerValue(default=1, help_text='points for bid on auction')
@@ -61,7 +62,7 @@ class Member(models.Model):
     def bid(self, auction):
         auction.bid_by(self)
         self.credits -= 1
-        self.points_amount += self.rewards.bid
+        self.points_amount += Member.rewards.bid
         self.save()
 
     def incr_credits(self, bids, type='P'):
@@ -74,7 +75,7 @@ class Member(models.Model):
 
     def pledge(self, auction, amount):
         auction.pledge(self, amount)
-        self.points_amount += self.rewards.fund
+        self.points_amount += Member.rewards.fund
         self.save()
 
     @property
@@ -97,6 +98,13 @@ class Member(models.Model):
             url = ''
         cache.set('avatar|%d' % self.pk, url , 60*60*24)
         return url
+
+
+    def invitation_succeed(self):
+        print 'adding points to ', self.user
+        self.points_amount += Member.rewards.invite
+        self.save()
+
     """
     def auctionorders_unpaid(self):
         return AuctionOrder.objects.filter(auction__status="m", winner=self)
@@ -174,6 +182,7 @@ class BannedIPAddress(models.Model):
 def create_user_profile(sender, instance, created, raw,**kwargs):
     if created and not raw:
         Member.objects.create(user=instance)
+        ReferralLink.objects.create(user=instance)
 
 @receiver(user_logged_in)
 def save_ip(sender, request, user, *args, **kwargs):
@@ -188,9 +197,10 @@ def user_registered(sender, user, response, details, **kwargs):
     if not profile.verified:
         profile.verified = True
         # this is a place to get an avatar for profile
-        profile.save()
 
+    profile.points_amount += Member.rewards.associate
+    profile.save()
 
-pre_update.connect(user_registered, sender=twitter.TwitterBackend)
-pre_update.connect(user_registered, sender=facebook.FacebookBackend)
-pre_update.connect(user_registered, sender=google.GoogleBackend)
+socialauth_registered.connect(user_registered, sender=twitter.TwitterBackend)
+socialauth_registered.connect(user_registered, sender=facebook.FacebookBackend)
+socialauth_registered.connect(user_registered, sender=google.GoogleBackend)

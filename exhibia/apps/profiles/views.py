@@ -135,13 +135,15 @@ def account(request):
 
     auctions_shipped = request.user.items_won.filter(order__status=ORDER_SHIPPED)
     available = set(get_backends().keys())
-    not_associated = available.difference(i.provider for i in
-                         request.user.social_auth.all())
+    associated = list(request.user.social_auth.all())
+    not_associated = available.difference(i.provider for i in associated)
+    print request.session.keys()
     return {'member':member,
             'auctions_waiting_payment': auctions_waiting_payment,
             'auctions_processing':auctions_processing,
             'auctions_shipped': auctions_shipped,
             'not_associated':not_associated,
+            'associated':[i.provider for i in associated],
             'available_auth_backends':available,
     }
 

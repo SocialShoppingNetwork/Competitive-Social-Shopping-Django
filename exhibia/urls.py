@@ -76,7 +76,7 @@ urlpatterns += patterns("",
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'},
                         name='logout'),
-    url(r'', include('social_auth.urls')),
+    # url(r'', include('social_auth.urls')),
     url(r'^ref/(?P<ref_id>\d+?)/$', 'referrals.views.refferal', name='refferal_url'),
     url("^socket\.io", 'streamer.views.socketio', name='socketio'),
 
