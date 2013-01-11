@@ -28,10 +28,17 @@ class RewardPoints(dbsettings.Group):
     review = dbsettings.PositiveIntegerValue(default=1, help_text='points for review item')
     invite = dbsettings.PositiveIntegerValue(default=1, help_text='points for invitings user')
 
+class RewardBids(dbsettings.Group):
+    bid_for_tweet = dbsettings.PositiveIntegerValue(default=1, help_text='bids for tweet')
+    bid_for_like = dbsettings.PositiveIntegerValue(default=1, help_text='bids for like in facebook')
+    bid_for_plus = dbsettings.PositiveIntegerValue(default=1, help_text='bids for + in g+')
+    bid_for_associate = dbsettings.PositiveIntegerValue(default=1, help_text='bids for association with some social network')
+    bid_for_review = dbsettings.PositiveIntegerValue(default=1, help_text='bids for review item')
+    bid_for_invite = dbsettings.PositiveIntegerValue(default=1, help_text='bids for invitings user')
 
 class Member(models.Model):
 
-    rewards = RewardPoints(verbose_name='Reward points')
+    rewards = RewardPoints(verbose_name='Reward points') + RewardBids(verbose_name=u'Reward bids')
 
     user = models.OneToOneField(User, verbose_name=_("user"), related_name='profile')
     about = models.TextField(_("about"), null=True, blank=True)
@@ -101,8 +108,8 @@ class Member(models.Model):
 
 
     def invitation_succeed(self):
-        print 'adding points to ', self.user
         self.points_amount += Member.rewards.invite
+        self.credits += Member.rewards.bid_for_invite
         self.save()
 
     """
