@@ -9,17 +9,17 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'LikeItem'
-        db.create_table('socials_likeitem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
-            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
-            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
+        # db.create_table('socials_likeitem', (
+        #     ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        #     ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
+        #     ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
+        #     ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
+        #     ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        # ))
         db.send_create_signal('socials', ['LikeItem'])
 
         # Adding unique constraint on 'LikeItem', fields ['item', 'member', 'type']
-        db.create_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
+        # db.create_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
 
 
     def backwards(self, orm):
