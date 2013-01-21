@@ -5,6 +5,7 @@
 		<button class="btn btn-mini active" id="sort_by_name">All</button>
 	  	<button class="btn btn-mini" id="sort_by_fund">Fund</button>
 	  	<button class="btn btn-mini" id="sort_by_bid">Bid</button>
+        <div class="fb-like" data-href="http://{{SITE_DOMAIN}}:8000" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 	</div>
     <div class="scroller">
         <div class="scrollingtext">Something something scrolling to the left</div>
@@ -33,6 +34,11 @@
 
 {% endblock %}
 {% block extra_js %}
+    <script type="text/javascript">
+        window.user_is_logged = '{{request.user.is_authenticated}}';
+        window.facebook_appId = '{{settings.FACEBOOK_APP_ID}}';
+    </script>
+    {{block.super}}
     {% compress js %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/socket.io.js"></script>
         <script type="text/javascript">$.exhibia = {};</script>
