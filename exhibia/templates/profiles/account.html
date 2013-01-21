@@ -92,15 +92,12 @@
 	</div>
 {% endblock %}
 {% block extra_js %}
-{{block.super}}
-<script src="http://connect.facebook.net/en_US/all.js"></script>
 <script type="text/javascript">
-FB.init({
-    appId:'{{settings.FACEBOOK_APP_ID}}',
-    cookie:true,
-    status:true,
-});
-
+    window.user_is_logged = '{{request.user.is_authenticated}}';
+    window.facebook_appId = '{{settings.FACEBOOK_APP_ID}}';
+</script>
+{{block.super}}
+<script type="text/javascript">
 $(document).ready(function(){
     $('a.facebook_invite').on('click', function(){
         FB.ui({
