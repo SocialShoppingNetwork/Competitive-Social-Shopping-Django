@@ -7,16 +7,15 @@ from profiles.models import BillingAddress
 from shipping.models import ShippingAddress
 from payments.models import Card
 
-def test_login(client, django_settings):
+def test_login(client, settings):
     login_page = client.get(reverse('acct_login'))
     assert login_page.status_code == 200
 
     login = client.post(reverse('acct_login'), {'username':'test',
-                        'password':django_settings.TEST_USER_PASSWORD})
+                        'password':settings.TEST_USER_PASSWORD})
     assert login.status_code == 302
     assert not login.context
     assert 'sessionid' in login.cookies.keys()
-
 
 def test_account_main_view(logged_client):
     res = logged_client.get(reverse('profile_account'))
