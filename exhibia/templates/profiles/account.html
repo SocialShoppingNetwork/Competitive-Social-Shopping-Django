@@ -18,6 +18,7 @@
     				{% endif %}</h3></li>
 				<li>{{ request.user.username }}</li>
 				<li>{% trans "Bids left" %}: {{ member.credits }}</li>
+                <li>{% trans "You have" %}: {{member.points_amount}} {% trans "points" %}</li>
 			</ul>
 		</div>
 		<div class="span4">

@@ -1,11 +1,17 @@
 {% extends 'site_base.html' %}
 {% load compress %}
+{% block extra_header_bar %}
+    <ul class="nav">
+            <li>
+              <div class="fb-like" data-href="http://{{SITE_DOMAIN}}" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false"></div>
+            </li>
+          </ul>
+{% endblock extra_header_bar %}
 {% block body %}
 	<div class="btn-group sorting" data-toggle="buttons-radio">
 		<button class="btn btn-mini active" id="sort_by_name">All</button>
 	  	<button class="btn btn-mini" id="sort_by_fund">Fund</button>
 	  	<button class="btn btn-mini" id="sort_by_bid">Bid</button>
-        <div class="fb-like" data-href="http://{{SITE_DOMAIN}}:8000" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 	</div>
     <div class="scroller">
         <div class="scrollingtext">Something something scrolling to the left</div>

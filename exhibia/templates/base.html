@@ -3,10 +3,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{{SITE_NAME}}</title>
+    <title>{% block title %}{{SITE_NAME}}{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="{% block meta_description %}{% endblock meta_description %}">
+    {# <meta name="author" content=""> #}
 
     <!-- Le styles -->
     {% compress css %}
@@ -35,7 +35,59 @@
 <body>
 {% block right_after_body %}{% endblock %}
 <div id="fb-root"></div>
-{% include 'header.html' %}
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+          <a class="brand" href="{% url home %}">Exhibia</a>
+          <ul class="nav">
+            <li class="active"><a href="#">How it Works</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Brands <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          {% block extra_header_bar %}{% endblock extra_header_bar %}
+          <ul class="nav pull-right">
+          {% if request.user.is_authenticated %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i>{{ request.user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/account">My Account</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url logout %}">Log Out</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li><a href="{% url acct_login %}">Sign In</a></li>
+          {% endif %}
+            <li class="divider-vertical"></li>
+            <form class="navbar-search pull-left" action="">
+                <input type="text" class="search-query span2" placeholder="Search">
+            </form>
+          </ul>
+    </div>
+  </div>
+</div>
 {% include 'fb/modal.html' %}
 {% credits_checkout %}
 
