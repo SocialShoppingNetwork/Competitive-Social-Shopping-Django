@@ -9,7 +9,13 @@ if (window.facebook_appId) {
         });
         FB.Event.subscribe('edge.create', function(response) {
             if (window.user_is_logged=='True'){
-                console.log('hoorai')
+                $.ajax({
+                    url:'/socials/user_like/',
+                    data: {
+                        href:window.location.href,
+                        type:'facebook'
+                    }
+                });
             }
         });
     };

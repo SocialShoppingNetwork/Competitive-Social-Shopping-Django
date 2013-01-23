@@ -25,7 +25,6 @@ from social_auth.views import complete
 from auctions.models import Auction, AuctionItem
 from socials.models import LikeItem, Invitation
 
-
 @csrf_exempt
 @login_required
 def reward_like_item(request):
@@ -101,3 +100,18 @@ def add_invitation(request):
             return HttpResponse('ok')
         return HttpResponse('no ids')
     return redirect(reverse('home'))
+
+
+
+def user_like(request):
+    if not request.user.is_authenticated():
+        return HttpResponse('')
+    like_source = request.GET.get('type', None)
+    known_providers = request.user.social_auth.all().values_list('provider', flat=True)
+    if not like_source or like_source not in known_providers:
+        return HttpResponse('')
+    request.user.get_profile().like(request.GET['href'], like_source)
+    return HttpResponse('ok')
+
+
+

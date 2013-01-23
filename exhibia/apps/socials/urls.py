@@ -5,5 +5,6 @@ admin.autodiscover()
 
 urlpatterns = patterns("socials.views",
     url(r"^reward/like/item/$", "reward_like_item", name="reward_like_item"),
-    url(r"^add_invitation/$",'add_invitation', name='add_invitation')
+    url(r"^add_invitation/$",'add_invitation', name='add_invitation'),
+    url(r"^user_like", 'user_like', name='user_like'),
 )

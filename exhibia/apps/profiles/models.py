@@ -2,6 +2,7 @@
 
 import hashlib
 from datetime import datetime
+from urlparse import urlparse
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -63,6 +64,11 @@ class Member(models.Model):
     points_amount = models.PositiveIntegerField(default=0)
     verified = models.BooleanField(default=False)
 
+    LIKE_SOURCES = {
+        'facebook':'like',
+        'google-oauth2':'plus'
+    }
+
     def __unicode__(self):
         return unicode(self.user)
 
@@ -110,6 +116,18 @@ class Member(models.Model):
     def invitation_succeed(self):
         self.points_amount += Member.rewards.invite
         self.credits += Member.rewards.bid_for_invite
+        self.save()
+
+    def like(self, href, type):
+        location = urlparse(href)
+        multiply = 1
+        if location.path == '/':
+            # this is an index page
+            multiply = 2
+        self.points_amount += getattr(Member.rewards,
+                                self.LIKE_SOURCES[type]) * multiply
+        self.credits += getattr(Member.rewards,
+                                'bid_for_'+self.LIKE_SOURCES[type]) * multiply
         self.save()
 
     """

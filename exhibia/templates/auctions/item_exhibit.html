@@ -40,11 +40,16 @@
 
         {% endwith %}
         {% endif %}
+        <div class="row">
+            <div class="span2 offset2">
+            <div class="fb-like" data-href="http://{{SITE_DOMAIN}}{{request.path}}" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false"></div>
+            </div>
+        </div>
         <div class="tabbable" style="margin-top: 50px;"> <!-- Only required for left/right tabs -->
             <div class="itemsocial">
                 <div class="itemfb">
                     <div class="socialtip"></div>
-                    <div class="fb-like" data-href="http://www.aphexthemes.com/demo/html/exhibiastraped/fb/item_exhibit.html" data-send="false" data-layout="box_count" data-width="100" data-show-faces="false"></div> </div>
+                </div>
             </div>
             <ul class="nav nav-tabs" id="nav2" style="padding-left: 20px">
                 <li class="active"><a href="#tab1" data-toggle="tab">Item Description</a></li>
@@ -96,6 +101,13 @@
 
 
 {% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+        window.user_is_logged = '{{request.user.is_authenticated}}';
+        window.facebook_appId = '{{settings.FACEBOOK_APP_ID}}';
+    </script>
+    {{block.super}}
+{% endblock extra_js %}
 {% block extra_body %}
     <script>
         function update_item(){
