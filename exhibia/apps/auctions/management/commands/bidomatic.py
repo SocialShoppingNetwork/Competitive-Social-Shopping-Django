@@ -1,15 +1,25 @@
-from django.core.management.base import BaseCommand
-from django.core.cache import cache
+# -*- coding: utf-8 -*-
+
+# from random import randint
 from time import sleep, time
+import threading
+import json
+# import cjson
+
+from django.conf import settings
+from django.db.models import F
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
+# from django.core.cache import cache
+
+from tweepy.streaming import StreamListener
+from tweepy import OAuthHandler
+from tweepy import Stream
+
 from auctions.models import Auction, AuctionItem
 from auctions.constants import *
-from django.db.models import F
+from profiles.models import Member
 
-from random import randint
-from django.conf import settings
-import threading
-import cjson
-from pprint import pprint
 
 def to_json(auction):
     result = {"id": auction.id,
@@ -50,10 +60,14 @@ def auctions_to_json(auctions):
 #             cache.get('auctions_json')
 #             sleep(0.5)
 
-class KickOff(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
+
+class KillReceived(threading.Thread):
+    def __init__(self, *args, **kwargs):
+        super(KillReceived, self).__init__(*args, **kwargs)
         self.kill_received = False
+
+class KickOff(KillReceived):
+
     def run(self):
         while not self.kill_received:
             if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
@@ -64,10 +78,7 @@ class KickOff(threading.Thread):
             Auction.objects.finish_expired()
             sleep(5)
 
-class Dispatcher(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.kill_received = False
+class Dispatcher(KillReceived):
 
     def run(self):
         while not self.kill_received:
@@ -88,10 +99,8 @@ class Dispatcher(threading.Thread):
             sleep(5)
 
 
-class Bidomatic(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.kill_received = False
+class Bidomatic(KillReceived):
+
     def run(self):
         while not self.kill_received:
             for auction in Auction.objects.showcase():
@@ -165,6 +174,27 @@ class Bidomatic(threading.Thread):
                     auction.end()
             sleep(1)
             """
+
+
+class StdOutListener(StreamListener):
+    """ A listener handles tweets are the received from the stream.
+
+    """
+    def on_data(self, data):
+        tweet = json.loads(data)
+        try:
+            profile = Member.objects.get(user__social_auth__uid=tweet['user']['id'])
+            profile.points_amount += Member.rewards.twit
+            profile.credits += member.rewards.bid_for_twit
+            profile.save()
+        except User.DoesNotExist:
+            print 'no duch user' , tweet['user']['id']
+        return True
+
+    def on_error(self, status):
+        print 'got error', status
+
+
 threads = []
 class Command(BaseCommand):
     def handle(self, **options):
@@ -176,10 +206,19 @@ class Command(BaseCommand):
             # c = UpdateCache()
             # c.start()
             #threads.extend([k, c, b])
+            l = StdOutListener()
+            auth = OAuthHandler(settings.TWITTER_CONSUMER_KEY,
+                                settings.TWITTER_CONSUMER_SECRET)
+            auth.set_access_token(settings.TWITTER_ACCESS_TOKEN,
+                                  settings.TWITTER_TOKEN_SECRET)
+
+            stream = Stream(auth, l)
+            stream.filter(track=settings.TWITTER_HASH_TAGS, async=True)
             threads.extend([b, d])
             while True:
-                r = raw_input()
-        except KeyboardInterrupt:
+                raw_input()
+        except (KeyboardInterrupt, SystemExit):
             for t in threads:
                 t.kill_received = True
+            stream.disconnect()
 

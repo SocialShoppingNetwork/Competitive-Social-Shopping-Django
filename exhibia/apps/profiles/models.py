@@ -25,7 +25,7 @@ from referrals.models import ReferralLink
 class RewardPoints(dbsettings.Group):
     bid = dbsettings.PositiveIntegerValue(default=1, help_text='points for bid on auction')
     fund = dbsettings.PositiveIntegerValue(default=1, help_text='points for fund auction')
-    tweet = dbsettings.PositiveIntegerValue(default=1, help_text='points for tweet')
+    twit = dbsettings.PositiveIntegerValue(default=1, help_text='points for twit')
     like = dbsettings.PositiveIntegerValue(default=1, help_text='points for like in facebook')
     plus = dbsettings.PositiveIntegerValue(default=1, help_text='points for + in g+')
     associate = dbsettings.PositiveIntegerValue(default=1, help_text='points for association with some social network')
@@ -33,7 +33,7 @@ class RewardPoints(dbsettings.Group):
     invite = dbsettings.PositiveIntegerValue(default=1, help_text='points for invitings user')
 
 class RewardBids(dbsettings.Group):
-    bid_for_tweet = dbsettings.PositiveIntegerValue(default=1, help_text='bids for tweet')
+    bid_for_twit = dbsettings.PositiveIntegerValue(default=1, help_text='bids for twit')
     bid_for_like = dbsettings.PositiveIntegerValue(default=1, help_text='bids for like in facebook')
     bid_for_plus = dbsettings.PositiveIntegerValue(default=1, help_text='bids for + in g+')
     bid_for_associate = dbsettings.PositiveIntegerValue(default=1, help_text='bids for association with some social network')

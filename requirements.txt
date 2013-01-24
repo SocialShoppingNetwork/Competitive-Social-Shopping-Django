@@ -1,6 +1,7 @@
 BeautifulSoup==3.2.1
 Cython==0.17.1
 Django==1.3
+execnet==1.1
 Fabric==1.5.1
 Pillow==1.7.8
 Pinax==0.9a2
@@ -18,6 +19,7 @@ django-braces==0.2.1
 -e git+https://github.com/jezdez/django_compressor.git@c46e52a20c83a1aa552490266c8b2fa942828211#egg=django_compressor-dev
 django-countries==1.3
 django-crispy-forms==1.2.0
+django-dbsettings==0.5
 django-debug-toolbar==0.9.4
 django-email-confirmation==0.2
 django-facebook==4.2.2
@@ -53,6 +55,7 @@ pycrypto==2.6
 pylibmc==1.2.2
 pytest==2.3.4
 pytest-cov==1.6
+pytest-xdist==1.8
 python-cjson==1.0.5
 python-memcached==1.48
 python-openid==2.2.5
@@ -60,6 +63,4 @@ pytz==2010h
 redis==2.7.1
 simplejson==2.6.2
 wsgiref==0.1.2
-django-dbsettings==0.5
-execnet==1.1
-pytest-xdist==1.8
+tweepy==1.13
