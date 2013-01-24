@@ -8,27 +8,35 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'LikeItem'
-        # db.create_table('socials_likeitem', (
-        #     ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
-        #     ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
-        #     ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
-        #     ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        # ))
-        # db.send_create_signal('socials', ['LikeItem'])
-        pass
+        # Removing unique constraint on 'LikeItem', fields ['member', 'item', 'type']
+        db.delete_unique('socials_likeitem', ['member_id', 'item_id', 'type'])
 
-        # Adding unique constraint on 'LikeItem', fields ['item', 'member', 'type']
-        # db.create_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
+        # Deleting field 'LikeItem.member'
+        db.delete_column('socials_likeitem', 'member_id')
 
+        # Adding field 'LikeItem.user'
+        db.add_column('socials_likeitem', 'user',
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['auth.User']),
+                      keep_default=False)
+
+
+        # Changing field 'LikeItem.item'
+        db.alter_column('socials_likeitem', 'item_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'], null=True))
 
     def backwards(self, orm):
-        # Removing unique constraint on 'LikeItem', fields ['item', 'member', 'type']
-        db.delete_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
+        # Adding field 'LikeItem.member'
+        db.add_column('socials_likeitem', 'member',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'], null=True, blank=True),
+                      keep_default=False)
 
-        # Deleting model 'LikeItem'
-        db.delete_table('socials_likeitem')
+        # Deleting field 'LikeItem.user'
+        db.delete_column('socials_likeitem', 'user_id')
+
+
+        # User chose to not deal with backwards NULL issues for 'LikeItem.item'
+        raise RuntimeError("Cannot reverse this migration. 'LikeItem.item' and its values cannot be restored.")
+        # Adding unique constraint on 'LikeItem', fields ['member', 'item', 'type']
+        db.create_unique('socials_likeitem', ['member_id', 'item_id', 'type'])
 
 
     models = {
@@ -40,7 +48,7 @@ class Migration(SchemaMigration):
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auctions.Category']", 'null': 'True', 'blank': 'True'}),
             'code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'primary_key': 'True', 'db_index': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('tinymce.models.HTMLField', [], {'null': 'True', 'blank': "''"}),
+            'description': ('tinymce.models.HTMLField', [], {'default': "''", 'blank': 'True'}),
             'image': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auctions.AuctionItemImages']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'last_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
@@ -106,43 +114,20 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'profiles.member': {
-            'Meta': {'object_name': 'Member'},
-            'about': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'address1': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'address2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'credits': ('django.db.models.fields.PositiveIntegerField', [], {'default': '3'}),
+        'socials.invitation': {
+            'Meta': {'object_name': 'Invitation'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'external_id': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_banned': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'location': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'points_amount': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'referer': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'referral_url': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'invited_users'", 'null': 'True', 'to': "orm['referrals.ReferralLink']"}),
-            'state': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'profile'", 'unique': 'True', 'to': "orm['auth.User']"}),
-            'verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'})
-        },
-        'referrals.referrallink': {
-            'Meta': {'object_name': 'ReferralLink'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_blocked': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'redirect_to': ('django.db.models.fields.CharField', [], {'default': "'/'", 'max_length': '500'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'refferal_urls'", 'to': "orm['auth.User']"}),
-            'visit_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'invitations'", 'to': "orm['auth.User']"})
         },
         'socials.likeitem': {
-            'Meta': {'unique_together': "(('item', 'member', 'type'),)", 'object_name': 'LikeItem'},
+            'Meta': {'object_name': 'LikeItem'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auctions.AuctionItem']"}),
-            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['profiles.Member']"}),
-            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'})
+            'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auctions.AuctionItem']", 'null': 'True', 'blank': 'True'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 

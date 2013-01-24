@@ -5,11 +5,13 @@ import datetime
 import json
 import cjson
 import settings
+from urlparse import urlparse
+
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response, redirect
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect
 from django.core.cache import cache
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -102,15 +104,34 @@ def add_invitation(request):
     return redirect(reverse('home'))
 
 
-
 def user_like(request):
     if not request.user.is_authenticated():
         return HttpResponse('')
-    like_source = request.GET.get('type', None)
+    like_source = request.GET.get('source', None)
+    like_type = request.GET.get('type', None)
     known_providers = request.user.social_auth.all().values_list('provider', flat=True)
     if not like_source or like_source not in known_providers:
         return HttpResponse('')
-    request.user.get_profile().like(request.GET['href'], like_source)
+
+    location = urlparse(request.GET['href'])
+    multiply = 1
+    if location.path == '/':
+        # this is an index page
+        multiply = 2
+    auction = None
+    if request.GET.get('item', None):
+        try:
+            auction = AuctionItem.objects.get(code=request.GET['item'])
+        except AuctionItem.DoesNotExist:
+            auction = None
+    liked, created = LikeItem.objects.get_or_create(user=request.user, item=auction, type=like_type)
+    if created:
+        profile = request.user.get_profile()
+        profile.points_amount += getattr(profile.__class__.rewards,
+                                profile.LIKE_SOURCES[like_type]) * multiply
+        profile.credits += getattr(profile.__class__.rewards,
+                                'bid_for_'+profile.LIKE_SOURCES[like_type]) * multiply
+        profile.save()
     return HttpResponse('ok')
 
 

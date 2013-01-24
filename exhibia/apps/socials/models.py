@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import datetime
-
 from django.db import models
 
 class LikeItem(models.Model):
+
     LIKE_TYPES = (
         ("F", "Facebook"),
         ("G", "Google Plus"),
-        ("Y", "Youtube")
+        ("Y", "Youtube"),
     )
-    item = models.ForeignKey('auctions.AuctionItem')
-    member = models.ForeignKey('profiles.Member')
+
+    item = models.ForeignKey('auctions.AuctionItem', blank=True, null=True)
+    user = models.ForeignKey('auth.user')
     type = models.CharField(choices=LIKE_TYPES, max_length=1)
     created = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        unique_together = ("item", "member", "type")
 
 
 class Invitation(models.Model):

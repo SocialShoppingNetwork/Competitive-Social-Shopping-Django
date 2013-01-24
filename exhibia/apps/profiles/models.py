@@ -15,8 +15,11 @@ from django.core.urlresolvers import reverse
 
 from django_countries import CountryField
 import dbsettings
+
+from auctions.models import AuctionItem
 from social_auth.signals import socialauth_registered
 from social_auth.backends import twitter, facebook, google
+from socials.models import LikeItem
 from referrals.models import ReferralLink
 
 class RewardPoints(dbsettings.Group):
@@ -65,8 +68,8 @@ class Member(models.Model):
     verified = models.BooleanField(default=False)
 
     LIKE_SOURCES = {
-        'facebook':'like',
-        'google-oauth2':'plus'
+        'F':'like',
+        'G':'plus'
     }
 
     def __unicode__(self):
@@ -118,17 +121,7 @@ class Member(models.Model):
         self.credits += Member.rewards.bid_for_invite
         self.save()
 
-    def like(self, href, type):
-        location = urlparse(href)
-        multiply = 1
-        if location.path == '/':
-            # this is an index page
-            multiply = 2
-        self.points_amount += getattr(Member.rewards,
-                                self.LIKE_SOURCES[type]) * multiply
-        self.credits += getattr(Member.rewards,
-                                'bid_for_'+self.LIKE_SOURCES[type]) * multiply
-        self.save()
+
 
     """
     def auctionorders_unpaid(self):

@@ -6,30 +6,28 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
-
+    depends_on = (
+        ("profiles", "0001_initial"),
+    )
     def forwards(self, orm):
-        # Adding model 'LikeItem'
-        # db.create_table('socials_likeitem', (
-        #     ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
-        #     ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
-        #     ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
-        #     ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        # ))
-        # db.send_create_signal('socials', ['LikeItem'])
-        pass
+        db.create_table('socials_likeitem', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
+            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('socials', ['LikeItem'])
 
         # Adding unique constraint on 'LikeItem', fields ['item', 'member', 'type']
-        # db.create_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
-
+        db.create_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
+        # Changing field 'LikeItem.member'
+        # db.alter_column('socials_likeitem', 'member_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'], null=True))
 
     def backwards(self, orm):
-        # Removing unique constraint on 'LikeItem', fields ['item', 'member', 'type']
-        db.delete_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
 
-        # Deleting model 'LikeItem'
-        db.delete_table('socials_likeitem')
-
+        # User chose to not deal with backwards NULL issues for 'LikeItem.member'
+        raise RuntimeError("Cannot reverse this migration. 'LikeItem.member' and its values cannot be restored.")
 
     models = {
         'auctions.auctionitem': {
@@ -136,12 +134,19 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'refferal_urls'", 'to': "orm['auth.User']"}),
             'visit_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         },
+        'socials.invitation': {
+            'Meta': {'object_name': 'Invitation'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'external_id': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'invitations'", 'to': "orm['auth.User']"})
+        },
         'socials.likeitem': {
             'Meta': {'unique_together': "(('item', 'member', 'type'),)", 'object_name': 'LikeItem'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auctions.AuctionItem']"}),
-            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['profiles.Member']"}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['profiles.Member']", 'null': 'True', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'})
         }
     }

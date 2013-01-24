@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
+{% block title %}{{item.name}} - {{block.super}}{% endblock title %}
+{% block meta_description %}{{item.description}}{% endblock meta_description %}
 {% block extra_head %}
     <!-- Update your html tag to include the itemscope and itemtype attributes -->
     <html itemscope itemtype="http://schema.org/Product">
     <!-- Add the following three tags inside head -->
     <meta itemprop="name" content="{{ item.name }}">
-    <meta itemprop="description" content="This would be a description of the content your users are sharing">
+    <meta itemprop="description" content="{{item.description}}">
     <meta itemprop="image" content="{{ item.get_full_image_url }}">
     <!-- END Google Plus one -->
 
@@ -41,8 +43,11 @@
         {% endwith %}
         {% endif %}
         <div class="row">
-            <div class="span2 offset2">
-            <div class="fb-like" data-href="http://{{SITE_DOMAIN}}{{request.path}}" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false"></div>
+            <div class="span1">
+                <div class="fb-like" data-href="http://{{SITE_DOMAIN}}{{request.path}}" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false"></div>
+            </div>
+            <div class="span1 offset1">
+                <div class="g-plusone" data-size="medium" href="http://{{SITE_DOMAIN}}{{request.path}}"></div>
             </div>
         </div>
         <div class="tabbable" style="margin-top: 50px;"> <!-- Only required for left/right tabs -->

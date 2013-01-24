@@ -13,7 +13,9 @@ if (window.facebook_appId) {
                     url:'/socials/user_like/',
                     data: {
                         href:window.location.href,
-                        type:'facebook'
+                        type:'F',
+                        source:'facebook',
+                        item:$('meta[name="id"]').attr('content')
                     }
                 });
             }
