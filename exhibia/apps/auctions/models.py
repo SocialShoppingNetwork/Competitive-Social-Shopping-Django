@@ -160,7 +160,7 @@ class AuctionItem(models.Model):
 
     bidding_time = models.SmallIntegerField(default=120)
     shipping_fee = models.DecimalField(max_digits=7, decimal_places=2)
-    description = tinymce_models.HTMLField(blank='', null=True)
+    description = tinymce_models.HTMLField(default='', blank=True)
 
     notes = models.TextField(default='', blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True)
