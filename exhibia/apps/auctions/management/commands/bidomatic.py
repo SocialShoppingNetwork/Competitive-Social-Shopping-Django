@@ -183,7 +183,8 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
         try:
-            profile = Member.objects.get(user__social_auth__uid=tweet['user']['id'])
+            profile = Member.objects.get(user__social_auth__provider='twitter',
+                                     user__social_auth__uid=tweet['user']['id'])
             profile.points_amount += Member.rewards.twit
             profile.credits += member.rewards.bid_for_twit
             profile.save()

@@ -6,23 +6,12 @@ from django.db import models
 
 
 class Migration(SchemaMigration):
-    depends_on = (
-        ("profiles", "0001_initial"),
-    )
     def forwards(self, orm):
-        db.create_table('socials_likeitem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
-            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
-            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('socials', ['LikeItem'])
 
         # Adding unique constraint on 'LikeItem', fields ['item', 'member', 'type']
         db.create_unique('socials_likeitem', ['item_id', 'member_id', 'type'])
         # Changing field 'LikeItem.member'
-        # db.alter_column('socials_likeitem', 'member_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'], null=True))
+        db.alter_column('socials_likeitem', 'member_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'], null=True))
 
     def backwards(self, orm):
 
