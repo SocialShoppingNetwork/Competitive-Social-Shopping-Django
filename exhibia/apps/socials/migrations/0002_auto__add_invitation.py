@@ -19,6 +19,14 @@ class Migration(SchemaMigration):
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal('socials', ['Invitation'])
+        db.create_table('socials_likeitem', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.AuctionItem'])),
+            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['profiles.Member'])),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('socials', ['LikeItem'])
 
 
     def backwards(self, orm):

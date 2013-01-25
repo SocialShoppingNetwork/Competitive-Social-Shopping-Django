@@ -34,6 +34,7 @@ urlpatterns = patterns("profiles.views",
 
 
 urlpatterns += patterns('',
+    url(r'^points_store/', include('points_store.urls')),
     # authentication
     url(r'^login/(?P<backend>[^/]+)/$', auth,
         name='socialauth_begin'),

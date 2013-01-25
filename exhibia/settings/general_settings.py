@@ -208,6 +208,7 @@ INSTALLED_APPS = [
     "socials",
     'referrals',
     'streamer',
+    'points_store'
 
 ]
 
