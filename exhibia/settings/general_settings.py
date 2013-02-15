@@ -119,6 +119,7 @@ MIDDLEWARE_CLASSES = [
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "utils.middleware.MemberMiddleware",
+    "utils.middleware.BasicAuthenticationMiddleware",
     "referrals.middlewares.RefererMiddleware",
     # 'tracking.middleware.VisitorCleanUpMiddleware',
 ]
@@ -281,3 +282,7 @@ REDIS = {
 # geoip
 GEOIP_PATH = path.join(path.dirname(PROJECT_ROOT), 'geoip')
 TRACKING_USE_GEOIP = True
+
+BASIC_WWW_AUTHENTICATION_USERNAME = "U&7cO4^2"
+BASIC_WWW_AUTHENTICATION_PASSWORD = "m9)E6*uU"
+BASIC_WWW_AUTHENTICATION = True
