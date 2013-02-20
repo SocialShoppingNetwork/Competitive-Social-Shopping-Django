@@ -37,9 +37,10 @@ pip install -U pip
 sudo pip install -r requirements.txt
 ```
 
-# Running
+# Running server
 
-running web server 
+## running web server
+
 ```
 # Only on Ubunu
 workon exhibiaenv
@@ -47,8 +48,18 @@ cd exhibia/exhibia
 python manage.py runserver
 ```
 
-running daemon to update timers
+## running daemon to update timers
 
-1. workon exhibiaenv
-1. cd Exhibiasrc/exhibia
-1. python manage.py bidomatic
+```
+# Only on Ubunu
+workon exhibiaenv
+cd exhibia/exhibia
+python manage.py bidomatic
+```
+
+# Open in browser
+
+http://localhost:8000/
+```
+username: U&7cO4^2
+password: m9)E6*uU
