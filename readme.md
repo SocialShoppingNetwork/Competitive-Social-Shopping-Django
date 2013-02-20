@@ -1,52 +1,54 @@
+This file shows how to get this app running on local
 
-[TESTED in Ubuntu 12.04 64 bits]
+# Prepare
+
+## Ubuntu
+
+[TESTED on Ubuntu 12.04 64 bits]
 
 1. sudo apt-get update
-2. sudo apt-get install virtualenvwrapper git ipython sqlite3 python-dev libmemcached-dev nodejs npm memcached build-essential
-
-3. source ~/.bashrc
-
-4. mkvirtualenv exhibiaenv
-
-
-5. git clone https://github.com/exhibia/exhibia.git Exhibiasrc
-
-6. cd Exhibiasrc
+1. sudo apt-get install virtualenvwrapper git ipython sqlite3 python-dev libmemcached-dev nodejs npm memcached build-essential
+1. source ~/.bashrc
+1. mkvirtualenv exhibiaenv
+1. git clone https://github.com/exhibia/exhibia.git Exhibiasrc
+1. cd Exhibiasrc
    pip install -U pip
-   pip install -r requirements_local.txt
-
+   pip install -r requirements.txt
 6. copy Exhibiasrc/exhibia/nodeapp/app.js outside of exhibia or Exhibiasrc folders wherever you want
-
 7. In the directory where you have app.js runs it
   npm install socket.io memcached
-
 8. add 127.0.0.1 testing.exhibia.com        to your /etc/hosts file
 
+## OS X
+[TESTED on OS X 10.8.2]
 
-##### TO RUN Exhibia ######
+```
+# Clone the source if haven't
+git clone https://github.com/exhibia/exhibia.git
+# Install
+# * libevent, used by Python's gevent
+# * libmemcached, used by Python's pylibmc
+brew install libevent libmemcached
+# Go to wokring directory
+cd exhibia/exhibia
+# Update global dependencies
+pip install -U pip
+# Install local dependencies
+sudo pip install -r requirements.txt
+```
+
+# Running
 
 running web server 
-
-1 workon exhibiaenv
-
-2 cd  Exhibiasrc/exhibia
-
-3 python manage.py runserver
-
+```
+# Only on Ubunu
+workon exhibiaenv
+cd exhibia/exhibia
+python manage.py runserver
+```
 
 running daemon to update timers
 
 1. workon exhibiaenv
-
-2. cd Exhibiasrc/exhibia
-
-3. python manage.py bidomatic
-
-
-running timers server
-
-1. go to to directory where you copy app.'s
-
-2. node app.js
-
-
+1. cd Exhibiasrc/exhibia
+1. python manage.py bidomatic
