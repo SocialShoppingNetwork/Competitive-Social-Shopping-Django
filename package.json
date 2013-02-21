@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "grunt": "0.4.0rc7",
+    "grunt-coffeelint": "git://github.com/truongsinh/grunt-coffeelint.git#dev",
     "grunt-contrib-copy": "0.4.0rc7",
     "grunt-contrib-concat": "0.1.2rc6",
     "grunt-contrib-coffee": "0.4.0rc7",

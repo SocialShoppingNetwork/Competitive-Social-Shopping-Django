@@ -1,0 +1,59 @@
+{
+  "no_tabs" : {
+    "level" : "error"
+  },
+  "no_trailing_whitespace" : {
+    "level" : "error"
+  },
+  "max_line_length" : {
+    "value": 80,
+    "level" : "error"
+  },
+  "camel_case_classes" : {
+    "level" : "error"
+  },
+  "indentation" : {
+    "value" : 2,
+    "level" : "error"
+  },
+  "no_implicit_braces" : {
+    "level" : "ignore"
+  },
+  "no_trailing_semicolons" : {
+    "level" : "error"
+  },
+  "no_plusplus" : {
+    "level" : "ignore"
+  },
+  "no_throwing_strings" : {
+    "level" : "error"
+  },
+  "cyclomatic_complexity" : {
+    "value" : 11,
+    "level" : "ignore"
+  },
+  "no_backticks" : {
+    "level" : "error"
+  },
+  "line_endings" : {
+    "value" : "unix",
+    "level" : "error"
+  },
+  "no_implicit_parens" : {
+    "level" : "ignore"
+  },
+  "space_operators" : {
+    "value": 3,
+    "level" : "error"
+  },
+  "newlines_after_classes" : {
+    "level" : "error"
+  },
+  "no_eof_newline" : {
+    "level": "error"
+  },
+  "no_stand_alone_at" : {
+    "level": "ignore"
+  }
+
+}

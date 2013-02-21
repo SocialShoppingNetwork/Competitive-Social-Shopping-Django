@@ -8,14 +8,12 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').concat(['gruntacular']).forEach(grunt.loadNpmTasks);
 
-  // configurable paths
-  var yeomanConfig = {
-    app: 'app',
-    dist: 'dist'
-  };
-
   grunt.initConfig({
-    yeoman: yeomanConfig,
+    yeoman: {
+      app: 'app',
+      dist: 'dist'
+    },
+    server: 'server',
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/scripts/**/*.coffee'],
@@ -80,6 +78,15 @@ module.exports = function (grunt) {
       all: [
         'Gruntfile.js',
         '<%= yeoman.app %>/scripts/**/*.js'
+      ]
+    },
+    coffeelint: {
+      options: {
+        coffeehintrc: '.coffeelintrc'
+      },
+      all: [
+        '<%= yeoman.app %>/scripts/**/*.coffee',
+        '<%= server %>/**/*.coffee'
       ]
     },
     testacular: {
@@ -223,8 +230,14 @@ module.exports = function (grunt) {
     'watch'
   ]);
 
+  grunt.registerTask('lint', [
+    'jshint',
+    'coffeelint'
+  ]);
+
   grunt.registerTask('test', [
     'clean:server',
+    'lint',
     'coffee',
     'compass',
     'connect:test',
@@ -233,9 +246,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'jshint',
     'test',
-    'coffee',
     'compass:dist',
     'useminPrepare',
     'imagemin',
