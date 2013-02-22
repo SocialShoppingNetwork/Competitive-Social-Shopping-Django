@@ -52,7 +52,7 @@ psycogreen==1.0
 psycopg2==2.4.1
 py==1.4.12
 pycrypto==2.6
--e git+https://github.com/lericson/pylibmc.git#egg=pylibmc
+pylibmc
 pytest==2.3.4
 pytest-cov==1.6
 pytest-xdist==1.8
