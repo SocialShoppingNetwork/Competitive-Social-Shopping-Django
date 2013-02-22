@@ -5,5 +5,3 @@ angular.module('exhibiaApp').controller 'MainCtrl', ($scope, socket)->
     'AngularJS'
     'Testacular'
   ]
-  socket.on 'news', (data)->
-    $scope.awesomeThings.push data.hello

@@ -1,0 +1,24 @@
+<h1>Angular Socket.io Demo Chat App</h1>
+<div ng-controller='ChatCtrl'>
+	<div class="col">
+		<h3>Messages</h3>
+		<div class="overflowable">
+			<p ng-repeat="message in messages" ng-class="{alert: message.user == &quot;chatroom&quot;}">{{message.user}}: {{message.text}}</p>
+		</div>
+	</div>
+	<div class="col">
+		<h3>Users</h3>
+		<div class="overflowable">
+			<p ng-repeat="user in users">{{user}}</p>
+		</div>
+	</div>
+	<div class="clr">
+		<form ng-submit="sendMessage()">
+			Message: <input size="60" ng-model="message">
+			<input type="submit" value="Send">
+		</form>
+	</div>
+	<div class="clr">
+		<p>Your current user name is {{name}}</p>
+	</div>
+</div>

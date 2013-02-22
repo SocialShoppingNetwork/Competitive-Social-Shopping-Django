@@ -1,1 +1,19 @@
 /* Will be compiled down to a single stylesheet with your sass files */
+.overflowable {
+  height: 240px;
+  overflow-y: auto;
+  border: 1px solid #000;
+}
+
+.overflowable p {
+  margin: 0;
+}
+
+.col {
+  float: left;
+  width: 350px;
+}
+
+.clr {
+  clear: both;
+}
