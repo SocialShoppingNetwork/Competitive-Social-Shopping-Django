@@ -25,14 +25,13 @@ ADMINS = [
 MANAGERS = ADMINS
 
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'd374ksafc2ng20',
-    'HOST': 'ec2-107-22-170-5.compute-1.amazonaws.com',
-    'PORT': 5432,
-    'USER': 'flhtkewvpaznps',
-    'PASSWORD': 'M72ZD95HEp3QrAGk-WHbI4Nk1A'
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': '',
+        'NAME': 'ssn'
+    }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -68,7 +67,7 @@ STATIC_ROOT = path.join(PROJECT_ROOT, "static")
 
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
-STATIC_URL = "http://s3.amazonaws.com/exhibia/"
+STATIC_URL = "http://s3.amazonaws.com/ssn-network/"
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
@@ -247,23 +246,23 @@ EMAIL_DEBUG = DEBUG
 
 COMPRESS_URL = STATIC_URL
 
-
-environ['MEMCACHE_SERVERS'] = environ.get('MEMCACHIER_SERVERS', '')
-environ['MEMCACHE_USERNAME'] = environ.get('MEMCACHIER_USERNAME', '')
-environ['MEMCACHE_PASSWORD'] = environ.get('MEMCACHIER_PASSWORD', '')
-environ['MEMCACHE_SERVERS'] = "mc2.ec2.memcachier.com:11211"
-environ['MEMCACHE_USERNAME'] = "237cfc"
-environ['MEMCACHE_PASSWORD'] = "c8442b7942494c9f54c0"
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
-        'LOCATION': environ.get('MEMCACHIER_SERVERS', ''),
-        'TIMEOUT': 500,
-        'BINARY': True,
-        'KEY_PREFIX': 'bidstick',
-    },
-}
+#
+# environ['MEMCACHE_SERVERS'] = environ.get('MEMCACHIER_SERVERS', '')
+# environ['MEMCACHE_USERNAME'] = environ.get('MEMCACHIER_USERNAME', '')
+# environ['MEMCACHE_PASSWORD'] = environ.get('MEMCACHIER_PASSWORD', '')
+# environ['MEMCACHE_SERVERS'] = "mc2.ec2.memcachier.com:11211"
+# environ['MEMCACHE_USERNAME'] = "237cfc"
+# environ['MEMCACHE_PASSWORD'] = "c8442b7942494c9f54c0"
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+#         'LOCATION': environ.get('MEMCACHIER_SERVERS', ''),
+#         'TIMEOUT': 500,
+#         'BINARY': True,
+#         'KEY_PREFIX': 'bidstick',
+#     },
+# }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_AGE = 15552000
 
@@ -283,6 +282,6 @@ REDIS = {
 GEOIP_PATH = path.join(path.dirname(PROJECT_ROOT), 'geoip')
 TRACKING_USE_GEOIP = True
 
-BASIC_WWW_AUTHENTICATION_USERNAME = "U&7cO4^2"
-BASIC_WWW_AUTHENTICATION_PASSWORD = "m9)E6*uU"
-BASIC_WWW_AUTHENTICATION = True
+BASIC_WWW_AUTHENTICATION_USERNAME = "admin"
+BASIC_WWW_AUTHENTICATION_PASSWORD = "admin"
+BASIC_WWW_AUTHENTICATION = False

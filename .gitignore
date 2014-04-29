@@ -3,7 +3,7 @@ dist
 .tmp
 .sass-cache
 app/components
-
+exhibia/env
 *.pyc
 *.idea
 site_media/
