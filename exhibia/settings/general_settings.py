@@ -27,10 +27,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': '',
-        'NAME': 'ssn'
+        'HOST': 'f1398afa8bfa20dbd6efefe4106a86aad5c683b2.rackspaceclouddb.com',
+        'USER': 'exhibia',
+        'PASSWORD': '$$nrule2020',
+        'NAME': 'exhibia'
     }
 }
 
