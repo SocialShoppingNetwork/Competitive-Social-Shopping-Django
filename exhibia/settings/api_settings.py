@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+PYBACKEND_RACKSPACE_CLOUD_ID_TYPE = 'rackspace'
+import os
+os.environ['CLOUD_ID_TYPE'] = PYBACKEND_RACKSPACE_CLOUD_ID_TYPE
 
 #payments
 TEST_MODE = True
