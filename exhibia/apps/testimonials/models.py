@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils import simplejson
 from django.db.models.signals import post_save
 from gdata.youtube.service import YouTubeService
+from storages.backends.mosso import cloudfiles_upload_to
 
 VIDEO_CATEGORIES = (('Film', 'Film & Animation'),
 ('Autos','Autos'),
@@ -26,13 +27,14 @@ VIDEO_CATEGORIES = (('Film', 'Film & Animation'),
 
 VIDEO_CATEGORIES_DICT = dict(VIDEO_CATEGORIES)
 
+
 class Video(models.Model):
     member = models.ForeignKey('profiles.Member', related_name='testimonials')
     auction = models.OneToOneField('auctions.Auction', unique=True)
     title = models.CharField(max_length=500, blank=True, null=True)
     review = models.TextField(blank=True, null=True)
     rated = models.SmallIntegerField(default=5)
-    file = models.FileField(upload_to='item_videos')
+    file = models.FileField(upload_to=cloudfiles_upload_to)
 
     youtube_url = models.URLField(verify_exists=False)
 

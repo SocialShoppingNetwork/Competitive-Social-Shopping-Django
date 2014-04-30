@@ -16,6 +16,7 @@ from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotR
 
 from utils import full_url
 from auctions.constants import *
+from storages.backends.mosso import cloudfiles_upload_to
 
 AUCTION_WAITING = 'w'
 AUCTION_PROCESSING = 'p'
@@ -348,7 +349,7 @@ class AuctionBid(models.Model):
 
 class AuctionItemImages(models.Model):
     item = models.ForeignKey(AuctionItem, related_name="images")
-    img = models.ImageField(help_text="default image 120px height 200px width recommended", upload_to="items")
+    img = models.ImageField(help_text="default image 120px height 200px width recommended", upload_to=cloudfiles_upload_to)
     is_default = models.BooleanField(default=False)
 
     def __unicode__(self):

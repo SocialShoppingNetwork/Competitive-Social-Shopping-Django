@@ -155,9 +155,6 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'social_auth.context_processors.social_auth_login_redirect',
 ]
 
-# STATICFILES_DIRS = (
-#     '/var/www/Competitive-Social-Shopping-Django/exhibia/static/',
-# )
 
 INSTALLED_APPS = [
     # Django
@@ -254,7 +251,7 @@ EMAIL_DEBUG = DEBUG
 
 COMPRESS_URL = STATIC_URL
 
-#
+# temporary unable memcahe
 # environ['MEMCACHE_SERVERS'] = environ.get('MEMCACHIER_SERVERS', '')
 # environ['MEMCACHE_USERNAME'] = environ.get('MEMCACHIER_USERNAME', '')
 # environ['MEMCACHE_PASSWORD'] = environ.get('MEMCACHIER_PASSWORD', '')
@@ -271,6 +268,8 @@ COMPRESS_URL = STATIC_URL
 #         'KEY_PREFIX': 'bidstick',
 #     },
 # }
+
+
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_AGE = 15552000
 
@@ -279,10 +278,10 @@ SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
 SITE_NAME = 'testing.exhibia.com'
 
 REDIS = {
-    'username':'redistogo',
-    'password':'04970af27e1eb8cbaaca6243e0b730d4',
-    'host':'grouper.redistogo.com',
-    'port':9134
+    'username': 'redistogo',
+    'password': '04970af27e1eb8cbaaca6243e0b730d4',
+    'host': 'grouper.redistogo.com',
+    'port': 9134
 }
 
 

@@ -6,6 +6,7 @@ from django.db import models
 from django.conf import settings
 
 from tinymce.models import HTMLField
+from storages.backends.mosso import cloudfiles_upload_to
 
 def upload_to(instance, filename):
     return u'point_store/%s' % filename
@@ -22,7 +23,7 @@ class StoreItem(models.Model):
     cost = models.PositiveSmallIntegerField(help_text=u"number of points this item cost")
     duration = models.PositiveIntegerField(help_text=u'How long this item will be active after buy in hours')
     description = HTMLField()
-    image = models.ImageField(upload_to=upload_to, default=os.path.join(settings.PROJECT_ROOT, 'images/super-man-icon.png'))
+    image = models.ImageField(upload_to=cloudfiles_upload_to, default=os.path.join(settings.PROJECT_ROOT, 'images/super-man-icon.png'))
     active = models.BooleanField(default=True)
 
     def __unicode__(self):
