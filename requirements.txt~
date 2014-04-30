@@ -48,8 +48,6 @@ ipython==0.13
 lxml==3.0.1
 oauth2==1.5.211
 paramiko==1.9.0
-psycogreen==1.0
-psycopg2==2.4.1
 py==1.4.12
 pycrypto==2.6
 -e git+https://github.com/lericson/pylibmc.git#egg=pylibmc

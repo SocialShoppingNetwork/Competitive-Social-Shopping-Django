@@ -67,7 +67,9 @@ STATIC_ROOT = path.join(PROJECT_ROOT, "static")
 
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
-STATIC_URL = "http://s3.amazonaws.com/ssn-network/"
+# STATIC_URL = "http://s3.amazonaws.com/ssn-network/"
+STATIC_URL = "http://7d631cc7eb3db87625b0-8e9e521ab8bd37a06344a5191c9b0f2d.r41.cf5.rackcdn.com/"
+# STATIC_URL = "/static/"
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
@@ -153,6 +155,10 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'social_auth.context_processors.social_auth_login_redirect',
 ]
 
+# STATICFILES_DIRS = (
+#     '/var/www/Competitive-Social-Shopping-Django/exhibia/static/',
+# )
+
 INSTALLED_APPS = [
     # Django
     "django.contrib.admin",
@@ -163,6 +169,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.humanize",
     "django.contrib.flatpages",
+    "django.contrib.staticfiles",
 
     "pinax.templatetags",
 
@@ -180,6 +187,7 @@ INSTALLED_APPS = [
     "pagination",
     "south",
     "tinymce",
+    'cumulus',
     "social_auth",
     "django_countries",
     # Pinax
@@ -285,3 +293,5 @@ TRACKING_USE_GEOIP = True
 BASIC_WWW_AUTHENTICATION_USERNAME = "admin"
 BASIC_WWW_AUTHENTICATION_PASSWORD = "admin"
 BASIC_WWW_AUTHENTICATION = False
+
+

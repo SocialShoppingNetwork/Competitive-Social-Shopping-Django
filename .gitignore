@@ -4,6 +4,7 @@ dist
 .sass-cache
 app/components
 exhibia/env
+exhibia/static
 *.pyc
 *.idea
 site_media/
