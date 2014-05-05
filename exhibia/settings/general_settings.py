@@ -94,10 +94,8 @@ SECRET_KEY = "y(si0o6#r6@b87d24!(dl=9pe23b*b@tobc(x$()@1#q)4ds-u"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = [
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -273,7 +271,8 @@ COMPRESS_URL = STATIC_URL
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_AGE = 15552000
 
-SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
+# SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
+SOCKETIO_SERVER = '127.0.0.1:5000'
 
 SITE_NAME = 'testing.exhibia.com'
 

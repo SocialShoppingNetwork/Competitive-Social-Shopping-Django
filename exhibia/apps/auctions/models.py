@@ -258,7 +258,7 @@ class Auction(models.Model):
     @property
     def funded(self):
         """returns the percent funded"""
-        return self.amount_pleged * 100 / self.item.price
+        return float(self.amount_pleged * 100 / self.item.price)
 
     @property
     def time_left(self):

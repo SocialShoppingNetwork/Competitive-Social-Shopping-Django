@@ -111,10 +111,12 @@
         window.user_is_logged = '{{request.user.is_authenticated}}';
         window.facebook_appId = '{{settings.FACEBOOK_APP_ID}}';
     </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/socket.io.js"></script>
     {{block.super}}
 {% endblock extra_js %}
 {% block extra_body %}
-    <script>
+    <script type="text/javascript">
+
         function update_item(){
             //  updates items waiting plegde
             $.post('{% url auction_info  auction.id %}', function(data){
@@ -123,7 +125,6 @@
             });
         }
         $(document).ready(function() {
-
 
             {% if auction.is_processing %}
             $('#bid-btn').click(function(event){
@@ -135,59 +136,59 @@
             {% endif %}
 
             {% if auction.is_waiting_pledge %}
-            setInterval(update_item, 10000);
-            $('#btn-fund').click(function(event) {
-                event.preventDefault();
-                /*item_id = {{ auction.id }};
-                $.post('/items/fund/' + item_id + '/', {'amount':100}, function(data){
-                    switch(data['error']){
-                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
-                        case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
-                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
-                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
-                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
-                    }
-                }, 'json');*/
-                return;
-            });
-            $('#fund_item').click(function(event) {
-                event.preventDefault();
-                var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
-                $.post('/items/fund/' + {{ auction.id }} + '/', {'amount':amount}, function(data){
-                    switch(data['error']){
-                        case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
-                        case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
-                        case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
-                        case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
-                        case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
-                    }
-                    //window.location.reload();
-                }, 'json');
-                $('#fundModal').modal('hide');
-                get_account_bids(function(data){
-                    $('#member_bids').text(data);
+                setInterval(update_item, 10000);
+                $('#btn-fund').click(function(event) {
+                    event.preventDefault();
+                    /*item_id = {{ auction.id }};
+                    $.post('/items/fund/' + item_id + '/', {'amount':100}, function(data){
+                        switch(data['error']){
+                            case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                            case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
+                            case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                            case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                            case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                        }
+                    }, 'json');*/
+                    return;
                 });
-                update_item();
-                window.location.reload();
-            });
+                $('#fund_item').click(function(event) {
+                    event.preventDefault();
+                    var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
+                    $.post('/items/fund/' + {{ auction.id }} + '/', {'amount':amount}, function(data){
+                        switch(data['error']){
+                            case 'AUTH_REQUIRED': redirect("{% url acct_login %}"); break;
+                            case 'NOT_ENOUGH_CREDITS': alert("/buycredits/"); break;
+                            case 'ALREADY_HIGHEST_BID': alert('ALREADY_HIGHEST_BID'); break;
+                            case 'AUCTION_EXPIRED': alert('AUCTION_EXPIRED'); break;
+                            case 'AUCTION_IS_NOT_READY_YET': alert('AUCTION_IS_NOT_READY_YET'); break;
+                        }
+                        //window.location.reload();
+                    }, 'json');
+                    $('#fundModal').modal('hide');
+                    get_account_bids(function(data){
+                        $('#member_bids').text(data);
+                    });
+                    update_item();
+                    window.location.reload();
+                });
             {% endif %}
 
 
             {% if auction and auction.is_running %}
-            socket = io.connect('http://{{ SOCKETIO_SERVER }}');
-            socket.on('news', function (data) {
-                console.log(data);
-                socket.emit('my other event', { my: 'data' });
-            });
-            function update(){
-                socket.emit('update', {'id':{{ auction.id }} });
-            }
-            setInterval(update, 1000);
-            socket.on('update', function (data) {
-                auctions = $.parseJSON(data['auctions']);
-                a = new Auctions(auctions);
-                update_auctions_ui(auctions);
-            });
+                socket = io.connect('http://{{ SOCKETIO_SERVER }}');
+                socket.on('news', function (data) {
+                    console.log(data);
+                    socket.emit('my other event', { my: 'data' });
+                });
+                function update(){
+                    socket.emit('update', {'id':{{ auction.id }} });
+                }
+                setInterval(update, 1000);
+                socket.on('update', function (data) {
+                    auctions = $.parseJSON(data['auctions']);
+                    a = new Auctions(auctions);
+                    update_auctions_ui(auctions);
+                });
             {% endif %}
 
         });
