@@ -272,15 +272,15 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_COOKIE_AGE = 15552000
 
 # SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'
-SOCKETIO_SERVER = '127.0.0.1:5000'
+SOCKETIO_SERVER = 'exhibia.com'
 
 SITE_NAME = 'testing.exhibia.com'
 
 REDIS = {
-    'username': 'redistogo',
-    'password': '04970af27e1eb8cbaaca6243e0b730d4',
-    'host': 'grouper.redistogo.com',
-    'port': 9134
+    'username': 'root',
+    'password': '',
+    'host': 'localhost',
+    'port': 6379
 }
 
 
