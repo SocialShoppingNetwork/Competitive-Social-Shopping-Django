@@ -10,6 +10,7 @@ from django.conf import settings
 from django.db.models import F
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
+from django.db import transaction
 # from django.core.cache import cache
 
 from tweepy.streaming import StreamListener
@@ -70,11 +71,11 @@ class KickOff(KillReceived):
 
     def run(self):
         while not self.kill_received:
-            if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
-                item = AuctionItem.objects.kick_off()
-                auction = Auction.objects.create_from_item(item)
-                #item.maticbid.create_auction_maticbid(auction)
-                print 'kickoff auction : %s' % auction
+            # if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
+            #     item = AuctionItem.objects.kick_off()
+            #     auction = Auction.objects.create_from_item(item)
+            #     #item.maticbid.create_auction_maticbid(auction)
+            #     # print 'kickoff auction : %s' % auction
             Auction.objects.finish_expired()
             sleep(5)
 
@@ -91,18 +92,30 @@ class Dispatcher(KillReceived):
                 #auctions_not_funded = Auction.objects.filter(amount_pleged__lt=F('item__price'))
                 #auctions_not_funded.update(status=AUCTION_FINISHED_NO_PLEDGED)
 
-            if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
-                item = AuctionItem.objects.kick_off()
-                auction = Auction.objects.create_from_item(item)
-                print 'kickoff auction : %s' % auction
+            # if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
+            #     item = AuctionItem.objects.kick_off()
+            #     if item:
+            #         auction = Auction.objects.create_from_item(item)
+            #         print 'kickoff auction : %s' % auction
+
             Auction.objects.finish_expired()
             sleep(5)
+
+
+@transaction.commit_manually
+def flush_transaction():
+    """
+    Flush the current transaction so we don't read stale data
+    """
+    transaction.commit()
 
 
 class Bidomatic(KillReceived):
 
     def run(self):
         while not self.kill_received:
+            flush_transaction()
+            print Auction.objects.filter(status='p').count()
             for auction in Auction.objects.showcase():
                 t = auction.time_left
                 """
@@ -120,6 +133,15 @@ class Bidomatic(KillReceived):
 
                 if auction.time_left < 0:
                     auction.end()
+                    # automatically rotation loop
+                    amount = auction.item.amount
+                    # don't create only if amount = 0
+                    if amount != 0:
+                        print 'CREATING NEW AUCTION!!'
+                        auction = Auction.objects.create_from_item(auction.item)
+
+
+
                     """
                     if bidomatic.win:
                         if  auction.last_bid_type == 'n':

@@ -268,7 +268,7 @@ COMPRESS_URL = STATIC_URL
 # }
 
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# SESSION_ENGINE = "django.contrib.sessions.backends.bidomaticcache"
 SESSION_COOKIE_AGE = 15552000
 
 # SOCKETIO_SERVER = 'powerful-taiga-2596.herokuapp.com'

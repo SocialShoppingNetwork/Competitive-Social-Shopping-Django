@@ -108,16 +108,18 @@ class AuctionManager(models.Manager):
 
     def create_from_item(self, item):
         auction = Auction.objects.create(item=item, bidding_time=item.bidding_time, deadline_time=time()+item.pledge_time)
-        item.amount -= 1
+        if item.amount is not None:
+            item.amount -= 1
         item.save()
         return auction
 
 class AuctionItemManager(models.Manager):
     def kick_off(self):
         items = self.get_query_set().exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True), amount__gt=0)
-        i = randint(0, items.count()-1) #TODO check this
-        item = items[i]
-        return item
+        if items.count() > 0:
+            i = randint(0, items.count()-1) #TODO check this
+            item = items[i]
+            return item
         #return Auction.objects.create_from_item(item)
 
 class Brand(models.Model):
@@ -151,13 +153,13 @@ class AuctionItem(models.Model):
     name = models.CharField(max_length=150)
     slug_name = models.CharField(max_length=200, unique=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
-    amount = models.SmallIntegerField()
+    amount = models.SmallIntegerField(null=True, blank=True)
     brand = models.ForeignKey(Brand, blank=True, null=True)
     category = models.ForeignKey(Category, blank=True, null=True)
 
     pledge_time = models.PositiveIntegerField(default=settings.PLEDGE_TIME)
 
-    showcase_time = models.PositiveIntegerField(default=3600)
+    showcase_time = models.PositiveIntegerField(default=settings.SHOWCASE_TIME)
 
     bidding_time = models.SmallIntegerField(default=120)
     shipping_fee = models.DecimalField(max_digits=7, decimal_places=2)
