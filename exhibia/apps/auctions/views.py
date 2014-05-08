@@ -47,8 +47,9 @@ def index(request):
     showcase = Auction.objects.live()
     #auctions = cache.get('auctions')
     #auctions_json = cache.get('auctions_json')
-    auctions_ended  = Auction.objects.finished().select_related('item', 'item__image')[:4]
+    auctions_ended = Auction.objects.finished().select_related('item', 'item__image')[:4]
     items = Auction.objects.public().order_by('created').select_related('item', 'item__image')
+
     return {'auctions': auctions,
             'showcase': showcase,
             'items':items,

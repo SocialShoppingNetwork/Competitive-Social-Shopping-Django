@@ -59,6 +59,7 @@ BID_TYPE_CHOICES = (
     ("m", "bid-o-matic"),
 )
 
+
 class AuctionManager(models.Manager):
     def waiting_pledge(self):
         return self.get_query_set().filter(status=AUCTION_WAITING_PLEDGE)
@@ -93,7 +94,6 @@ class AuctionManager(models.Manager):
     def finished(self):
         return self.get_query_set().filter(status=AUCTION_FINISHED)
 
-
     def just_ended(self):
         return self.get_query_set().filter(status=AUCTION_JUST_ENDED)
 
@@ -107,26 +107,59 @@ class AuctionManager(models.Manager):
         self.expired().update(status='f')
 
     def create_from_item(self, item):
-        auction = Auction.objects.create(item=item, bidding_time=item.bidding_time, deadline_time=time()+item.pledge_time)
+        auction = Auction.objects.create(item=item,
+                                         bidding_time=item.bidding_time,
+                                         deadline_time=time()+item.pledge_time
+                                         )
         if item.amount is not None:
             item.amount -= 1
         item.save()
         return auction
 
+    def create_giveaway_from_item(self, item):
+        auction = Auction.objects.create(item=item,
+                                         bidding_time=item.bidding_time,
+                                         deadline_time=time()+item.pledge_time,
+                                         status=AUCTION_SHOWCASE,
+                                         amount_pleged=item.price,
+                                         )
+        if item.amount is not None:
+            item.amount -= 1
+        item.save()
+        return auction
+
+
 class AuctionItemManager(models.Manager):
     def kick_off(self):
         items = self.get_query_set().exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True), amount__gt=0)
         if items.count() > 0:
-            i = randint(0, items.count()-1) #TODO check this
+            i = randint(0, items.count()-1)
             item = items[i]
             return item
         #return Auction.objects.create_from_item(item)
 
+    def get_giveaway_item(self):
+        # get items which aren't in showcase list, as well as not in waiting pledge
+        print Auction.objects.showcase().values_list('item', flat=True)
+        items = self.get_query_set()\
+            .filter(giveaway=True)\
+            .exclude(amount=0)\
+            .exclude(code__in=Auction.objects.showcase().values_list('item', flat=True))\
+            .exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True))
+
+        if items.count() > 0:
+            i = randint(0, items.count()-1)
+            item = items[i]
+            return item
+
+
 class Brand(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=250, unique=True)
+
     def __unicode__(self):
         return self.name
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -171,6 +204,8 @@ class AuctionItem(models.Model):
     objects = AuctionItemManager()
     image = models.OneToOneField('auctions.AuctionItemImages', blank=True, null=True)
 
+    giveaway = models.BooleanField()
+
     def __unicode__(self):
         return self.name
 
@@ -196,6 +231,7 @@ class AuctionItem(models.Model):
         #except:
         #    return None
 
+
 class Auction(models.Model):
     item = models.ForeignKey(AuctionItem, related_name='auctions', db_index=True)
     #status = models.CharField(max_length=1, default=AUCTION_WAITING_PLEDGE, choices=AUCTION_STATUS, db_index=True)
@@ -207,7 +243,7 @@ class Auction(models.Model):
     amount_pleged = models.PositiveIntegerField(default=0)
     backers = models.PositiveIntegerField(default=0)
     current_offer = models.DecimalField(max_digits=7, decimal_places=2, default=0)
-    pledge_time =  models.PositiveIntegerField(default=43200)
+    pledge_time = models.PositiveIntegerField(default=43200)
 
     deadline_time = models.FloatField(db_index=True)
     bidding_time = models.PositiveSmallIntegerField()
@@ -220,6 +256,8 @@ class Auction(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     objects = AuctionManager()
+
+    in_queue = models.BooleanField()
 
     def __unicode__(self):
         return self.item.name

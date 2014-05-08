@@ -292,4 +292,7 @@ BASIC_WWW_AUTHENTICATION_USERNAME = "admin"
 BASIC_WWW_AUTHENTICATION_PASSWORD = "admin"
 BASIC_WWW_AUTHENTICATION = False
 
-
+try:
+    from .local_settings import *
+except ImportError:
+    pass

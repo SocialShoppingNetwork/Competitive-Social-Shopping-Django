@@ -139,12 +139,22 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
             self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
                         auction.backers, '%.1f' %auction.funded)
         else:
-            # do we need to limit auctions number ?
-            auction.status = constants.AUCTION_SHOWCASE
-            auction.save()
-            self.publish("auction_fund_ended", auction.pk, auction.time_left,
-             loader.render_to_string('auctions/showcase_box.html',
-                     {'auction':auction, 'STATIC_URL':settings.STATIC_URL}))
+            if settings.MAX_AUCTIONS - Auction.objects.showcase().count() > 0:
+                auction.status = constants.AUCTION_SHOWCASE
+                auction.save()
+                self.publish("auction_fund_ended", auction.pk, auction.time_left,
+                             loader.render_to_string('auctions/showcase_box.html',
+                             {'auction':auction,
+                              'STATIC_URL':settings.STATIC_URL
+                             }))
+            else:
+                # TODO: correct html update
+                # TODO: add items form queue
+                auction.in_queue = True
+                auction.save()
+                print 'ON_FUND!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! LOLOLOLOLOL'
+                self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
+                    auction.backers, '%.1f' %auction.funded)
 
 
     @login_required
@@ -154,7 +164,7 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
             return
         try:
             auction = Auction.objects.live().get(pk=int(auction_pk))
-        except Auction.DoesNotExist:return
+        except Auction.DoesNotExist: return
         try:
             member.bid(auction)
         except NotEnoughCredits:

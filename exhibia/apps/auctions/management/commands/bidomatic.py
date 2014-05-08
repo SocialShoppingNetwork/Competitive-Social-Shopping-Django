@@ -20,6 +20,7 @@ from tweepy import Stream
 from auctions.models import Auction, AuctionItem
 from auctions.constants import *
 from profiles.models import Member
+import sys
 
 
 def to_json(auction):
@@ -32,6 +33,7 @@ def to_json(auction):
     if auction.last_bidder_member:
         result["last_bidder_img"] = auction.last_bidder_member.img_url
     return result
+
 
 def auctions_to_json(auctions):
     result = {}
@@ -67,10 +69,30 @@ class KillReceived(threading.Thread):
         super(KillReceived, self).__init__(*args, **kwargs)
         self.kill_received = False
 
+
 class KickOff(KillReceived):
 
     def run(self):
+        ### THIS NOT RUNNING FOR NOW
         while not self.kill_received:
+
+            # here we must
+            ## for bidded I thinhk
+            # MIN_ACTIVE_AUCTIONS
+
+            # waiting_pledge() - открытые для funda
+            # show_case - открытые для bida (и уже забиденные кем-то)
+            flush_transaction()
+
+            # # adds giveaway item if active auctions less than in settings
+            # if Auction.objects.showcase().count() < settings.MIN_ACTIVE_AUCTIONS:
+            #     '--->>> not enought active actions!'
+            #     item = AuctionItem.objects.get_giveaway_item()
+            #     auction = Auction.objects.create_giveaway_from_item(item)
+            #     print '--->>> add giveaway auction \n'
+
+
+
             # if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
             #     item = AuctionItem.objects.kick_off()
             #     auction = Auction.objects.create_from_item(item)
@@ -79,15 +101,45 @@ class KickOff(KillReceived):
             Auction.objects.finish_expired()
             sleep(5)
 
+
 class Dispatcher(KillReceived):
 
     def run(self):
         while not self.kill_received:
+
+            flush_transaction()
             now = time()
+
+            ## adds giveaway item if active auctions less than in settings
+            if Auction.objects.showcase().count() < settings.MIN_ACTIVE_AUCTIONS:
+                item = AuctionItem.objects.get_giveaway_item()
+                if item:
+                    Auction.objects.create_giveaway_from_item(item)
+                    print '--->>> add giveaway auction \n'
+
+            ## changes items, wich were fully funded, to active auctions
             auctions_time_over = Auction.objects.time_over()
+
+
+
+            ### NEW
+            # if auctions_time_over:
+            #     auctions_funded = auctions_time_over.filter(amount_pleged__gte=F('item__price'))
+            #     print '>>>>>>>>>>>>>>>>>'
+            #     print auctions_funded
+            #     print '<<<<<<<<<<<<<<<<<'
+            #     if auctions_funded:
+            #         showcase_auctions_count = Auction.objects.showcase().count()
+            #         available_count = settings.MAX_AUCTIONS - showcase_auctions_count
+            #         auctions_funded[:available_count].update(status=AUCTION_SHOWCASE)
+            #         auctions_funded[available_count:].update(in_queue=True)
+            ### NEW
+
+            ### OLD
             if auctions_time_over:
                 auctions_funded = auctions_time_over.filter(amount_pleged__gte=F('item__price'))
                 auctions_funded.update(status=AUCTION_SHOWCASE)
+            ### OLD
 
                 #auctions_not_funded = Auction.objects.filter(amount_pleged__lt=F('item__price'))
                 #auctions_not_funded.update(status=AUCTION_FINISHED_NO_PLEDGED)
@@ -115,7 +167,7 @@ class Bidomatic(KillReceived):
     def run(self):
         while not self.kill_received:
             flush_transaction()
-            print Auction.objects.filter(status='p').count()
+
             for auction in Auction.objects.showcase():
                 t = auction.time_left
                 """
@@ -133,12 +185,15 @@ class Bidomatic(KillReceived):
 
                 if auction.time_left < 0:
                     auction.end()
-                    # automatically rotation loop
-                    amount = auction.item.amount
-                    # don't create only if amount = 0
-                    if amount != 0:
-                        print 'CREATING NEW AUCTION!!'
-                        auction = Auction.objects.create_from_item(auction.item)
+                    flush_transaction()
+                    ## automatically rotation loop (creates new auction for funding)
+                    ## if auction is already there don't create it
+                    # if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
+                    if not Auction.objects.showcase().filter(item__code=auction.item.code).exists():
+                        amount = auction.item.amount
+                        # don't create only if amount = 0
+                        if amount != 0:
+                            auction = Auction.objects.create_from_item(auction.item)
 
 
 
