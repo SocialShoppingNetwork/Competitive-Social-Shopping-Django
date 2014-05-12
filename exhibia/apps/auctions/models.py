@@ -188,7 +188,7 @@ class AuctionItem(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     amount = models.SmallIntegerField(null=True, blank=True)
     brand = models.ForeignKey(Brand, blank=True, null=True)
-    category = models.ForeignKey(Category, blank=True, null=True)
+    categories = models.ManyToManyField(Category, blank=True, null=True)
 
     pledge_time = models.PositiveIntegerField(default=settings.PLEDGE_TIME)
 
@@ -230,6 +230,10 @@ class AuctionItem(models.Model):
         #    return image
         #except:
         #    return None
+
+    def categories_inline(self):
+        return ', '.join([i.name for i in self.categories.all()])
+    categories_inline.short_description = "categories"
 
 
 class Auction(models.Model):

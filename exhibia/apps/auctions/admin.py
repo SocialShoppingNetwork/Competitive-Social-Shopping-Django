@@ -12,8 +12,8 @@ class PrepAdmin(object):
    prepopulated_fields = {"slug": ("name",)}
 
 class AuctionItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'amount', 'shipping_fee', 'category',)
-    list_filter = ('created', 'category', )
+    list_display = ('name', 'price', 'amount', 'shipping_fee', 'categories_inline')
+    list_filter = ('created', )
     date_hierarchy = 'created'
     search_fields = ('name',)
     # raw_id_fields = ('image',)

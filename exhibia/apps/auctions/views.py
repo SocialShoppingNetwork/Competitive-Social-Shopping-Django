@@ -44,7 +44,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 @render_to('index.html')
 def index(request):
-    auctions = Auction.objects.waiting_pledge().filter(item__category=Category.objects.all()[0])
+    auctions = Auction.objects.waiting_pledge().filter(item__categories=Category.objects.all()[0])
     #showcase = Auction.objects.showcase()
     showcase = Auction.objects.live()
     #auctions = cache.get('auctions')
@@ -176,7 +176,7 @@ def checkout(request):
 @csrf_exempt
 def append_funding_carousel(request):
     category_id = request.GET.get('category_id')
-    auctions = Auction.objects.waiting_pledge().filter(item__category=category_id)
+    auctions = Auction.objects.waiting_pledge().filter(item__categories=category_id)
     if not auctions:
         return HttpResponse('')
 
