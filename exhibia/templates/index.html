@@ -1,6 +1,12 @@
 {% extends 'site_base.html' %}
 {% load compress %}
 
+
+{% block extra_head_base %}
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery.jcarousel.min.js"></script>
+    <link href="{{ STATIC_URL }}funding.jcarousel.css" rel="stylesheet">
+{% endblock extra_head_base %}
+
 {% block body %}
 
 	<div class="btn-group sorting" data-toggle="buttons-radio">
@@ -15,6 +21,17 @@
     </div>
     <div id="items_container" class="row items">
         {% include 'auctions/auctions.html' %}
+    </div>
+
+    <div>
+        <div>
+            {% for category in categories %}
+                <a href="javascript:;" class="append_funding_carousel" data-id='{{ category.id }}'>{{ category.name }}</a>
+            {% endfor %}
+        </div>
+        <div id="funding_container">
+            {% include 'auctions/funding_carousel.html' %}
+        </div>
     </div>
 
     <div id="chat" class="tabbed">
@@ -36,12 +53,16 @@
     </div>
 
 {% endblock %}
+
+
 {% block extra_js %}
     <script type="text/javascript">
         window.user_is_logged = '{{request.user.is_authenticated}}';
         window.facebook_appId = '{{settings.FACEBOOK_APP_ID}}';
     </script>
+
     {{block.super}}
+
     {% compress js %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/socket.io.js"></script>
         <script type="text/javascript">$.exhibia = {};</script>
@@ -49,4 +70,28 @@
         <script type="text/javascript" src="{{ STATIC_URL }}js/item.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/chat.js"></script>
     {% endcompress %}
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('.append_funding_carousel').click(function() {
+            var category_id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                url: "/items/append-funding-carousel/",
+                data: {'category_id': category_id },
+                dataType: 'html',
+                success: function (data) {
+                    if(data) {
+                        console.log(data);
+                        $('#funding_container').html(data);
+                    }
+                    else {
+                        $('#funding_container').html('<h1>There is no items for this category. You can try later!</h1>');
+                    }
+                }
+            });
+        });
+    });
+    </script>
+
 {% endblock %}

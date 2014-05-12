@@ -148,11 +148,8 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
                               'STATIC_URL':settings.STATIC_URL
                              }))
             else:
-                # TODO: correct html update
-                # TODO: add items form queue
                 auction.in_queue = True
                 auction.save()
-                print 'ON_FUND!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! LOLOLOLOLOL'
                 self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
                     auction.backers, '%.1f' %auction.funded)
 

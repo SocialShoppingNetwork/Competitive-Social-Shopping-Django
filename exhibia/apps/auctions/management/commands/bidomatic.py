@@ -21,6 +21,7 @@ from auctions.models import Auction, AuctionItem
 from auctions.constants import *
 from profiles.models import Member
 import sys
+from apps.auctions import constants
 
 
 def to_json(auction):
@@ -110,6 +111,19 @@ class Dispatcher(KillReceived):
             flush_transaction()
             now = time()
 
+            ## checking for auctions in queue, if there are empty slots, make them active
+            if Auction.objects.waiting_pledge().filter(in_queue=True):
+                available_slots = settings.MAX_AUCTIONS - Auction.objects.showcase().count()
+                if available_slots > 0:
+                    print '--->>> move from queue \n'
+                    Auction.objects.waiting_pledge()[:available_slots].update(in_queue=False, status=constants.AUCTION_SHOWCASE)
+
+            if Auction.objects.showcase().count() < settings.MAX_AUCTIONS:
+                item = AuctionItem.objects.get_giveaway_item()
+                if item:
+                    Auction.objects.create_giveaway_from_item(item)
+                    print '--->>> add giveaway auction \n'
+
             ## adds giveaway item if active auctions less than in settings
             if Auction.objects.showcase().count() < settings.MIN_ACTIVE_AUCTIONS:
                 item = AuctionItem.objects.get_giveaway_item()
@@ -136,6 +150,7 @@ class Dispatcher(KillReceived):
             ### NEW
 
             ### OLD
+            ## changes items, wich were fully funded, to active auctions
             if auctions_time_over:
                 auctions_funded = auctions_time_over.filter(amount_pleged__gte=F('item__price'))
                 auctions_funded.update(status=AUCTION_SHOWCASE)
