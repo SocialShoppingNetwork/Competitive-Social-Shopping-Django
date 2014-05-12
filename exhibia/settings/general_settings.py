@@ -68,7 +68,7 @@ STATIC_ROOT = path.join(PROJECT_ROOT, "static")
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
 # STATIC_URL = "http://s3.amazonaws.com/ssn-network/"
-STATIC_URL = "http://7d631cc7eb3db87625b0-8e9e521ab8bd37a06344a5191c9b0f2d.r41.cf5.rackcdn.com/"
+STATIC_URL = "http://static.exhibia.com/"
 # STATIC_URL = "/static/"
 
 # Additional directories which hold static files
