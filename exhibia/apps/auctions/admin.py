@@ -21,6 +21,11 @@ class AuctionItemAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug_name": ("name",)}
     inlines = [AuctionItemImagesInline, ]
 
+    def save_model(self, request, obj, form, change):
+        super(AuctionItemAdmin, self).save_model(request, obj, form, change)
+        Auction.objects.create_from_item(obj)
+
+
 
 class AutciotnBidAdmin(admin.ModelAdmin):
     list_display = ('auction', 'bidder', 'price')

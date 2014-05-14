@@ -2,6 +2,8 @@
 
 import hashlib
 from datetime import datetime
+import urllib
+import urllib2
 from urlparse import urlparse
 
 from django.db import models
@@ -21,6 +23,8 @@ from social_auth.signals import socialauth_registered
 from social_auth.backends import twitter, facebook, google
 from socials.models import LikeItem
 from referrals.models import ReferralLink
+from settings.api_settings import SOCIAL_ACCOUNTS
+
 
 class RewardPoints(dbsettings.Group):
     bid = dbsettings.PositiveIntegerValue(default=1, help_text='points for bid on auction')
@@ -32,6 +36,7 @@ class RewardPoints(dbsettings.Group):
     review = dbsettings.PositiveIntegerValue(default=1, help_text='points for review item')
     invite = dbsettings.PositiveIntegerValue(default=1, help_text='points for invitings user')
 
+
 class RewardBids(dbsettings.Group):
     bid_for_twit = dbsettings.PositiveIntegerValue(default=1, help_text='bids for twit')
     bid_for_like = dbsettings.PositiveIntegerValue(default=1, help_text='bids for like in facebook')
@@ -39,6 +44,7 @@ class RewardBids(dbsettings.Group):
     bid_for_associate = dbsettings.PositiveIntegerValue(default=1, help_text='bids for association with some social network')
     bid_for_review = dbsettings.PositiveIntegerValue(default=1, help_text='bids for review item')
     bid_for_invite = dbsettings.PositiveIntegerValue(default=1, help_text='bids for invitings user')
+
 
 class Member(models.Model):
 
@@ -115,13 +121,31 @@ class Member(models.Model):
         cache.set('avatar|%d' % self.pk, url , 60*60*24)
         return url
 
-
     def invitation_succeed(self):
         self.points_amount += Member.rewards.invite
         self.credits += Member.rewards.bid_for_invite
         self.save()
 
+    def auction_funded_notify(self, message):
 
+        providers = set(i.provider for i in self.user.social_auth.all())
+
+        if 'facebook' in providers:
+            params = {
+                'access_token': SOCIAL_ACCOUNTS['facebook']['APP_TOCKEN'],
+                'template': message,
+                'href': '#'
+            }
+            req = urllib2.Request("https://graph.facebook.com/%s/notifications" % self.user.social_auth.get(user=self,
+                                                                                                            provider='facebook').uid,
+                                  urllib.urlencode(params), {})
+
+            urllib2.urlopen(req).read()
+
+        elif 'twitter' in providers:
+            pass
+        else:
+            pass
 
     """
     def auctionorders_unpaid(self):
@@ -149,6 +173,7 @@ def create_shipping_profile(sender, instance=None, **kwargs):
                                                                        'phone':instance.phone})
 post_save.connect(create_shipping_profile, sender=Member)
 """
+
 
 class BillingAddress(models.Model):
 
@@ -182,6 +207,7 @@ class IPAddress(models.Model):
         ordering = ('-last_login', )
         verbose_name_plural = 'IP addresses'
 
+
 class BannedIPAddress(models.Model):
     IPAddress = models.IPAddressField()
     created_at = models.DateField(auto_now_add=True)
@@ -209,6 +235,7 @@ def save_ip(sender, request, user, *args, **kwargs):
     if not created:
         obj.last_login = datetime.now()
         obj.save()
+
 
 def user_registered(sender, user, response, details, **kwargs):
     profile = user.get_profile()

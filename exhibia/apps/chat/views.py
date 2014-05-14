@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 import cjson
 from utils import post
 from django.conf import settings
+import redis
 
 @csrf_exempt
 def send_message(request):
@@ -49,5 +50,21 @@ def unban_user(request):
     profile.is_banned = False
     profile.save()
     return HttpResponse('OK')
+
+
+def admin_chat(request):
+
+    redis_pool = redis.ConnectionPool(host=settings.REDIS['host'],
+                                  port=settings.REDIS['port'],
+                                  password=settings.REDIS['password'],
+                                  db=1, max_connections=3)
+
+    r = redis.Redis(connection_pool=redis_pool)
+    r = redis.StrictRedis()
+    p = r.pubsub()
+    p.subscribe('chat/')
+    for aa in p.listen():
+        print aa
+    print r.listen()
 
 

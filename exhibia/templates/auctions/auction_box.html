@@ -5,6 +5,9 @@
             <a href="{{auction.get_absolute_url}}">{{ a.item.name }}</a>
             {# <a href="{% url auction_item a.item.slug_name %}?auction={{ a.id }}">{{ a.item.name }}</a> #}
         </div>
+        {% if a.last_unixtime %}
+            <span>Starts at: {{ a.bidding_start_at|date:"M/d" }}</span>
+        {% endif %}
         <div align="center">
       	<a href="{{auction.get_absolute_url}}">
 			<img class="product" src="{{ a.item.image.img.url }}"/>

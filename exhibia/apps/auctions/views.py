@@ -15,6 +15,7 @@ from annoying.decorators import render_to, ajax_request
 from auctions.models import Auction, AuctionItem
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 from apps.auctions.models import Category
+from django.db.models import Q
 
 
 @csrf_exempt
@@ -44,22 +45,21 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 @render_to('index.html')
 def index(request):
-    auctions = Auction.objects.waiting_pledge().filter(item__categories=Category.objects.all()[0])
-    #showcase = Auction.objects.showcase()
+    # auctions = Auction.objects.waiting_pledge().filter(item__categories=Category.objects.all()[0])
+    auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
+    auctions.filter(item__categories=Category.objects.all()[0])
+
     showcase = Auction.objects.live()
-    #auctions = cache.get('auctions')
-    #auctions_json = cache.get('auctions_json')
+
     auctions_ended = Auction.objects.finished().select_related('item', 'item__image')[:4]
     items = Auction.objects.public().order_by('created').select_related('item', 'item__image')
-    categories = Category.objects.all()
 
-    # чтобы не путаться
-    items = showcase
+    categories = Category.objects.all()
 
     ## нужно передавать showcase (bidd) и auctions (fund) отдельно
     return {'auctions': auctions,
             'showcase': showcase,
-            'items': items,
+            'items': showcase,
             'categories': categories,
             #'auctions_json': auctions_json,
             'auctions_ended q': auctions_ended}
@@ -157,14 +157,13 @@ def auctions_info(request):
     return HttpResponse(cjson.encode(auctions_to_dict(auctions)))
 
 
-
 from payments.forms import PledgeForm
 @render_to('payments/pledge.html')
 def pledge(request, item_id):
     auction = get_object_or_404(Auction, id=item_id)
-    form = PledgeForm(initial={'auction':auction.id})
-    return {'auction':auction,
-            'form':form}
+    form = PledgeForm(initial={'auction': auction.id})
+    return {'auction': auction,
+            'form': form}
 
 @render_to('fb/checkout.html')
 @login_required
@@ -176,7 +175,8 @@ def checkout(request):
 @csrf_exempt
 def append_funding_carousel(request):
     category_id = request.GET.get('category_id')
-    auctions = Auction.objects.waiting_pledge().filter(item__categories=category_id)
+    auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
+    auctions.filter(item__categories=category_id)
     if not auctions:
         return HttpResponse('')
 

@@ -39,30 +39,8 @@ def to_json(auction):
 def auctions_to_json(auctions):
     result = {}
     for a in auctions:
-        result['a_%s' % a.id] =  to_json(a)
+        result['a_%s' % a.id] = to_json(a)
     return result
-
-
-# class UpdateCache(threading.Thread):
-#     def __init__(self):
-#         print settings.CACHES
-#         threading.Thread.__init__(self)
-#         self.kill_received = False
-
-#     def run(self):
-#         while not self.kill_received:
-#             auctions = Auction.objects.live().order_by('id').select_related('item', 'item__image')
-#             cache.set('auctions', auctions)
-#             auctions = auctions_to_json(auctions)
-#             d = {}
-#             for k,v in auctions.items():
-#                 cache.set(k, cjson.encode({k:v}), 30)
-#             auctions_json = cjson.encode(auctions)
-#             print 'updating cache'
-#             cache.set('auctions_json', auctions_json, 30)
-
-#             cache.get('auctions_json')
-#             sleep(0.5)
 
 
 class KillReceived(threading.Thread):
@@ -74,33 +52,26 @@ class KillReceived(threading.Thread):
 class KickOff(KillReceived):
 
     def run(self):
-        ### THIS NOT RUNNING FOR NOW
         while not self.kill_received:
 
-            # here we must
-            ## for bidded I thinhk
-            # MIN_ACTIVE_AUCTIONS
-
-            # waiting_pledge() - открытые для funda
-            # show_case - открытые для bida (и уже забиденные кем-то)
             flush_transaction()
 
-            # # adds giveaway item if active auctions less than in settings
-            # if Auction.objects.showcase().count() < settings.MIN_ACTIVE_AUCTIONS:
-            #     '--->>> not enought active actions!'
-            #     item = AuctionItem.objects.get_giveaway_item()
-            #     auction = Auction.objects.create_giveaway_from_item(item)
-            #     print '--->>> add giveaway auction \n'
+            ## checking time of transition phase 1
+            for auction in Auction.objects.transition_phase_1():
+                if time() > auction.last_unixtime + settings.TRANSITION_PHASE_1_TIME:
+                    auction.in_queue = True
+                    auction.status = constants.AUCTION_WAITING
+                    auction.last_unixtime = None
+                    auction.save()
+                    print '--->>> move from transition phase 1 to queue \n'
 
+            ## checking time of transition phase 2
+            for auction in Auction.objects.transition_phase_2():
+                if time() > auction.last_unixtime + settings.TRANSITION_PHASE_2_TIME:
+                    auction.end()
+                    print '--->>> move from transition phase 2 to queue \n'
 
-
-            # if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
-            #     item = AuctionItem.objects.kick_off()
-            #     auction = Auction.objects.create_from_item(item)
-            #     #item.maticbid.create_auction_maticbid(auction)
-            #     # print 'kickoff auction : %s' % auction
-            Auction.objects.finish_expired()
-            sleep(5)
+            sleep(1)
 
 
 class Dispatcher(KillReceived):
@@ -116,13 +87,14 @@ class Dispatcher(KillReceived):
                 available_slots = settings.MAX_AUCTIONS - Auction.objects.showcase().count()
                 if available_slots > 0:
                     print '--->>> move from queue \n'
-                    Auction.objects.waiting_pledge()[:available_slots].update(in_queue=False, status=constants.AUCTION_SHOWCASE)
+                    ids = Auction.objects.waiting_pledge().filter(in_queue=True).values_list('pk', flat=True)[:available_slots]
+                    Auction.objects.filter(pk__in=list(ids)).update(in_queue=False, status=constants.AUCTION_SHOWCASE)
 
-            if Auction.objects.showcase().count() < settings.MAX_AUCTIONS:
-                item = AuctionItem.objects.get_giveaway_item()
-                if item:
-                    Auction.objects.create_giveaway_from_item(item)
-                    print '--->>> add giveaway auction \n'
+            # if Auction.objects.showcase().count() < settings.MAX_AUCTIONS:
+            #     item = AuctionItem.objects.get_giveaway_item()
+            #     if item:
+            #         Auction.objects.create_giveaway_from_item(item)
+            #         print '--->>> add giveaway auction \n'
 
             ## adds giveaway item if active auctions less than in settings
             if Auction.objects.showcase().count() < settings.MIN_ACTIVE_AUCTIONS:
@@ -150,20 +122,10 @@ class Dispatcher(KillReceived):
             ### NEW
 
             ### OLD
-            ## changes items, wich were fully funded, to active auctions
+            ## changes items, wich were fully funded, to transition_phase_1
             if auctions_time_over:
                 auctions_funded = auctions_time_over.filter(amount_pleged__gte=F('item__price'))
-                auctions_funded.update(status=AUCTION_SHOWCASE)
-            ### OLD
-
-                #auctions_not_funded = Auction.objects.filter(amount_pleged__lt=F('item__price'))
-                #auctions_not_funded.update(status=AUCTION_FINISHED_NO_PLEDGED)
-
-            # if Auction.objects.waiting_pledge().count() < settings.MAX_AUCTIONS:
-            #     item = AuctionItem.objects.kick_off()
-            #     if item:
-            #         auction = Auction.objects.create_from_item(item)
-            #         print 'kickoff auction : %s' % auction
+                auctions_funded.update(status=TRANSITION_PHASE_1)
 
             Auction.objects.finish_expired()
             sleep(5)
@@ -198,8 +160,9 @@ class Bidomatic(KillReceived):
                                 bidomatic.bid(auction)
                 """
 
+
                 if auction.time_left < 0:
-                    auction.end()
+                    auction.transition_phase_2()
                     flush_transaction()
                     ## automatically rotation loop (creates new auction for funding)
                     ## if auction is already there don't create it
@@ -289,6 +252,8 @@ class StdOutListener(StreamListener):
 
 
 threads = []
+
+
 class Command(BaseCommand):
     def handle(self, **options):
         try:
@@ -296,6 +261,8 @@ class Command(BaseCommand):
             b.start()
             d = Dispatcher()
             d.start()
+            k = KickOff()
+            k.start()
             # c = UpdateCache()
             # c.start()
             #threads.extend([k, c, b])

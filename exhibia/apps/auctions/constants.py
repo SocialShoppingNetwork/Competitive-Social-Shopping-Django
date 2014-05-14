@@ -6,6 +6,10 @@ AUCTION_FINISHED = 'f'
 AUCTION_WAITING_PAYMENT = 'm'
 AUCTION_PAID = 'd'
 AUCTION_COMPLETED = 'c'
+# delay before displaying for bidding (after item was fully funded)
+TRANSITION_PHASE_1 = 't1'
+# item will stay there for 10 mins more displaying the winner until disappears from bidding and appears to funding
+TRANSITION_PHASE_2 = 't2'
 
 AUCTION_WAITING_PLEDGE = 'w'
 AUCTION_FINISHED_NO_PLEDGED = 'x'

@@ -3,6 +3,7 @@
 from decimal import Decimal
 from json import dumps, loads
 from collections import deque
+from time import time
 import weakref
 
 import redis
@@ -19,12 +20,14 @@ from .decorators import login_required
 from auctions.models import Auction
 from auctions.exceptions import *
 from auctions import constants
+from settings.apps_settings import TRANSITION_PHASE_1_TIME
 
 
 redis_pool = redis.ConnectionPool(host=settings.REDIS['host'],
                                   port=settings.REDIS['port'],
                                   password=settings.REDIS['password'],
-                                  db=0, max_connections=3)
+                                  db=1, max_connections=3)
+
 
 def listener():
     "listens to redis server for new messages and distributes them to all sockets in current process"
@@ -52,6 +55,7 @@ def listener():
 
 
 gevent.spawn(listener)
+
 
 def automessage():
     while True:
@@ -83,6 +87,7 @@ def automessage():
 
 gevent.spawn(automessage)
 
+
 class RedisBroadcast(object):
 
     def initialize(self):
@@ -111,7 +116,6 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
         for i in chat_history:
             self.emit('user_message', *i)
 
-
     def on_send_chat_message(self, msg):
         r = redis.Redis(connection_pool=redis_pool)
         if r.sinter('banned_users', self.session['username']):
@@ -136,22 +140,39 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
         member.pledge(auction, amount)
         member.incr_credits(amount)
         if auction.amount_pleged < auction.item.price:
+
+            for member in auction.backers_history:
+                member.auction_funded_notify(message='Item %s was fully funded. '
+                    'Exhibition will start in %s minutes!' % (auction.item.name, int(TRANSITION_PHASE_1_TIME/60)))
+
             self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
                         auction.backers, '%.1f' %auction.funded)
         else:
-            if settings.MAX_AUCTIONS - Auction.objects.showcase().count() > 0:
-                auction.status = constants.AUCTION_SHOWCASE
-                auction.save()
-                self.publish("auction_fund_ended", auction.pk, auction.time_left,
-                             loader.render_to_string('auctions/showcase_box.html',
-                             {'auction':auction,
-                              'STATIC_URL':settings.STATIC_URL
-                             }))
-            else:
-                auction.in_queue = True
-                auction.save()
-                self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
-                    auction.backers, '%.1f' %auction.funded)
+            auction.status = constants.TRANSITION_PHASE_1
+            auction.last_unixtime = time()
+            auction.save()
+            # notify all users, that have funded this item via facebook messages, google, mail
+
+            self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
+                        auction.backers, '%.1f' %auction.funded)
+
+
+
+            ### it must be executed when timer of transition_phase_1 ends
+
+            # if settings.MAX_AUCTIONS - Auction.objects.showcase().count() > 0:
+            #     auction.status = constants.AUCTION_SHOWCASE
+            #     auction.save()
+            #     self.publish("auction_fund_ended", auction.pk, auction.time_left,
+            #                  loader.render_to_string('auctions/showcase_box.html',
+            #                  {'auction':auction,
+            #                   'STATIC_URL':settings.STATIC_URL
+            #                  }))
+            # else:
+            #     auction.in_queue = True
+            #     auction.save()
+            #     self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
+            #         auction.backers, '%.1f' %auction.funded)
 
 
     @login_required

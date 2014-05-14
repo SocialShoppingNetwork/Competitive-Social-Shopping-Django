@@ -29,9 +29,11 @@ AUCTION_COMPLETED = 'c'
 
 AUCTION_STATUS = (
     (AUCTION_WAITING_PLEDGE, "Waiting pledge"),
+    (TRANSITION_PHASE_1, "Transition phase 1"),
     (AUCTION_SHOWCASE, "Showcase"),
     (AUCTION_PAUSE, "Pause"),
     (AUCTION_JUST_ENDED, "Just Ended"),
+    (TRANSITION_PHASE_2, "Transition phase 2"),
     (AUCTION_FINISHED, "Finished"),
     (AUCTION_FINISHED_NO_PLEDGED, "Finished without pledged the price"),
     (AUCTION_WAITING_PAYMENT, "Waiting Payment"), #NEW
@@ -64,6 +66,12 @@ class AuctionManager(models.Manager):
     def waiting_pledge(self):
         return self.get_query_set().filter(status=AUCTION_WAITING_PLEDGE)
 
+    def transition_phase_1(self):
+        return self.get_query_set().filter(status=TRANSITION_PHASE_1)
+
+    def transition_phase_2(self):
+        return self.get_query_set().filter(status=TRANSITION_PHASE_1)
+
     def time_over(self):
         return self.waiting_pledge().filter(deadline_time__lte=time())
 
@@ -77,7 +85,7 @@ class AuctionManager(models.Manager):
         return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, AUCTION_JUST_ENDED, AUCTION_WAITING_PLEDGE])
 
     def live(self):
-        return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, AUCTION_JUST_ENDED])
+        return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, TRANSITION_PHASE_2])
         #return self.get_query_set().filter(status__in=['w', 'p', 's', 'e'])
     #def live(self):
     #    return self.get_query_set().filter(status__in=['w', 'p', 's', 'e'])
@@ -109,7 +117,8 @@ class AuctionManager(models.Manager):
     def create_from_item(self, item):
         auction = Auction.objects.create(item=item,
                                          bidding_time=item.bidding_time,
-                                         deadline_time=time()+item.pledge_time
+                                         deadline_time=time()+item.pledge_time,
+                                         status=AUCTION_WAITING_PLEDGE,
                                          )
         if item.amount is not None:
             item.amount -= 1
@@ -167,6 +176,7 @@ class Category(models.Model):
 
     def __unicode__(self):
         return self.name
+
     class Meta:
         verbose_name = u'Category'
         verbose_name_plural = u'Categories'
@@ -251,7 +261,7 @@ class Auction(models.Model):
 
     deadline_time = models.FloatField(db_index=True)
     bidding_time = models.PositiveSmallIntegerField()
-    last_bidder = models.CharField(max_length=30, default='', db_index=True)
+    last_bidder = models.CharField(max_length=30, default='', db_index=True, blank=True)
     last_bidder_member = models.ForeignKey('auth.User', blank=True, null=True, related_name='items_won')  #winner
 
     last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True, null=True) #Todo remove this field
@@ -268,7 +278,7 @@ class Auction(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return 'auction_item', (), {'slug':self.item.slug_name}
+        return 'auction_item', (), {'slug': self.item.slug_name}
 
     @property
     def time_to_go(self):
@@ -312,6 +322,13 @@ class Auction(models.Model):
         #t = self.last_unixtime + self.bidding_time - time()
         return int(round(t+0.49))
 
+    # @property
+    # def time_left_for_bidding_start(self):
+    #     return 180
+    @property
+    def bidding_start_at(self):
+        return datetime.fromtimestamp(int(settings.TRANSITION_PHASE_1_TIME + self.last_unixtime))
+
     def end_dt(self):
         return datetime.fromtimestamp(int(self.last_unixtime))
 
@@ -321,6 +338,13 @@ class Auction(models.Model):
 
     def end(self):
         self.status = AUCTION_JUST_ENDED
+        # self.ended_unixtime = time()
+        # if self.last_bidder_member:
+        #     self.order_status = ORDER_WAITING_PAYMENT
+        self.save()
+
+    def transition_phase_2(self):
+        self.status = TRANSITION_PHASE_2
         self.ended_unixtime = time()
         if self.last_bidder_member:
             self.order_status = ORDER_WAITING_PAYMENT
@@ -381,8 +405,9 @@ class Auction(models.Model):
     def total_price(self):
         return self.current_offer + self.item.shipping_fee
 
+
 class AuctionBid(models.Model):
-    auction = models.ForeignKey(Auction)
+    auction = models.ForeignKey(Auction, related_name='bids')
     bidder = models.ForeignKey('profiles.Member')
     price = models.DecimalField(max_digits=7, decimal_places=2)
     unixtime = models.FloatField()
@@ -390,6 +415,7 @@ class AuctionBid(models.Model):
 
     def __unicode__(self):
         return '%s : %s ' %(self.auction, self.bidder)
+
 
 class AuctionItemImages(models.Model):
     item = models.ForeignKey(AuctionItem, related_name="images")

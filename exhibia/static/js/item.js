@@ -39,13 +39,20 @@ $(document).ready(function() {
         insert_notification(li.find('.fund-title a').text() + ' has been funded');
     });
     auction_socket.on('auction_fund_ended', function(auction_pk, time_left, html){
-        // item have been funded for a full price so convert it to auction
-        var block = $('li#'+auction_pk),
-            next_id = block.prev().attr('id');
-            html = $(html);
-        html.insertAfter(block);
+        var block = $('li#'+auction_pk);
+        $(html).insertBefore($('#items li:first'));
         block.slideUp('slow', function(){$(this).remove();});
         insert_notification(block.find('.fund-title a').text() + ' has been opened for bidding');
+
+        // item have been funded for a full price so convert it to auction
+//        var block = $('li#'+auction_pk),
+//            next_id = block.prev().attr('id');
+//            html = $(html);
+//        html.insertAfter(block);
+//        block.slideUp('slow', function(){$(this).remove();});
+//        insert_notification(block.find('.fund-title a').text() + ' has been opened for bidding');
+
+
     });
     auction_socket.on('auction_bid', function(auction_pk, time_left, username, avatar){
         // user made a bid on auction
