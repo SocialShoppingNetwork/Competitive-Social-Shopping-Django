@@ -27,7 +27,7 @@ SHOWCASE_TIME = 3600
 # delay before displaying for bidding (after item was fully funded)
 TRANSITION_PHASE_1_TIME = 0.2 * 60
 # item will stay there for X mins more displaying the winner until disappears from bidding and appears to funding
-TRANSITION_PHASE_2_TIME = 10 * 60
+TRANSITION_PHASE_2_TIME = 1 * 60
 
 
 # auth

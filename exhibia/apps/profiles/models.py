@@ -14,11 +14,12 @@ from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-
+from time import time
 from django_countries import CountryField
 import dbsettings
 
-from auctions.models import AuctionItem
+from auctions.models import AuctionItem, Auction
+
 from social_auth.signals import socialauth_registered
 from social_auth.backends import twitter, facebook, google
 from socials.models import LikeItem
@@ -118,7 +119,7 @@ class Member(models.Model):
             # XXX need to set extra params to twitter backend
             # as we have to get avatar via api call
             url = ''
-        cache.set('avatar|%d' % self.pk, url , 60*60*24)
+        cache.set('avatar|%d' % self.pk, url, 60*60*24)
         return url
 
     def invitation_succeed(self):
@@ -136,16 +137,21 @@ class Member(models.Model):
                 'template': message,
                 'href': '#'
             }
-            req = urllib2.Request("https://graph.facebook.com/%s/notifications" % self.user.social_auth.get(user=self,
-                                                                                                            provider='facebook').uid,
-                                  urllib.urlencode(params), {})
-
-            urllib2.urlopen(req).read()
+            try:
+                req = urllib2.Request("https://graph.facebook.com/%s/notifications" % self.user.social_auth.get(user=self, provider='facebook').uid, urllib.urlencode(params), {})
+                urllib2.urlopen(req).read()
+            except urllib2.HTTPError:
+                pass
 
         elif 'twitter' in providers:
             pass
         else:
             pass
+
+    def is_newbie(self):
+        return not Auction.objects.filter(last_bidder_member=self.user,
+                                          ended_unixtime__isnull=False)\
+                                  .exists()
 
     """
     def auctionorders_unpaid(self):

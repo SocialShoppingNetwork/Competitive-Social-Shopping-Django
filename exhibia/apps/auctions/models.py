@@ -12,7 +12,7 @@ from django.db.models import Avg, Max, Min, Count
 from django.core.validators import RegexValidator
 from django_countries import CountryField
 
-from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
+from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits, AuctionLocked
 
 from utils import full_url
 from auctions.constants import *
@@ -70,7 +70,7 @@ class AuctionManager(models.Manager):
         return self.get_query_set().filter(status=TRANSITION_PHASE_1)
 
     def transition_phase_2(self):
-        return self.get_query_set().filter(status=TRANSITION_PHASE_1)
+        return self.get_query_set().filter(status=TRANSITION_PHASE_2)
 
     def time_over(self):
         return self.waiting_pledge().filter(deadline_time__lte=time())
@@ -153,8 +153,8 @@ class AuctionItemManager(models.Manager):
         items = self.get_query_set()\
             .filter(giveaway=True)\
             .exclude(amount=0)\
-            .exclude(code__in=Auction.objects.showcase().values_list('item', flat=True))\
-            .exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True))
+            .exclude(code__in=Auction.objects.showcase().values_list('item', flat=True))
+            # .exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True))
 
         if items.count() > 0:
             i = randint(0, items.count()-1)
@@ -216,6 +216,11 @@ class AuctionItem(models.Model):
 
     giveaway = models.BooleanField()
 
+    # lock item after X bids
+    lock_after = models.PositiveIntegerField(blank=True, null=True, verbose_name='Lock item after how many bids?')
+    # item is only for new users (which have never been winners)
+    newbie = models.BooleanField()
+
     def __unicode__(self):
         return self.name
 
@@ -272,6 +277,8 @@ class Auction(models.Model):
     objects = AuctionManager()
 
     in_queue = models.BooleanField()
+
+    locked = models.BooleanField()
 
     def __unicode__(self):
         return self.item.name
@@ -373,6 +380,12 @@ class Auction(models.Model):
             #TODO check this only raise without conditions, no win require, no conditions
             raise AlreadyHighestBid
 
+        # the auction is locked
+        if self.locked:
+            #check user
+            if not AuctionBid.objects.filter(auction=self, bidder=bidder).exists():
+                raise AuctionLocked
+
         #if self.status == "w":
         #    raise AuctionIsNotReadyYet
 
@@ -385,12 +398,19 @@ class Auction(models.Model):
         unixtime = time()
         if self.status == 'w':
             self.status = 'p'
+
         AuctionBid.objects.create(auction=self, bidder=bidder, unixtime=unixtime, price=price)
         self.last_bidder = username
         self.last_bidder_member = bidder.user
         self.last_bid_type = bid_type
         self.last_unixtime = time()
         self.current_offer = price
+
+        #lock item after "item.lock_after" bids
+
+        if self.item.lock_after == self.bids.count():
+            self.locked = True
+
         self.save()
 
     @property

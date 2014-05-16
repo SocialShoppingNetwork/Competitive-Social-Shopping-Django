@@ -1,10 +1,5 @@
-	<ul id="items" class="thumbnails">
-{% for auction in items %}
-    {% if auction.is_processing %}
-        {% include "auctions/showcase_box.html" %}
-    {% else %}
-        {% include "auctions/auction_box.html" %}
-    {% endif %}
-{% endfor %}
-
-	</ul>
+<ul id="items" class="thumbnails">
+    {% for auction in items %}
+            {% include "auctions/showcase_box.html" %}
+    {% endfor %}
+</ul>

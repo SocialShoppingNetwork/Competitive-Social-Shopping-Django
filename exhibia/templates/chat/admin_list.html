@@ -1,0 +1,162 @@
+{% extends "admin/base_site.html" %}
+{% load adminmedia admin_list i18n %}
+{% load url from future %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>{% if title %} &rsaquo; {{ title }}{% endif %}</div>{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+    {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+    {% endif %}
+    {% if cl.formset or action_form %}
+    {% url 'admin:jsi18n' as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+    {% endif %}
+    {{ media.css }}
+    {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!--<script>window.jQuery || document.write('<script src="{{ STATIC_URL }}/js/libs/jquery-1.6.2.min.js"><\/script>')</script>-->
+    <script>
+        $(document).ready(function() {
+            $('.action-select').change(function() {
+                if(this.checked) {
+                    $(this).closest('tr').addClass('selected');
+                }
+                else {
+                    $(this).closest('tr').removeClass('selected');
+                    $('#action-toggle').prop('checked', false);
+                }
+            });
+
+            $('#action-toggle').change(function() {
+                if(this.checked) {
+                    $('#result_list').find('.action-select').prop('checked', true).change();
+                }
+                else {
+                    $('#result_list').find('.action-select').prop('checked', false).change();
+                }
+            });
+
+            $('.ban-unban-user').click(function() {
+                var user_id = $(this).attr('data-user-id');
+                var status = $(this).attr('data-user-status');
+                var _this = this;
+
+                $.ajax({
+                    url:"/chat/ban-user/",
+                    type: "POST",
+                    data: {user_id: user_id, status: status},
+                    success: function(result) {
+                        if(result == 'OK') {
+                            if(status == 1) {
+                                var text = 'Ban user';
+                            }
+                            else {
+                                var text = 'Unban user'
+                            }
+
+                            $('.ban-unban-user[data-user-id=' + user_id + ']').text(text);
+                            $('.ban-unban-user[data-user-id=' + user_id + ']').attr('data-user-status', 1 - status);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock extrahead %}
+
+
+{% block content %}
+    <div id="content" class="flex">
+        <h1>Last chat messages:</h1>
+        {% if chat_messages %}
+        <div id="content-main">
+            <div class="module filtered" id="changelist">
+                <form id="changelist-form" method="POST">
+                    {% csrf_token %}
+                    <div class="actions">
+                        <label>Action: <select name="action">
+                    <option value="" selected="selected">---------</option>
+                    <option value="delete_selected">Delete selected auctions</option>
+                    </select></label><input type="hidden" class="select-across" value="0" name="select_across">
+                        <button type="submit" class="button" title="Run the selected action" name="index" value="0">Go</button>
+                    </div>
+                    <div class="results">
+                        <table cellspacing=0 id="result_list">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="action-checkbox-column">
+                                        <input type="checkbox" id="action-toggle" style="display: inline-block;">
+                                    </th>
+                                    <th scope="col">
+                                           <a href="#">Username</a>
+                                    </th>
+                                    <th scope="col">
+                                           <a href="#">Message</a>
+                                    </th>
+                                    <th scope="col">
+                                           <a href="#">Date</a>
+                                    </th>
+                                    <th scope="col">
+                                           <a href="#">Status</a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for message in chat_messages %}
+                                    <tr class="{% cycle 'row1' 'row2' %}">
+                                        {% for key, value in message.items %}
+                                            {% if key == '_id' %}
+                                                <td class="action-checkbox">
+                                                    <input type="checkbox" class="action-select" value="{{ value }}" name="_selected_action">
+                                                </td>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <td class="username">
+                                            {% if message.user %}
+                                                <a href="{% url 'admin:auth_user_change' message.user.id %}">{{ message.username }}</a>
+                                            {% else %}
+                                                {{ message.username }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ message.message }}</td>
+                                        <td>{{ message.date }}</td>
+                                        {% if message.user %}
+                                            <td>
+                                                <a class="ban-unban-user" data-user-id="{{ message.user_id }}" data-user-status="{% if message.user.profile.is_banned %}1{% else %}0{% endif %}" href="#">
+                                                    {% if not message.user.profile.is_banned %}
+                                                        Ban user
+                                                    {% else %}
+                                                        Unban user
+                                                    {% endif %}
+                                                </a>
+                                            </td>
+                                        {% else %}
+                                            <td>guest user</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <p class="paginator">
+            0 messages
+        </p>
+        {% endif %}
+    </div>
+    <script type="text/javascript">
+{% endblock content%}

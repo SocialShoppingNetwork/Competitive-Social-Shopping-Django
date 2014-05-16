@@ -69,4 +69,5 @@ rackspace-auth-openstack==1.3
 rackspace-novaclient==1.4
 rax-default-network-flags-python-novaclient-ext==0.2.4
 rax-scheduled-images-python-novaclient-ext==0.2.1
+pymongo==2.7
 

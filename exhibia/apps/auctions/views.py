@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import pymongo
 import datetime
 import cjson
 from operator import attrgetter
@@ -12,10 +12,10 @@ from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
 
-from auctions.models import Auction, AuctionItem
-from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
+from apps.auctions.models import Auction, AuctionItem
+from apps.auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 from apps.auctions.models import Category
-from django.db.models import Q
+from apps.utils.mongo_connection import get_mongodb
 
 
 @csrf_exempt
@@ -56,16 +56,21 @@ def index(request):
 
     categories = Category.objects.all()
 
-    ## нужно передавать showcase (bidd) и auctions (fund) отдельно
+    # last 15 chat messages from mongo
+    db = get_mongodb()
+    chat_messages = list(db.chat.find().limit(15).sort("date", pymongo.DESCENDING))
+
     return {'auctions': auctions,
             'showcase': showcase,
             'items': showcase,
             'categories': categories,
-            #'auctions_json': auctions_json,
+            'messages': chat_messages,
             'auctions_ended q': auctions_ended}
+
 
 def xauction_bid(request, auction_id):
     pass
+
 
 @render_to('auctions/item_exhibit.html')
 def view_item(request, slug):
@@ -91,6 +96,7 @@ def view_item(request, slug):
 @render_to('buy_now.html')
 def buy_now(request, item_id):
     return {}
+
 
 def auction_bid(request, auction_id=None):
     "not used"

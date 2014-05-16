@@ -3,7 +3,7 @@
         "pk": 1,
         "model": "sites.site",
         "fields": {
-            "domain": "glacial-depths-3204.herokuapp.com",
+            "domain": "exhibia.com",
             "name": "Exhibia"
         }
     }

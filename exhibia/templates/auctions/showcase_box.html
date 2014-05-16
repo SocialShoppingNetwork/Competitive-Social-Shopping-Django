@@ -18,13 +18,28 @@
                     <img class="social" width="24" height="24" src="" style="display:none;"/>
                     <span style="font-size: 11px;">Be the first bidder</span>
                 {% endif %}
-
 			</div>
         </div>
 		<div class="panel">
-			<div class="btn-group fund-options">
-				<a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#" >BID</a>
-			</div>
+            {% if a.item.newbie %}
+                {% if request.user.profile.is_newbie or not request.user.is_authenticated %}
+                    <div class="btn-group fund-options">
+                        <a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#" >BID</a>
+                    </div>
+                {% else %}
+                    <div class="btn-group fund-options">
+                        <h6 align="center">Newbie exhibit</h6>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="btn-group fund-options">
+				    <a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#" >BID</a>
+			    </div>
+            {% endif %}
+
+            {% if a.locked %}
+                <span style="font-size: 11px;">LOCKED ITEM</span>
+            {% endif %}
 		</div>
 	</div>
 </li>

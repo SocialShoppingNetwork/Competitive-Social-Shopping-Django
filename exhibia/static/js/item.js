@@ -30,6 +30,9 @@ $(document).ready(function() {
     auction_socket.on('AUCTION_EXPIRED', function(){
        alert('Auction Expired');
     });
+    auction_socket.on('AUCTION_LOCKED', function(){
+       alert('Auction was locked');
+    });
     auction_socket.on('auction_funded', function(auction_pk, amount_pleged, backers, funded){
         // item have been funded but not at full price yet
         var li = $("li#"+auction_pk);

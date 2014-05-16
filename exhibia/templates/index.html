@@ -8,7 +8,6 @@
 {% endblock extra_head_base %}
 
 {% block body %}
-
 	<div class="btn-group sorting" data-toggle="buttons-radio">
         <div class="fb-like" data-href="http://{{SITE_DOMAIN}}" data-send="false" data-layout="button_count" data-show-faces="false"></div>
         <div class="g-plusone" data-size="medium" data-href="http://{{SITE_DOMAIN}}" data-callback="gplus_callback"></div>
@@ -44,11 +43,24 @@
         </div>
         <h3 class="tab-title">Chat</h3>
         <div class="container chat-content">
-            <ul class="unstyled chat-container"></ul>
+            <ul class="unstyled chat-container">
+                {% for message in messages %}
+                    <li class="row">
+                        <div class="span1">
+                            <img src="{{ message.avatar }}" class="img-circle" title="{{ message.username }}" />
+                        </div>
+                        <div class="span2">
+                            <span class="user-name">{{ message.username }}</span> {{ message.message }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if not request.user.profile.is_banned %}
             <div class="input-prepend type-message">
                 <span class="add-on"><i class="icon-envelope"></i></span>
                 <input id="chat-msg" type="text" class="span2">
             </div>
+            {% endif %}
         </div>
     </div>
 

@@ -55,9 +55,9 @@ class KickOff(KillReceived):
         while not self.kill_received:
 
             flush_transaction()
-
             ## checking time of transition phase 1
             for auction in Auction.objects.transition_phase_1():
+                print '--->>> there are some auctions in transition phase 1 \n'
                 if time() > auction.last_unixtime + settings.TRANSITION_PHASE_1_TIME:
                     auction.in_queue = True
                     auction.status = constants.AUCTION_WAITING
@@ -67,6 +67,7 @@ class KickOff(KillReceived):
 
             ## checking time of transition phase 2
             for auction in Auction.objects.transition_phase_2():
+                print '--->>> there are some auctions in transition phase 2 \n'
                 if time() > auction.last_unixtime + settings.TRANSITION_PHASE_2_TIME:
                     auction.end()
                     print '--->>> move from transition phase 2 to queue \n'
@@ -99,6 +100,7 @@ class Dispatcher(KillReceived):
             ## adds giveaway item if active auctions less than in settings
             if Auction.objects.showcase().count() < settings.MIN_ACTIVE_AUCTIONS:
                 item = AuctionItem.objects.get_giveaway_item()
+
                 if item:
                     Auction.objects.create_giveaway_from_item(item)
                     print '--->>> add giveaway auction \n'

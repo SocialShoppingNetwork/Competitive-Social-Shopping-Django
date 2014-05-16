@@ -8,6 +8,7 @@ import weakref
 
 import redis
 import gevent
+import datetime
 
 from django.core.urlresolvers import reverse
 from django.template import loader
@@ -17,16 +18,17 @@ from socketio.namespace import BaseNamespace
 
 from .decorators import login_required
 
-from auctions.models import Auction
-from auctions.exceptions import *
-from auctions import constants
+from apps.auctions.models import Auction
+from apps.auctions.exceptions import *
+from apps.auctions import constants
 from settings.apps_settings import TRANSITION_PHASE_1_TIME
+from apps.utils.mongo_connection import get_mongodb
 
 
 redis_pool = redis.ConnectionPool(host=settings.REDIS['host'],
                                   port=settings.REDIS['port'],
                                   password=settings.REDIS['password'],
-                                  db=1, max_connections=3)
+                                  db=0, max_connections=3)
 
 
 def listener():
@@ -98,7 +100,8 @@ class RedisBroadcast(object):
         msg = {'event':event, 'args':args}
         r.publish(self.channel, dumps(msg))
 
-chat_history = deque(maxlen=15)
+
+# chat_history = deque(maxlen=15)
 
 
 class ChatNamespace(RedisBroadcast, BaseNamespace):
@@ -109,20 +112,39 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
         super(ChatNamespace, self).initialize()
         if self.request.user.is_authenticated():
             self.session['username'] = self.request.user.username
+            self.session['user_id'] = self.request.user.id
             self.session['avatar'] = self.request.user.profile.img_url
         else:
             self.session['username'] = u'guest'
             self.session['avatar'] = '' # pick default avatar
-        for i in chat_history:
-            self.emit('user_message', *i)
+            self.session['user_id'] = '' # pick default avatar
+
+        # here can be added custom chat history
+        # chat_history = (ms1, ms2,)
+
+        # for i in chat_history:
+        #     self.emit('user_message', *i)
 
     def on_send_chat_message(self, msg):
         r = redis.Redis(connection_pool=redis_pool)
-        if r.sinter('banned_users', self.session['username']):
-            return
+        # if r.sinter('banned_users', self.session['username']):
+        #     return
+        # check if user is not banned
+        # if self.session['user_id']:
+        #     return
+
         message = [self.session['username'], msg[:200], self.session['avatar']]
-        chat_history.append(message)
+        # chat_history.append(message)
+        # first publish
         self.publish('user_message',  *message)
+        # then add to MongoDB
+        db = get_mongodb()
+        db.chat.save({"username": self.session['username'],
+                      "user_id": self.session['user_id'],
+                      "avatar": self.session['avatar'],
+                      "message": msg[:200],
+                      "date": datetime.datetime.utcnow(),
+                      })
 
 
 class AuctionNamespace(RedisBroadcast, BaseNamespace):
@@ -140,18 +162,17 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
         member.pledge(auction, amount)
         member.incr_credits(amount)
         if auction.amount_pleged < auction.item.price:
-
-            for member in auction.backers_history:
-                member.auction_funded_notify(message='Item %s was fully funded. '
-                    'Exhibition will start in %s minutes!' % (auction.item.name, int(TRANSITION_PHASE_1_TIME/60)))
-
             self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
                         auction.backers, '%.1f' %auction.funded)
         else:
             auction.status = constants.TRANSITION_PHASE_1
             auction.last_unixtime = time()
             auction.save()
+
             # notify all users, that have funded this item via facebook messages, google, mail
+            for member in auction.backers_history:
+                member.auction_funded_notify(message='Item %s was fully funded. '
+                    'Exhibition will start in %s minutes!' % (auction.item.name, int(TRANSITION_PHASE_1_TIME/60)))
 
             self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
                         auction.backers, '%.1f' %auction.funded)
@@ -174,7 +195,6 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
             #     self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
             #         auction.backers, '%.1f' %auction.funded)
 
-
     @login_required
     def on_bid(self, auction_pk):
         member = self.request.user.profile
@@ -183,14 +203,18 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
         try:
             auction = Auction.objects.live().get(pk=int(auction_pk))
         except Auction.DoesNotExist: return
+
         try:
             member.bid(auction)
+
         except NotEnoughCredits:
             self.emit('NOT_ENOUGH_CREDITS')
         except AlreadyHighestBid:
             self.emit('ALREADY_HIGHEST_BID')
         except AuctionExpired:
             self.emit('AUCTION_EXPIRED')
+        except AuctionLocked:
+            self.emit('AUCTION_LOCKED')
         else:
             self.publish("auction_bid", auction.pk, auction.time_left,
                          self.request.user.username, member.img_url)

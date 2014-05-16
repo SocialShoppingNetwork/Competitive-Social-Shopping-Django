@@ -280,9 +280,16 @@ REDIS = {
     'username': 'root',
     'password': '',
     'host': 'localhost',
-    'port': 6379
+    'port': 6379,
 }
 
+
+MONGO = {
+    'username': 'root',
+    'password': '',
+    'host': 'localhost',
+    'port': 27017,
+}
 
 # geoip
 GEOIP_PATH = path.join(path.dirname(PROJECT_ROOT), 'geoip')
