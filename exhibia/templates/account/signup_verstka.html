@@ -1,0 +1,18 @@
+<div class="modal fade" id="ModalSignIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">sign up</h1>
+      </div>
+      <div class="modal-body loginbtns">
+        <a href="{% url socialauth_begin 'facebook' %}" class="btn btn-blue icon-social icon-fb border-left-fb">Sign up with Facebook</a>
+        <a href="{% url socialauth_begin 'twitter' %}" class="btn btn-twit icon-social icon-twit border-right-tw">Sign up with Twitter</a>
+        <a href="{% url socialauth_begin 'google-oauth2' %}" class="btn btn-google icon-social icon-google">Sign up with Google</a>
+        <a href="" class="text-center link">or sign up with <span>email</span></a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-black" data-dismiss="modal">close</button>
+      </div>
+    </div>
+  </div>
+</div>

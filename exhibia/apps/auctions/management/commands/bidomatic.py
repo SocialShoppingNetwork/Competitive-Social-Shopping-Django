@@ -22,6 +22,7 @@ from auctions.constants import *
 from profiles.models import Member
 import sys
 from apps.auctions import constants
+from apps.streamer.namespaces import AuctionNamespace
 
 
 def to_json(auction):
@@ -107,6 +108,10 @@ class Dispatcher(KillReceived):
 
             ## changes items, wich were fully funded, to active auctions
             auctions_time_over = Auction.objects.time_over()
+
+
+            namespace = AuctionNamespace()
+            namespace.test()
 
 
 

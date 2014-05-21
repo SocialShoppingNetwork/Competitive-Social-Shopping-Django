@@ -43,12 +43,10 @@ def bid_ajax(request, auction_id):
 
 from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
-@render_to('index.html')
+@render_to('index_verstka.html')
 def index(request):
     # auctions = Auction.objects.waiting_pledge().filter(item__categories=Category.objects.all()[0])
     auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
-    auctions.filter(item__categories=Category.objects.all()[0])
-
     showcase = Auction.objects.live()
 
     auctions_ended = Auction.objects.finished().select_related('item', 'item__image')[:4]
@@ -58,9 +56,9 @@ def index(request):
 
     # last 15 chat messages from mongo
     db = get_mongodb()
-    chat_messages = list(db.chat.find().limit(15).sort("date", pymongo.DESCENDING))
+    chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(5))
 
-    return {'auctions': auctions,
+    return {'auctions': auctions.filter(item__categories=Category.objects.all()[0]),
             'showcase': showcase,
             'items': showcase,
             'categories': categories,
@@ -137,7 +135,7 @@ def fund(request, auction_id):
     # not used anymore. see streamer.namespaces
     if not request.user.is_authenticated():
         if request.is_ajax():
-            response = {'error':"AUTH_REQUIRED"}
+            response = {'error': "AUTH_REQUIRED"}
             return HttpResponse(cjson.encode(response))
         return HttpResponseRedirect(reverse('acct_login')) #TODO redirect to register
     auction = get_object_or_404(Auction, id=auction_id)
@@ -181,9 +179,10 @@ def checkout(request):
 @csrf_exempt
 def append_funding_carousel(request):
     category_id = request.GET.get('category_id')
+    print category_id
     auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
-    auctions.filter(item__categories=category_id)
+    auctions = auctions.filter(item__categories=category_id)
     if not auctions:
         return HttpResponse('')
-
-    return render(request, 'auctions/funding_carousel.html', {'auctions': auctions})
+    print 'ПАУУУУУУУУУУУУУУК!!!!'
+    return render(request, 'auctions/funding_carousel_verstka.html', {'auctions': auctions})

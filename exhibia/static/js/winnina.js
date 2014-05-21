@@ -166,16 +166,20 @@ function fill_payment_form(item_description, item_price, custom_value){
 
 
 function ban_user(username){
-    $.post("/chat/send-message/",{'username':username});
+    $.post("/chat/send-message/", {'username':username});
 }
 
 
 function insert_notification(text){
     if (text.length) {
-        var line = $('<li />').addClass('row').hide();
-        var block = $('.social-stream ul');
-        line.html('<div class="span1"></div><div class="span2">'+text+'</div>');
-        $('.social-stream ul').prepend(line);
-        line.show();
+        var notification = $('<li />').hide();
+        notification.html(
+            '<div class="warning">' +
+            '<i class="icon-attention"></i>' +
+            '<span>' + text +'</span>' +
+            '</div>');
+
+        $('#chat-msg').closest('li').prepend(notification);
+        notification.slideDown();
     }
 }

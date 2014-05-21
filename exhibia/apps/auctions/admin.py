@@ -8,6 +8,7 @@ class AuctionItemImagesInline(admin.TabularInline):
     extra = 0
     # max_num = 0
 
+
 class PrepAdmin(object):
    prepopulated_fields = {"slug": ("name",)}
 
@@ -23,8 +24,15 @@ class AuctionItemAdmin(admin.ModelAdmin):
     inlines = [AuctionItemImagesInline, ]
 
     def save_model(self, request, obj, form, change):
+        created = obj.pk
         super(AuctionItemAdmin, self).save_model(request, obj, form, change)
-        Auction.objects.create_from_item(obj)
+        if not created:
+            Auction.objects.create_from_item(obj)
+
+
+
+
+
 
 
 class AutciotnBidAdmin(admin.ModelAdmin):
@@ -52,7 +60,8 @@ class CategoryAdmin(PrepAdmin, admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
-class BrandADmin(PrepAdmin, admin.ModelAdmin):pass
+class BrandADmin(PrepAdmin, admin.ModelAdmin):
+    pass
 
 
 site.register(Auction, AuctionAdmin)

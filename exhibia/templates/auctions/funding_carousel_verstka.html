@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <div class="jcarousel-wrapper">
+      <div class="row">
+          <div class="jcarousel">
+            <div class="row">
+              {% for auction in auctions %}
+                    {% include 'auctions/auction_box_verstka.html' %}
+              {% endfor %}
+            </div>
+          </div>
+        <div class="clearfix"></div>
+      </div>
+
+      <a href="#" class="jcarousel-control-prev">&lsaquo;</a>
+      <a href="#" class="jcarousel-control-next">&rsaquo;</a>
+  </div>
+</div>
+<div class="controls"></div>
+
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jcarousel.responsive.js"></script>

@@ -94,7 +94,7 @@ class AuctionManager(models.Manager):
     #    return self.filter(status='p')
 
     def paused(self):
-        return self.get_query_set().filter(status='p')
+        return self.get_query_set().filter(status=AUCTION_PROCESSING)
 
     #def waiting(self):
     #    return self.get_query_set().filter(status='w')
@@ -112,7 +112,7 @@ class AuctionManager(models.Manager):
         return self.running().filter(last_unixtime__lte=time()-F('bidding_time'))
 
     def finish_expired(self):
-        self.expired().update(status='f')
+        self.expired().update(status=AUCTION_FINISHED)
 
     def create_from_item(self, item):
         auction = Auction.objects.create(item=item,

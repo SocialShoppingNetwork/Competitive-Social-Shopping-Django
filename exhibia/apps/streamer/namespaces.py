@@ -119,12 +119,6 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
             self.session['avatar'] = '' # pick default avatar
             self.session['user_id'] = '' # pick default avatar
 
-        # here can be added custom chat history
-        # chat_history = (ms1, ms2,)
-
-        # for i in chat_history:
-        #     self.emit('user_message', *i)
-
     def on_send_chat_message(self, msg):
         r = redis.Redis(connection_pool=redis_pool)
         # if r.sinter('banned_users', self.session['username']):
@@ -134,7 +128,6 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
         #     return
 
         message = [self.session['username'], msg[:200], self.session['avatar']]
-        # chat_history.append(message)
         # first publish
         self.publish('user_message',  *message)
         # then add to MongoDB
@@ -153,6 +146,7 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
 
     @login_required
     def on_fund(self, message):
+        print message
         try:
             auction = Auction.objects.select_related('item').get(pk=message['auction_pk'])
         except Auction.DoesNotExist:
@@ -161,6 +155,7 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
         amount = Decimal(message['amount'])
         member.pledge(auction, amount)
         member.incr_credits(amount)
+
         if auction.amount_pleged < auction.item.price:
             self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
                         auction.backers, '%.1f' %auction.funded)
@@ -195,14 +190,21 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
             #     self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
             #         auction.backers, '%.1f' %auction.funded)
 
+    def test(self):
+        self.publish("auction_bid", 'auction.pk', 'auction.time_left',
+                     'self.request.user.username', 'member.img_url')
+
     @login_required
     def on_bid(self, auction_pk):
+
+        print 'BIIIID'
         member = self.request.user.profile
         if not auction_pk:
             return
         try:
             auction = Auction.objects.live().get(pk=int(auction_pk))
-        except Auction.DoesNotExist: return
+        except Auction.DoesNotExist:
+            return
 
         try:
             member.bid(auction)

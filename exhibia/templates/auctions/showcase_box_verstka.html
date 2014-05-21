@@ -1,0 +1,60 @@
+{% with auction as a %}
+<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 w-193">
+    <div class="thumbnail" id="item_{{ a.id }}">
+      <div class="item-foto">
+        <button data-toggle="modal" data-target="#ModalBattleView"><img src="{{ a.item.image.img.url }}" alt=""/></button>
+      </div>
+      <div class="item-name">
+        <h6>{{ a.item.name }}</h6>
+      </div>
+      <div class="caption">
+        <div class="item-bid">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                    {% if a.last_bidder %}
+                        <div class="wrapper-foto">
+                            <img class="item-bidder-foto" src="{{ a.last_bidder_member.profile.img_url }}">
+                        </div>
+                    {% else %}
+                        <div class="wrapper-foto" style="display:none;">
+                            <img class="item-bidder-foto" src="">
+                        </div>
+                    {% endif %}
+
+                    <div class="item-last-bidder">{{ a.last_bidder }}</div>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="item-timer">timer: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} sec</span></div></td>
+              </tr>
+
+              <tr>
+                <td>
+                  {% if a.last_bidder %}
+                    <div data-timeleft="{{ a.time_left }}" data-bidtime="{{ a.bidding_time }}" class="time showcase-timer">{{ a.time_left }}</div>
+                  {% else %}
+                    <div class="color-blue start-message">Be the first bidder</div>
+                    <div style="display:none;" data-timeleft="{{ a.time_left }}" data-bidtime="{{a.bidding_time}}" class="time showcase-timer">{{ a.time_left }}</div>
+                  {% endif %}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-pink bid-btn" data-auctionid="{{ a.id }}">bid</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="item-buy">
+          <table>
+            <tr>
+              <td>Retail ${{ a.item.price }}</td>
+              <td ><button data-toggle="modal" data-target="#ModalBuyNow" class="btn btn-buy pull-right">вuy</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+{% endwith %}

@@ -1,7 +1,6 @@
 {% extends 'site_base.html' %}
 {% load compress %}
 
-
 {% block extra_head_base %}
     <script type="text/javascript" src="{{ STATIC_URL }}jquery.jcarousel.min.js"></script>
     <link href="{{ STATIC_URL }}funding.jcarousel.css" rel="stylesheet">
@@ -96,9 +95,7 @@
                     if(data) {
                         console.log(data);
                         $('#funding_container').html(data);
-                    }
-                    else {
-                        $('#funding_container').html('<h1>There is no items for this category. You can try later!</h1>');
+
                     }
                 }
             });

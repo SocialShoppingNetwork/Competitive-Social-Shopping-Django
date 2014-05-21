@@ -103,7 +103,8 @@ $(document).ready(function() {
         auction_socket.emit("fund", {amount:amount, auction_pk:auction_pk});
         $('#fundModal').modal('hide');
     });
-    $('ul#items').on('click', '.bid-btn', function(event){
+    $('#items').on('click', '.bid-btn', function(event){
+        alert(';dadadadada!!!');
         var self = $(this);
         if (!self.hasClass('disabled')){
             auction_id = self.attr('data-auctionid');

@@ -1,0 +1,80 @@
+{% with request.user as user %}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      My Profile
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="pull-right btn-accordion">
+        <img src="{{ MEDIA_URL }}img/btn-accordion.png" width="12" height="12"/>
+      </a>
+    </h4>
+  </div>
+  <div id="collapseOne" class="panel-collapse collapse in logIn" style="height: auto;">
+    <div class="panel-body">
+      <div class="alert alert-info">
+        <span>You have earned the</span> Verified Badge!
+      </div>
+      <ul class="list-unstyled">
+        <li>
+          <div class="foto"><img src="{{ user.profile.img_url }}" /></div>
+          <div class="description">
+             <table>
+               <tr>
+                 <td><a href="javascript:void(0)" data-toggle="modal" data-target="#ModalBidderProfile">{{ user.username }}</a></td>
+                 <td><i class="icon-ok-circled"></i></td>
+                 <td><img src="{{ MEDIA_URL }}img/winner.png"/></td>
+               </tr>
+             </table>
+                <div class="comment">since {{ user.date_joined|date:"M Y" }}</div>
+          </div>
+        </li>
+      </ul>
+      <div class="info-profile">
+        <div class=" profile-nav">
+          <div class="col-xs-6 col-sm-6 col-md-12 col-lg-6">
+            <a href="">My Cart (3)</a>
+            <a href="">Notifications (2)</a>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-12 col-lg-6">
+            <a href="">My Watchlist(3)</a>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="star-profile">
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <ul class="list-unstyled">
+              <li>
+                <span class="glyphicon glyphicon-star star-pink"></span>
+                <strong>1024</strong>
+                Paid Bids
+              </li>
+              <li>
+                <span class="glyphicon glyphicon-star star-blue"></span>
+                <strong>123</strong>
+                Bonus Bids
+              </li>
+            </ul>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <ul class="list-unstyled">
+              <li>
+                <span class="glyphicon glyphicon-star star-green"></span>
+                <strong>431</strong>
+                Points
+              </li>
+              <li>
+                <span><img src="{{ MEDIA_URL }}img/price.png" width="15" height="19" /></span>
+                <strong>12</strong>
+                Wins
+              </li>
+            </ul>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+        <div class="time-limit">Win Limit: <span class="txt-pink">23:59:59</span></div>
+    </div>
+  </div>
+</div>
+{% endwith %}

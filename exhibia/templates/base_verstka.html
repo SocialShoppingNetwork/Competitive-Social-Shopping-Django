@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="">
+    <title>{% block title %}{{SITE_NAME}}{% endblock title %}</title>
+
+    {% block stylesheets_head %}
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jcarousel.responsive.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/fontello.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/animation.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/style.css">
+    {% endblock stylesheets_head %}
+
+    {% block javascripts_head %}
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-scrollto.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}jquery.jcarousel.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/application.js"></script>
+        <!--[if lt IE 9]>
+        <script src="{{ MEDIA_URL }}js/html5shiv.js"></script>
+        <script src="{{ MEDIA_URL }}js/respond.min.js"></script>
+        <![endif]-->
+
+        <!--OLD -->
+             <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <!--OLD -->
+    {% endblock javascripts_head %}
+
+        <!--OLD-->
+        <script>
+            var selected_item = null;
+        </script>
+        {% block extra_head_base %}
+            {% block extra_head %}{% endblock %}
+        {% endblock %}
+        <!--OLD -->
+  </head>
+
+  <body>
+    <!-- header -->
+    <header>
+     <div class="container w-1300 header">
+       <div class="row">
+         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <nav class="navbar">
+              <div class="navbar-header">
+               <a class="navbar-brand" href=""><img class="img-responsive" src="{{ MEDIA_URL }}img/logo.png"/></a>
+              </div>
+             <!--  <div class="">
+                <form class="navbar-form navbar-left" role="search">
+                  <div class="form-group has-feedback">
+                    <input type="text" class="form-control form-search" placeholder="search">
+                    <span class="glyphicon glyphicon-search  form-control-feedback"></span>
+                  </div>
+                </form>
+              </div> -->
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">how it works</a></li>
+                <li><a href="">faq</a></li>
+                <li>
+                  <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
+                </li>
+                <li>
+                  <button type="button " class="btn btn-danger">login</button>
+                </li>
+              </ul>
+           </nav>
+         </div>
+         <div class="clearfix"></div>
+       </div>
+     </div>
+     <div class="green-line"></div>
+     <div class="red-line"></div>
+    </header>
+    <!-- end header -->
+
+    {% block body %}
+    {% endblock %}
+
+    <!-- footer -->
+    <footer>
+     <div class="footer">
+       <div class="container w-960">
+         <div class="row">
+          <div class="menu">
+             <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+               <h4>our company</h4>
+               <ul class="list-unstyled">
+                 <li>
+                   <a href="">About Us</a>
+                 </li>
+                 <li>
+                   <a href="">FAQ’s</a>
+                 </li>
+                 <li>
+                   <a href="">Contact Us</a>
+                 </li>
+                 <li>
+                   <a href="">Privacy Policy</a>
+                 </li>
+               </ul>
+             </div>
+             <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+               <h4>customer service</h4>
+               <ul class="list-unstyled">
+                 <li>
+                   <a href="">How It Works</a>
+                 </li>
+                 <li>
+                   <a href="">Bidding</a>
+                 </li>
+                 <li>
+                   <a href="">Shipping & Delivery</a>
+                 </li>
+                 <li>
+                   <a href="">Returns & Warranties</a>
+                 </li>
+               </ul>
+             </div>
+             <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+               <h4>online operations</h4>
+               <ul class="list-unstyled">
+                 <li>
+                   <a href="">Payment Methods & Security</a>
+                 </li>
+                 <li>
+                   <a href="">Technical Information</a>
+                 </li>
+                 <li>
+                   <a href="">Blog</a>
+                 </li>
+               </ul>
+             </div>
+             <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+               <h4>connect with us</h4>
+               <ul class="list-unstyled icon-circle">
+                  <li>
+                    <a href="{% url socialauth_begin 'facebook' %}"><i class="icon-facebook-circled"></i></a>
+                  </li>
+                  <li>
+                     <a href="{% url socialauth_begin 'twitter' %}"><i class="icon-twitter-circled"></i></a>
+                  </li>
+               </ul>
+             </div>
+             <div class="clearfix"></div>
+          </div>
+         </div>
+         <div class="row">
+           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+             <div class="copyright">
+               <div class="text-center">&copy; 2013  Social Shopping Network</div>
+             </div>
+           </div>
+           <div class="clearfix"></div>
+         </div>
+       </div>
+     </div>
+    </footer>
+    <!-- end footer -->
+
+
+    <!-- ModalSignIn -->
+    {% include "account/signup_verstka.html" %}
+    <!-- END  ModalSignIn-->
+    <!-- MODAL fUNDiTEMS -->
+    {% include "auctions/modal_funding.html"%}
+    <!-- END MODAL fUNDiTEMS -->
+
+    <!-- modalWishList -->
+    {% include "account/modal_wishlist.html"%}
+    <!-- end modalWishList -->
+
+
+    <script type="text/javascript">
+      console.log("juu");
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 100) {
+              $('#go-up').show();
+              ;
+          } else {
+              $('#go-up').hide();
+          }
+      });
+      $('#go-up').click(function () {
+          $('.header').ScrollTo(0);
+      });
+    </script>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% block extra_js %}
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.easing.1.3.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.quicksand.js"></script>
+        <!--<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.js"></script>-->
+        <script type="text/javascript" src="{{ STATIC_URL }}js/facebook.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/gplus.js"></script>
+    {% endblock extra_js %}
+
+    {% block extra_body %}
+    {% endblock extra_body %}
+
+  </body>
+</html>

@@ -3,7 +3,7 @@
         <div class="jcarousel">
             <ul class="thumbnails">
                 {% for auction in auctions %}
-                    {% include "auctions/auction_box.html" %}
+                    {% include "auctions/auction_box_verstka.html" %}
                 {% endfor %}
             </ul>
         </div>
@@ -25,7 +25,7 @@
                 if (width >= 600) {
                     width = width / 3;
                 } else if (width >= 350) {
-                    width = width / 2;
+                    width = width / 5;
                 }
 
                 jcarousel.jcarousel('items').css('width', width + 'px');
