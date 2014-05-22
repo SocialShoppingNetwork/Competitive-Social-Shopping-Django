@@ -11,7 +11,7 @@ from profiles.models import BillingAddress
 
 
 class ShippingAddress(models.Model):
-    user = models.ForeignKey('auth.User', related_name='shipping_adddresses')
+    user = models.ForeignKey('auth.User', related_name='shipping_addresses')
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
     address1 = models.CharField(max_length=100)

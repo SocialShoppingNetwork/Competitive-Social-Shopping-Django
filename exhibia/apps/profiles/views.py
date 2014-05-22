@@ -85,7 +85,7 @@ def auction_won(request, auction_id, template_name='profiles/auction_won.html'):
             return HttpResponseRedirect('/accounts/profile/won/')
     c = RequestContext(request, {"a": auction,
                                  "member": member,
-                                 'shipping':request.user.shipping_adddresses.all()[0],})
+                                 'shipping':request.user.shipping_addresses.all()[0],})
     return render_to_response(template_name, context_instance=c)
 
 

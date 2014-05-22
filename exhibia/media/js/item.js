@@ -114,14 +114,33 @@ $(document).ready(function() {
     };
     setInterval(update_timers, 1000);
 
-	$('#fund_item').click(function(event) {
+	$('body').on('click', '#fund_item', function(event) {
         event.preventDefault();
         var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
         // TODO later we'll add 'choose your value'
         auction_socket.emit("fund", {amount:amount, auction_pk:auction_pk});
-        $('#total-bids').text(0);
-        $('#fund_form input').prop('checked', '');
         $('#ModalFund').modal('hide');
+        $('#fund_form input[name=option5]').prop('checked', '');
+        $('#total-bids').text(0);
+    });
+
+	$('body').on('click', '.btn-buy', function(event) {
+        // initiate ajax call to get the right buy now form
+        event.preventDefault();
+        var id= $(this).data('id');
+        $.ajax({
+            type: "POST",
+            url: "/checkout/append_buy_now_form/",
+            data: {'id': id },
+            dataType: 'html',
+            success: function (data) {
+                if(data) {
+                    $('#ModalBuyNow').html(data);
+                    $('#ModalBuyNow').modal('show');
+                }
+            }
+        });
+
     });
     $('#items').on('click', '.bid-btn', function(event){
         var self = $(this);

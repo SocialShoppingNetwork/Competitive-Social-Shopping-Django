@@ -1065,6 +1065,11 @@
 	#ModalBuyNow .foto-pr{
 		text-align: right;
 	}
+    #ModalBuyNow .foto-pr img{
+        width: 350px;
+        max-width: 350px;
+        overflow: hidden;
+	}
 	#ModalBuyNow .item-title h6{
 		font-size: 15px;
 	}

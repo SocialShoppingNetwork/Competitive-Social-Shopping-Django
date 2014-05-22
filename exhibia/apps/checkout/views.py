@@ -20,6 +20,8 @@ from payments.forms import CardForm
 
 from profiles.forms import BillingForm
 from profiles.models import BillingAddress
+from django.views.decorators.http import require_POST
+from checkout.forms import BuyNowForm
 
 
 @login_required
@@ -90,7 +92,7 @@ def confirm_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
 @render_to('checkout/select_shipping_address.html')
 def select_shipping_address(request, auction_id):
     auction = get_object_or_404(request.user.items_won.filter(order=None), id=auction_id)
-    shipping_profiles = request.user.shipping_adddresses.filter(deleted=False)
+    shipping_profiles = request.user.shipping_addresses.filter(deleted=False)
     next_url = request.REQUEST.get('next')
 
     id = request.POST.get('id')
@@ -406,3 +408,15 @@ def select_billing(request, auction_id):
 #     return {
 #         'order':order,
 #     }
+
+
+@csrf_exempt
+@require_POST
+def append_buy_now_form(request):
+    if request.user.is_authenticated():
+        auction = get_object_or_404(Auction, pk=request.POST.get('id'))
+        form = BuyNowForm(request.user)
+        return render(request, 'checkout/modal_buy_now.html', {'item': auction.item, 'form': form})
+    else:
+        # TODO change this to some 'only logged in users' , please log in
+        return render(request, 'checkout/modal_buy_now.html',)
