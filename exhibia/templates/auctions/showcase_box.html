@@ -4,7 +4,7 @@
 		<div class="h3 fund-title"><a href="{{auction.get_absolute_url}}">{{ a.item.name }}</a></div>
         <div align="center">
           	<a href="{{auction.get_absolute_url}}">
-    			<img class="product" src="{{ a.item.image.img.url }}"/>
+    			<img class="product" src="{%if a.item.image.img %}{{ STATIC_URL }}{{ a.item.image.img }}{% endif %}"/>
     		</a>
         </div>
         <div class="caption">
