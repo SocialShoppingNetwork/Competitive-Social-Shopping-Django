@@ -22,7 +22,7 @@ $(document).ready(function() {
                   if(is_text_or_value){
                     element.text(this.someValue.toFixed(0));
                   }else{
-                      element.val(this.someValue.toFixed(0));
+                    element.val(this.someValue.toFixed(0));
                   }
               }
           });
@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 
     var auction_pk = '';
-	$('.fund').click(function() {
+	$('body').on('click', '.fund', function() {
 		// auction_uri = $(this).data('uri');
         auction_pk = parseInt($(this).data('pk'));
 	});
@@ -50,6 +50,7 @@ $(document).ready(function() {
        alert('Auction was locked');
     });
     auction_socket.on('auction_funded', function(auction_pk, amount_pleged, backers, funded){
+        console.log(auction_pk, amount_pleged, backers, funded);
         // item have been funded but not at full price yet
         var div = $("div#auction-"+auction_pk);
         div.find('.bakers').text(backers);
@@ -118,9 +119,9 @@ $(document).ready(function() {
         var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
         // TODO later we'll add 'choose your value'
         auction_socket.emit("fund", {amount:amount, auction_pk:auction_pk});
-        $('#ModalFund').modal('hide');
         $('#total-bids').text(0);
-        $('#fund_form input[name="option5"]').attr('checked', '');
+        $('#fund_form input').prop('checked', '');
+        $('#ModalFund').modal('hide');
     });
     $('#items').on('click', '.bid-btn', function(event){
         var self = $(this);
@@ -132,9 +133,7 @@ $(document).ready(function() {
     });
     $('#fund_form input[name="option5"]').on('click', function(event){
         var val = $(this).val()
-//        $('#total-bids').text(val);
         slotmachine($('#total-bids'), val, true);
-        // TODO add cool up-and-down-animation animation
     });
 
 

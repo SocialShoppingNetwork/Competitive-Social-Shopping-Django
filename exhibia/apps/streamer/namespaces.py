@@ -190,7 +190,7 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
             #     self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,
             #         auction.backers, '%.1f' %auction.funded)
 
-    def test(self):
+    def on_test(self):
         self.publish("auction_bid", 'auction.pk', 'auction.time_left',
                      'self.request.user.username', 'member.img_url')
 

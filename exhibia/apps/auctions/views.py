@@ -179,10 +179,8 @@ def checkout(request):
 @csrf_exempt
 def append_funding_carousel(request):
     category_id = request.GET.get('category_id')
-    print category_id
     auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
     auctions = auctions.filter(item__categories=category_id)
     if not auctions:
         return HttpResponse('')
-    print 'ПАУУУУУУУУУУУУУУК!!!!'
     return render(request, 'auctions/funding_carousel_verstka.html', {'auctions': auctions})

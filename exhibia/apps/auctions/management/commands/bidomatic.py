@@ -110,8 +110,8 @@ class Dispatcher(KillReceived):
             auctions_time_over = Auction.objects.time_over()
 
 
-            namespace = AuctionNamespace()
-            namespace.test()
+            # namespace = AuctionNamespace()
+            # namespace.test()
 
 
 

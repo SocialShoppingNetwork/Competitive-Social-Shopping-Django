@@ -22,14 +22,12 @@
                             <img class="item-bidder-foto" src="">
                         </div>
                     {% endif %}
-
                     <div class="item-last-bidder">{{ a.last_bidder }}</div>
                 </td>
               </tr>
               <tr>
                 <td><div class="item-timer">timer: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} sec</span></div></td>
               </tr>
-
               <tr>
                 <td>
                   {% if a.last_bidder %}
