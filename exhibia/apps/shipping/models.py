@@ -26,10 +26,10 @@ class ShippingAddress(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return unicode(self.user)
+        return "{} {}, {} {} {}".format(self.first_name, self.last_name, self.country, self.city, self.phone)
 
 class ShippingFee(models.Model):
-    item = models.ForeignKey('auctions.AuctionItem')
+    item = models.ForeignKey('auctions.AuctionItem', related_name='shipping_fees')
     country = CountryField()
     shipping = models.CharField(choices=SHIPPING_OPTIONS, max_length=3)
     price = models.DecimalField(max_digits=7, decimal_places=2)

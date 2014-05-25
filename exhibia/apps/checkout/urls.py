@@ -20,6 +20,7 @@ from profiles.models import BillingAddress
 
 urlpatterns = patterns('',
     url(r"^append_buy_now_form/$", 'checkout.views.append_buy_now_form', name='checkout_append_buy_now_form'),
+    url(r"^buy_now/$", 'checkout.views.buy_now', name='buy_now'),
     url(r"^shipping/(?P<auction_pk>\d+?)/$", AddressView.as_view(choose_address=True,
                             headline="Select your shipping address"), name='checkout_shipping'),
     url(r"^billing/(?P<auction_pk>\d+?)/(?P<shipping_pk>\d+?)/$",

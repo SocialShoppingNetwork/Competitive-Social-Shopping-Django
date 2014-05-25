@@ -197,7 +197,7 @@ class BillingAddress(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return unicode(self.user)
+        return "{} {}, {} {} {}".format(self.first_name, self.last_name, self.country, self.city, self.phone)
 
 
 class IPAddress(models.Model):

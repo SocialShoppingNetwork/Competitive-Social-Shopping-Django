@@ -1,7 +1,8 @@
 import datetime
 import cjson
+import json
 
-from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.urlresolvers import reverse
@@ -12,7 +13,7 @@ from annoying.decorators import render_to
 
 from auctions.models import Auction
 from checkout.models import Order
-from shipping.models import ShippingAddress, ShippingRequest
+from shipping.models import ShippingAddress, ShippingRequest, ShippingFee
 from shipping.forms import ShippingForm, get_shipping_form
 
 from payments.models import Card
@@ -22,6 +23,7 @@ from profiles.forms import BillingForm
 from profiles.models import BillingAddress
 from django.views.decorators.http import require_POST
 from checkout.forms import BuyNowForm
+from checkout.models import Order
 
 
 @login_required
@@ -55,7 +57,7 @@ def confirm_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
             auction=auction,
             card=card,
             user=request.user,
-
+            shipping_fee=ShippingFee.objects.get(pk=5),
             shipping_first_name=shipping.first_name,
             shipping_last_name=shipping.last_name,
             shipping_address1=shipping.address1,
@@ -370,7 +372,7 @@ def select_billing(request, auction_id):
                 data = form.cleaned_data
                 if billing:
                     #Update and Select
-                    billing.first_name =  data['first_name']
+                    billing.first_name = data['first_name']
                     billing.last_name = data['last_name']
                     billing.address1 = data['address1']
                     billing.address2 = data['address2']
@@ -415,8 +417,65 @@ def select_billing(request, auction_id):
 def append_buy_now_form(request):
     if request.user.is_authenticated():
         auction = get_object_or_404(Auction, pk=request.POST.get('id'))
-        form = BuyNowForm(request.user)
+        # TODO check if user already bought this auction
+        form = BuyNowForm(request.user, auction)
         return render(request, 'checkout/modal_buy_now.html', {'item': auction.item, 'form': form})
     else:
         # TODO change this to some 'only logged in users' , please log in
         return render(request, 'checkout/modal_buy_now.html',)
+
+
+@require_POST
+@login_required
+def buy_now(request):
+    if request.method == 'POST':
+        auction = get_object_or_404(Auction, pk=request.POST.get('auction'))
+        form = BuyNowForm(request.user, auction, data=request.POST)
+        if form.is_valid():
+            shipping = form.cleaned_data['shipping']
+            billing = form.cleaned_data['billing']
+
+            ShippingRequest.objects.create(
+                auction=auction,
+                user=request.user,
+                first_name=shipping.first_name,
+                last_name=shipping.last_name,
+                address1=shipping.address1,
+                address2=shipping.address2,
+                city=shipping.city,
+                state=shipping.state,
+                country=shipping.country,
+                zip_code=shipping.zip_code,
+                phone=shipping.phone,
+            )
+
+            Order.objects.create(
+                user=request.user,
+                auction=auction,
+                card=form.cleaned_data['payment'],
+                shipping_fee=form.cleaned_data['method'],
+                shipping_first_name=shipping.first_name,
+                shipping_last_name=shipping.last_name,
+                shipping_address1=shipping.address1,
+                shipping_address2=shipping.address2,
+                shipping_city=shipping.city,
+                shipping_state=shipping.state,
+                shipping_country=shipping.country,
+                shipping_zip_code=shipping.zip_code,
+                shipping_phone=shipping.phone,
+                billing_first_name=billing.first_name,
+                billing_last_name=billing.last_name,
+                billing_address1=billing.address1,
+                billing_address2=billing.address2,
+                billing_city=billing.city,
+                billing_state=billing.state,
+                billing_country=billing.country,
+                billing_zip_code=billing.zip_code,
+                billing_phone=billing.phone,
+            )
+            return HttpResponse(json.dumps({'result': 'success',  'next': '/checkout/review/{}/'.format(order.id)}))
+        else:
+            response = {}
+            for k in form.errors:
+                response[k] = form.errors[k][0]
+            return HttpResponse(json.dumps({'response': response, 'result': 'error'}))

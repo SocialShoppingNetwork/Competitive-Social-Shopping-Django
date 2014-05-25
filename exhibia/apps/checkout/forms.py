@@ -1,23 +1,23 @@
 from django import forms
+from auctions.models import Auction
 
 
 class BuyNowForm(forms.Form):
-    SHIPMENT_METHODS = [
-        (0, 'Standard Shipping'),
-        (1, 'Two-Day Shipping'),
-        (2, 'One-Day Shipping'),
-    ]
 
-    shipping = forms.ModelChoiceField(queryset=None, empty_label='-------',
+    shipping = forms.ModelChoiceField(queryset=None, empty_label='-------', required=True,
                                       widget=forms.Select(attrs={'class': 'form-control'}))
-    payment = forms.ModelChoiceField(queryset=None, empty_label='-------',
+    payment = forms.ModelChoiceField(queryset=None, empty_label='-------', required=True,
                                      widget=forms.Select(attrs={'class': 'form-control'}))
-    billing = forms.ModelChoiceField(queryset=None, empty_label='-------',
+    billing = forms.ModelChoiceField(queryset=None, empty_label='-------', required=True,
                                      widget=forms.Select(attrs={'class': 'form-control'}))
-    method = forms.ChoiceField(choices=SHIPMENT_METHODS, initial=0, widget=forms.RadioSelect())
+    method = forms.ModelChoiceField(queryset=None, empty_label=None, widget=forms.RadioSelect(), required=True,)
+    auction = forms.ModelChoiceField(queryset=None, widget=forms.HiddenInput(), required=True)
 
-    def __init__(self, user, **kwargs):
+    def __init__(self, user, auction, **kwargs):
         super(BuyNowForm, self).__init__(**kwargs)
+        self.user = user
+        self.auction = auction
+        self.item = auction.item
         billing_addresses = user.billing_addresses.filter(deleted=0)
         if billing_addresses:
             self.fields['billing'].initial = billing_addresses[0]
@@ -32,6 +32,15 @@ class BuyNowForm(forms.Form):
         if cards:
             self.fields['payment'].initial = cards[0]
         self.fields['payment'].queryset = cards
+
+        self.fields['auction'].queryset = Auction.objects.filter(pk=auction.pk)
+        self.fields['auction'].initial = auction
+
+        shipping_fees = auction.item.shipping_fees.all()
+        self.fields['method'].queryset = shipping_fees
+        if shipping_fees:
+            self.fields['method'].initial = shipping_fees[0]
+
 
     def method_choices(self):
         """
