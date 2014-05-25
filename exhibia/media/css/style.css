@@ -24,6 +24,45 @@
 .header{
 
 }
+.header .navbar-toggle{
+		top: 20px;
+	}
+	.navbar-brand{
+		height: 70px;
+	}
+	.navbar-toggle:hover,  .navbar-toggle:focus {
+		background-color: #ddd;
+	}
+	.navbar-toggle {
+		border-color: #ddd;
+	}
+	.navbar-toggle .icon-bar {
+		background-color: #888;
+	}
+	.navbar-toggle:hover, .navbar-toggle:focus {
+		background-color: #ddd;
+	}
+	.header .navbar {
+		min-height: 125px;
+		margin-bottom: 10px;
+	}
+	.header .item-navbar{
+		position: absolute;
+		bottom: 4px;
+		right: 0;
+	}
+	.header .item-navbar .collapse{
+		float: left;
+	}
+	.header .item-navbar .registr-btn{
+		float: right;
+	}
+		.header .item-navbar .registr-btn li{
+			float: left;
+		}
+		.header .item-navbar .registr-btn li:first-child{
+			margin-right: 8px;
+		}
 	.header .form-control.form-search{
 		border-radius: 30px;
 		border-color: #b2e0f3;
@@ -35,11 +74,12 @@
 	.header .nav li a{
 		color: #b51c1b;
 	}
-		.header .nav li a:hover, 
+		.header .nav li a:hover,
 		.header .nav li a:focus{
 			background-color: transparent;
+			color: #d2322d;
 		}
-	.header .btn-danger{
+	.btn-danger{
 		background-color: #b92526;
 		border-color: #b92526;
 	}
@@ -1381,6 +1421,13 @@
 		margin: 0px 20px;
 		padding-right: 0px;
 	}
+	.error{
+		color: #da3b1c;
+		font-size: 12px;
+		display: block;
+		font-weight: normal;
+		display: none;
+	}
 /* media queris */
 @media screen and (min-width: 1240px) {
    
@@ -1389,50 +1436,172 @@
 /* tablet */
 @media screen and (min-width: 1024px) and (max-width: 1240px) {
     
-
+	.tab-content .jcarousel-control-next {
+		right: 40%;
+	}
+	.item-tab .nav-tabs li a{
+		font-size: 12px;
+	}
+	.item-tab .tab-content .thumbnail .alert .percent{
+		font-size: 14px;
+	}
+	.item-tab .tab-content .thumbnail .alert table{
+		padding: 0px;
+	}
+	.item-tab .tab-content .thumbnail .alert table{
+		font-size: 12px;
+	}
+	.content .w-193{
+		width: 33.33333333%;
+	}
+	.content .thumbnail{
+		width: auto;
+	}
+	.content .user-profile .panel-body .btn-connect .btn.btn-primary{
+		font-size: 12px;
+		padding: 8px 5px;
+	}
+	.content .user-profile .panel-body .btn-connect .btn.btn-primary{
+		font-size: 12px;
+		padding: 8px 5px;
+	}
+	.content .user-profile .panel-body .start-b{
+		font-size: 22px;
+	}
+	.content .user-profile .panel-body ul{
+		padding: 5px;
+	}
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-    
+    .tab-content .jcarousel-control-next {
+		right: 40%;
+	}
+	.item-tab .nav-tabs li a{
+		font-size: 12px;
+	}
+	.item-tab .tab-content .thumbnail .alert .percent{
+		font-size: 14px;
+	}
+	.item-tab .tab-content .thumbnail .alert table{
+		padding: 0px;
+	}
+	.item-tab .tab-content .thumbnail .alert table{
+		font-size: 12px;
+	}
+	.content .w-193{
+		width: 33.33333333%;
+	}
+	.content .thumbnail{
+		width: auto;
+	}
+	.content .user-profile .panel-body .btn-connect .btn.btn-primary{
+		font-size: 12px;
+		padding: 8px 5px;
+	}
+	.content .user-profile .panel-body .start-b{
+		font-size: 22px;
+	}
+	.content .user-profile .panel-body ul{
+		padding: 5px;
+	}
 
 }
 
 @media screen and (min-width: 768px) and (max-width: 990px) {
-    
+    .tab-content .jcarousel-control-next {
+		right: 40%;
+	}
+	.item-tab .tab-content .thumbnail .alert .percent{
+		font-size: 14px;
+	}
+	.item-tab .nav-tabs li a{
+		font-size: 12px;
+	}
+	.item-tab .tab-content .thumbnail .alert table{
+		padding: 0px;
+	}
+	.item-tab .tab-content .thumbnail .alert table{
+		font-size: 12px;
+	}
+	.content .w-193{
+		width: 33.33333333%;
+	}
+	.content .thumbnail{
+		width: auto;
+	}
+	.content .user-profile .panel-body .btn-connect .btn.btn-primary{
+		font-size: 12px;
+		padding: 8px 5px;
+	}
+	.content .user-profile .panel-body .start-b{
+		font-size: 22px;
+	}
+	.content .user-profile .panel-body .btn-connect .btn.btn-primary{
+		font-size: 12px;
+		padding: 8px 5px;
+	}
+	.content .user-profile .panel-body .start-b{
+		font-size: 22px;
+	}
+	.content .user-profile .panel-body ul{
+		padding: 5px;
+	}
 }
 
 /* mobile */
 @media screen and (max-width: 768px) {
     #ModalBattleView .inner-table{
-    	padding: 10px 15px;
+    	padding: 5px;
     }
     #ModalBattleView .inner-table .time{
-    	font-size: 30px;
+    	font-size: 22px;
     }
     #ModalBattleView .inner-table table tr td:last-child{
     	font-size: 12px;
     }
     #ModalBattleView .inner-table .btn-pink,
     #ModalBattleView .inner-table .btn-buy{
-    	font-size: 14px;
+    	font-size: 12px;
+    	padding: 6px 12px;
+    }
+    #ModalBattleView .inner-table .btn-buy{
+    	margin-right: 0px;
     }
     #ModalBattleView .modal-body,
     #ModalBidderProfile .modal-body{
     	padding: 15px;
     }
     #ModalBattleView .user-fotos{
-    	padding: 0px 15px;
+    	padding: 0px 8px;
     }
     #ModalSignIn .modal-body{
-    	padding: 20px 35px;
+    	padding: 5px;
     }
     #ModalSignIn .modal-content .loginbtns .btn{
-    	padding-left: 90px;
+    	height: 80px;
+    	padding: 30px 0px 30px 90px;
     }
+
     #ModalSignIn a.icon-social.icon-fb:after,
     #ModalSignIn a.icon-social.icon-twit:after,
     #ModalSignIn a.icon-social.icon-google:after{
-    	left: 36px;
+    	left: 2px;
+    }
+    #ModalSignIn .modal-content .loginbtns .btn{
+    	font-size: 14px;
+    }
+    #ModalSignIn a.icon-social.icon-fb:after{
+    	top: 5px;
+    }
+    #ModalSignIn a.icon-social.icon-twit:after{
+    	top: 92px;
+    }
+    #ModalSignIn a.icon-social.icon-google:after{
+    	top: 185px;
+    }
+    #ModalSignIn .link{
+    	font-size: 14px;
     }
     #ModalBuyNow .pl-50{
     	padding-left: 0px;
@@ -1457,6 +1626,10 @@
     .header .navbar-nav.navbar-right li button{
     	margin: 0px 15px;
     }
+    .header .navbar-toggle{
+    	top: 8px;
+    	margin-right: 0px;
+    }
     .content .thumbnail .item-foto{
     	padding: 5px;
     	text-align: center;
@@ -1464,6 +1637,12 @@
     }
     .content .thumbnail{
     	width: auto;
+    	height: 400px;
+    	max-height: 500px;
+    }
+    .content .thumbnail .item-bid{
+    	height: 135px;
+    	max-height: 135px;
     }
     .content .w-193{
     	width: 50%;
@@ -1482,8 +1661,93 @@
     }
     .content .header h3{
     	font-size: 16px;
+    	margin-top: 20px;
     }
-    
+    .navbar-brand img{
+    	width: 150px;
+    }
+    .navbar-nav li button{
+    	float: left;
+    }
+    .navbar-nav li button.login{
+    	text-align: right;
+    }
+    .header .item-navbar .registr-btn{
+    	float: left;
+    	position: relative;
+		top: 13px;
+		width: 100%;
+    }
+    .header .item-navbar .registr-btn li:last-child{
+    	float: right;
+    }
+    .header .item-navbar .registr-btn li:last-child button{
+
+    }
+    .header .item-navbar{
+    	position: relative;
+    	bottom: 0px;
+    	left: 0;
+    }
+    .header .item-navbar .collapse{
+    	float: none;
+    }
+    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1,
+    .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2,
+    .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
+     .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+	.row{
+		margin-left: -12px;
+		margin-right: -12px;
+	}
+	.item-tab .nav-tabs{
+		padding: 0px 15px;
+	}
+	.item-tab .nav-tabs li{
+		float: none;
+		margin: 0px;
+	}
+	.item-tab .nav-tabs li a{
+		font-size: 12px;
+	}
+	.item-tab .nav-tabs .active:after,
+	.item-tab .nav-tabs .active:before,
+	.item-tab .nav-tabs .active a:after,
+	.item-tab .nav-tabs .active a:before{
+		display: none;
+	}
+	.item-tab .nav-tabs li.active a,
+	.item-tab .nav-tabs li.active a:hover,
+	.item-tab .nav-tabs li.active a:focus{
+		background: transparent;
+	}
+	.item-bid .btn.btn-pink{
+		padding: 6px 12px;
+	}
+	.item-tab .tab-content .thumbnail .alert .percent{
+		font-size: 16px;
+	}
+	.footer .menu h4{
+		font-size: 16px;
+	}
+	#ModalFund .checkbox{
+		padding-left: 5px;
+	}
+	.content .thumbnail .wrapper-foto{
+		left: -10px;
+	}
+	.content .thumbnail .item-name h6{
+		font-size: 12px;
+	}
+	.tab-content .jcarousel-control-prev{
+		left: 37%;
+	}
+	.tab-content .jcarousel-control-next{
+		left: 49%;
+	}
 }
 
 /* iPad in portrait & landscape */

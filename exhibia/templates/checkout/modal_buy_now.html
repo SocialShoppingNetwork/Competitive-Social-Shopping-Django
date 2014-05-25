@@ -3,9 +3,9 @@
           <div class="modal-header">
             <h1 class="modal-title" id="myModalLabel">buy now</h1>
           </div>
-          <div class="modal-body ">
+          <form role="form" id="buy-now-form" method="POST" action="{% url buy_now %}">{% csrf_token %}
+            <div class="modal-body ">
           <!-- form -->
-              <form role="form">
                 <div class="row">
                   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <div class="block">
@@ -20,12 +20,8 @@
                         </div>
                         {{ form.shipping }}
                       </div>
+                      <div><label for="{{ form.shipping.auto_id }}" class="error"></label></div>
                       <div class="address">
-                        John Smith<br>
-                        1234 Example Rd<br>
-                        Los Angeles, CA<br>
-                        United States<br>
-                        Phone: 9876543210<br>
                         <div class="item-link">
                           <a href="{% url account_shipping  %}">Add new address</a>
                         </div>
@@ -39,7 +35,10 @@
                             <span class="caret"></span>
                         </div>
                         {{ form.payment }}
+
                       </div>
+                      <div><label for="{{ form.payment.auto_id }}" class="error"></label></div>
+
                       <div class="item-link">
                           <a href="{% url account_payments %}">Add new card</a>
                       </div>
@@ -53,6 +52,7 @@
                         </div>
                         {{ form.billing }}
                       </div>
+                      <div><label for="{{ form.billing.auto_id }}" class="error"></label></div>
                       <div class="item-link">
                           <a href="{% url account_billing %}">Add new address</a>
                       </div>
@@ -78,6 +78,8 @@
                       <div class="radio">
                           {{ form.method_choices.2 }}
                       </div>
+                      <div><label for="{{ form.method.auto_id }}" class="error"></label></div>
+
                       <!-- end radio-button -->
                       <div class="item-title mt-30">
                         <h6>Order Summary</h6>
@@ -95,15 +97,13 @@
                         <table>
                           <tbody>
                             <tr>
-                            <td>Buy Now:</td>
-                            <td>$753.00</td>
-                            </tr>
-                            <tr>
                               <td>Shipping & handling:</td>
-                              <td>$10.00</td>
+                              <td>$<span id="shipping-price">10.00</span></td>
                             </tr>
                           </tbody>
                         </table>
+                        {{ form.auction }}
+                        <div><label for="{{ form.auction.auto_id }}" class="error"></label></div>
                         <div class="total-sum">
                           Total:<span>$763.00</span>
                         </div>
@@ -112,13 +112,13 @@
                   </div>
                   <div class="clearfix"></div>
                   </div>
-              </form>
-            <div class="clearfix"></div>
+                <div class="clearfix"></div>
           <!-- end form -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-black" data-dismiss="modal">cancel</button>
-            <button type="submit" class="btn btn-info">place your order</button>
-          </div>
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-black" data-dismiss="modal">cancel</button>
+                <button type="button" id="buy-now" class="btn btn-info ajax-submit">place your order</button>
+              </div>
+          </form>
         </div>
       </div>

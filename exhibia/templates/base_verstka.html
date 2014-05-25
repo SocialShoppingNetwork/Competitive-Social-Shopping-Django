@@ -17,6 +17,7 @@
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-scrollto.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.form.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}jquery.jcarousel.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/application.js"></script>
         <!--[if lt IE 9]>
@@ -48,6 +49,12 @@
            <nav class="navbar">
               <div class="navbar-header">
                <a class="navbar-brand" href=""><img class="img-responsive" src="{{ MEDIA_URL }}img/logo.png"/></a>
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
               </div>
              <!--  <div class="">
                 <form class="navbar-form navbar-left" role="search">
@@ -57,16 +64,24 @@
                   </div>
                 </form>
               </div> -->
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">how it works</a></li>
-                <li><a href="">faq</a></li>
-                <li>
-                  <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
-                </li>
-                <li>
-                  <button type="button " class="btn btn-danger">login</button>
-                </li>
-              </ul>
+              <div class="navbar-right item-navbar">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li><a href="#">how it works</a></li>
+                    <li><a href="">faq</a></li>
+
+                  </ul>
+                </div>
+                <ul class="list-unstyled registr-btn">
+                  <li>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
+                  </li>
+                  <li>
+                    <button type="button " class="btn btn-danger login">login</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="clearfix"></div>
            </nav>
          </div>
          <div class="clearfix"></div>
