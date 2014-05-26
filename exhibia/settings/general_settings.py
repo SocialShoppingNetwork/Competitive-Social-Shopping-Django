@@ -193,6 +193,7 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "gunicorn",
     "storages",
+
     # 'tracking',
     'dbsettings',
 
@@ -299,7 +300,14 @@ BASIC_WWW_AUTHENTICATION_USERNAME = "admin"
 BASIC_WWW_AUTHENTICATION_PASSWORD = "admin"
 BASIC_WWW_AUTHENTICATION = False
 
+
+BID_REFUND_TIME = 60 * 60 * 2  # if you lost , you can get your bids back if you buy
+                                # item at full price for this amount of time
+
+
 try:
     from .local_settings import *
 except ImportError:
     pass
+
+

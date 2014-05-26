@@ -1,0 +1,37 @@
+{% with auction as a %}
+<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 w-193">
+    <div class="thumbnail" id="item_{{ a.id }}">
+      <div class="item-foto">
+        <button data-toggle="modal" data-target="#ModalBattleView"><img src="{{ a.item.image.img.url }}" alt=""/></button>
+      </div>
+      <div class="item-name">
+        <h6>{{ a.item.name }}</h6>
+      </div>
+      <div class="caption">
+        <div class="item-bid">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                   <div data-timeleft="{{ a.refund_time_left }}" class="time bid-refund-timer">{{ a.refund_time_left }}</div>
+                    {# TODO hide how many bids are returned and show on mouse over. #}
+                   <div class="color-blue start-message">Buy now and get {{ a.bid_refund }} bid{{ a.bid_refund|pluralize }} back!</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="item-buy">
+          <table>
+            <tr>
+              <td>Retail ${{ a.item.price }}</td>
+              <td>
+                    <button data-id="{{ a.pk }}" class="btn btn-buy pull-right">вuy</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+{% endwith %}

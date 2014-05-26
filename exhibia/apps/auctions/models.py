@@ -82,11 +82,13 @@ class AuctionManager(models.Manager):
         pass
 
     def public(self):
-        return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, AUCTION_JUST_ENDED, AUCTION_WAITING_PLEDGE])
+        return self.get_query_set().filter(
+            status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, AUCTION_JUST_ENDED, AUCTION_WAITING_PLEDGE])
 
     def live(self):
         return self.get_query_set().filter(status__in=[AUCTION_SHOWCASE, AUCTION_PAUSE, TRANSITION_PHASE_2])
         #return self.get_query_set().filter(status__in=['w', 'p', 's', 'e'])
+
     #def live(self):
     #    return self.get_query_set().filter(status__in=['w', 'p', 's', 'e'])
 
@@ -106,10 +108,10 @@ class AuctionManager(models.Manager):
         return self.get_query_set().filter(status=AUCTION_JUST_ENDED)
 
     def expired(self):
-        return self.just_ended().filter(ended_unixtime__lte=time()-settings.MAX_TIME_HOMEPAGE)
+        return self.just_ended().filter(ended_unixtime__lte=time() - settings.MAX_TIME_HOMEPAGE)
 
     def about_end(self):
-        return self.running().filter(last_unixtime__lte=time()-F('bidding_time'))
+        return self.running().filter(last_unixtime__lte=time() - F('bidding_time'))
 
     def finish_expired(self):
         self.expired().update(status=AUCTION_FINISHED)
@@ -117,9 +119,9 @@ class AuctionManager(models.Manager):
     def create_from_item(self, item):
         auction = Auction.objects.create(item=item,
                                          bidding_time=item.bidding_time,
-                                         deadline_time=time()+item.pledge_time,
+                                         deadline_time=time() + item.pledge_time,
                                          status=AUCTION_WAITING_PLEDGE,
-                                         )
+        )
         if item.amount is not None:
             item.amount -= 1
         item.save()
@@ -128,10 +130,10 @@ class AuctionManager(models.Manager):
     def create_giveaway_from_item(self, item):
         auction = Auction.objects.create(item=item,
                                          bidding_time=item.bidding_time,
-                                         deadline_time=time()+item.pledge_time,
+                                         deadline_time=time() + item.pledge_time,
                                          status=AUCTION_SHOWCASE,
                                          amount_pleged=item.price,
-                                         )
+        )
         if item.amount is not None:
             item.amount -= 1
         item.save()
@@ -140,24 +142,25 @@ class AuctionManager(models.Manager):
 
 class AuctionItemManager(models.Manager):
     def kick_off(self):
-        items = self.get_query_set().exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True), amount__gt=0)
+        items = self.get_query_set().exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True),
+                                             amount__gt=0)
         if items.count() > 0:
-            i = randint(0, items.count()-1)
+            i = randint(0, items.count() - 1)
             item = items[i]
             return item
-        #return Auction.objects.create_from_item(item)
+            #return Auction.objects.create_from_item(item)
 
     def get_giveaway_item(self):
         # get items which aren't in showcase list, as well as not in waiting pledge
         print Auction.objects.showcase().values_list('item', flat=True)
-        items = self.get_query_set()\
-            .filter(giveaway=True)\
-            .exclude(amount=0)\
+        items = self.get_query_set() \
+            .filter(giveaway=True) \
+            .exclude(amount=0) \
             .exclude(code__in=Auction.objects.showcase().values_list('item', flat=True))
-            # .exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True))
+        # .exclude(code__in=Auction.objects.waiting_pledge().values_list('item', flat=True))
 
         if items.count() > 0:
-            i = randint(0, items.count()-1)
+            i = randint(0, items.count() - 1)
             item = items[i]
             return item
 
@@ -180,6 +183,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = u'Category'
         verbose_name_plural = u'Categories'
+
 
 from tinymce import models as tinymce_models
 
@@ -248,6 +252,7 @@ class AuctionItem(models.Model):
 
     def categories_inline(self):
         return ', '.join([i.name for i in self.categories.all()])
+
     categories_inline.short_description = "categories"
 
 
@@ -269,7 +274,8 @@ class Auction(models.Model):
     last_bidder = models.CharField(max_length=30, default='', db_index=True, blank=True)
     last_bidder_member = models.ForeignKey('auth.User', blank=True, null=True, related_name='items_won')  #winner
 
-    last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True, null=True) #Todo remove this field
+    last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True,
+                                     null=True) #Todo remove this field
     last_unixtime = models.FloatField(null=True, blank=True, db_index=True)
     ended_unixtime = models.FloatField(blank=True, null=True)
 
@@ -327,7 +333,7 @@ class Auction(models.Model):
             return self.bidding_time
         return int(self.last_unixtime + self.bidding_time - time())
         #t = self.last_unixtime + self.bidding_time - time()
-        return int(round(t+0.49))
+        return int(round(t + 0.49))
 
     # @property
     # def time_left_for_bidding_start(self):
@@ -369,7 +375,7 @@ class Auction(models.Model):
         self.save()
 
     def bid_by(self, bidder):
-        if self.status in ['f','m','d','c','e']:
+        if self.status in ['f', 'm', 'd', 'c', 'e']:
             raise AuctionExpired
 
         username = bidder.user.username
@@ -416,7 +422,9 @@ class Auction(models.Model):
     @property
     def backers_history(self):
         from profiles.models import Member
-        return Member.objects.filter(auctionplegde__auction=self).distinct().annotate(pledge_date=Max('auctionplegde__created'))
+
+        return Member.objects.filter(auctionplegde__auction=self).distinct().annotate(
+            pledge_date=Max('auctionplegde__created'))
 
     @property
     def bidding_history(self):
@@ -434,12 +442,13 @@ class AuctionBid(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return '%s : %s ' %(self.auction, self.bidder)
+        return '%s : %s ' % (self.auction, self.bidder)
 
 
 class AuctionItemImages(models.Model):
     item = models.ForeignKey(AuctionItem, related_name="images")
-    img = models.ImageField(help_text="default image 120px height 200px width recommended", upload_to=cloudfiles_upload_to)
+    img = models.ImageField(help_text="default image 120px height 200px width recommended",
+                            upload_to=cloudfiles_upload_to)
     is_default = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -467,4 +476,5 @@ class AuctionPlegde(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.auction, self.member)
+
 

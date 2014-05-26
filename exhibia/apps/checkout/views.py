@@ -1,6 +1,7 @@
 import datetime
 import cjson
 import json
+from django.db.models import Count
 
 from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -24,6 +25,8 @@ from profiles.models import BillingAddress
 from django.views.decorators.http import require_POST
 from checkout.forms import BuyNowForm
 from checkout.models import Order
+from auctions.constants import AUCTION_FINISHED
+from exhibia.settings import BID_REFUND_TIME
 
 
 @login_required
@@ -419,10 +422,10 @@ def append_buy_now_form(request):
         auction = get_object_or_404(Auction, pk=request.POST.get('id'))
         # TODO check if user already bought this auction
         form = BuyNowForm(request.user, auction)
-        return render(request, 'checkout/modal_buy_now.html', {'item': auction.item, 'form': form})
+        return render(request, 'checkout/modal_buy_now.html', {'auction': auction, 'form': form})
     else:
         # TODO change this to some 'only logged in users' , please log in
-        return render(request, 'checkout/modal_buy_now.html',)
+        return render(request, 'checkout/modal_registered_users_only.html',)
 
 
 @require_POST
@@ -432,6 +435,21 @@ def buy_now(request):
         auction = get_object_or_404(Auction, pk=request.POST.get('auction'))
         form = BuyNowForm(request.user, auction, data=request.POST)
         if form.is_valid():
+            #  check if user bided for this auction, if he did we'll show him that he can return his bids
+            if auction.status == AUCTION_FINISHED:
+                bid_refund_auction = (
+                    Auction.objects.filter(pk=auction.id, bids__bidder=request.user,)
+                    .exclude(last_bidder_member=request.user)
+                    .annotate(bid_refund=Count('id'))
+                    .extra(where=['UNIX_TIMESTAMP() - ended_unixtime < {}'.format(BID_REFUND_TIME)])
+                    .distinct()
+                    .select_related('item', 'item__image')
+                )
+                if bid_refund_auction:
+                    profile = request.user.get_profile()
+                    profile.credits += bid_refund_auction[0].bid_refund
+                    profile.save()
+                    # TODO maybe some notification
             shipping = form.cleaned_data['shipping']
             billing = form.cleaned_data['billing']
 
@@ -449,7 +467,7 @@ def buy_now(request):
                 phone=shipping.phone,
             )
 
-            Order.objects.create(
+            order = Order.objects.create(
                 user=request.user,
                 auction=auction,
                 card=form.cleaned_data['payment'],

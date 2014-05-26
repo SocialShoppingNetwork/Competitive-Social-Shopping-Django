@@ -42,13 +42,13 @@ class RewardBids(dbsettings.Group):
     bid_for_twit = dbsettings.PositiveIntegerValue(default=1, help_text='bids for twit')
     bid_for_like = dbsettings.PositiveIntegerValue(default=1, help_text='bids for like in facebook')
     bid_for_plus = dbsettings.PositiveIntegerValue(default=1, help_text='bids for + in g+')
-    bid_for_associate = dbsettings.PositiveIntegerValue(default=1, help_text='bids for association with some social network')
+    bid_for_associate = dbsettings.PositiveIntegerValue(default=1,
+                                                        help_text='bids for association with some social network')
     bid_for_review = dbsettings.PositiveIntegerValue(default=1, help_text='bids for review item')
     bid_for_invite = dbsettings.PositiveIntegerValue(default=1, help_text='bids for invitings user')
 
 
 class Member(models.Model):
-
     rewards = RewardPoints(verbose_name='Reward points') + RewardBids(verbose_name=u'Reward bids')
 
     user = models.OneToOneField(User, verbose_name=_("user"), related_name='profile')
@@ -64,10 +64,10 @@ class Member(models.Model):
     state = models.CharField(max_length=30, null=True, blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True)
     birthday = models.DateField(null=True, blank=True,
-                             help_text="for example: 1980-7-9")
+                                help_text="for example: 1980-7-9")
     referer = models.CharField(max_length=100, blank=True, null=True)
     referral_url = models.ForeignKey('referrals.ReferralLink', blank=True,
-                 null=True, related_name='invited_users')
+                                     null=True, related_name='invited_users')
     #chat
     is_banned = models.BooleanField(default=False)
 
@@ -75,8 +75,8 @@ class Member(models.Model):
     verified = models.BooleanField(default=False)
 
     LIKE_SOURCES = {
-        'F':'like',
-        'G':'plus'
+        'F': 'like',
+        'G': 'plus'
     }
 
     def __unicode__(self):
@@ -119,7 +119,7 @@ class Member(models.Model):
             # XXX need to set extra params to twitter backend
             # as we have to get avatar via api call
             url = ''
-        cache.set('avatar|%d' % self.pk, url, 60*60*24)
+        cache.set('avatar|%d' % self.pk, url, 60 * 60 * 24)
         return url
 
     def invitation_succeed(self):
@@ -138,7 +138,10 @@ class Member(models.Model):
                 'href': '#'
             }
             try:
-                req = urllib2.Request("https://graph.facebook.com/%s/notifications" % self.user.social_auth.get(user=self, provider='facebook').uid, urllib.urlencode(params), {})
+                req = urllib2.Request(
+                    "https://graph.facebook.com/%s/notifications" % self.user.social_auth.get(user=self,
+                                                                                              provider='facebook').uid,
+                    urllib.urlencode(params), {})
                 urllib2.urlopen(req).read()
             except urllib2.HTTPError:
                 pass
@@ -150,8 +153,7 @@ class Member(models.Model):
 
     def is_newbie(self):
         return not Auction.objects.filter(last_bidder_member=self.user,
-                                          ended_unixtime__isnull=False)\
-                                  .exists()
+                                          ended_unixtime__isnull=False).exists()
 
     """
     def auctionorders_unpaid(self):
@@ -182,7 +184,6 @@ post_save.connect(create_shipping_profile, sender=Member)
 
 
 class BillingAddress(models.Model):
-
     user = models.ForeignKey(User, related_name='billing_addresses')
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
@@ -227,17 +228,18 @@ class BannedIPAddress(models.Model):
         verbose_name_plural = 'Banned IP addresses'
 
 
-
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, raw,**kwargs):
+def create_user_profile(sender, instance, created, raw, **kwargs):
     if created and not raw:
         Member.objects.create(user=instance)
         ReferralLink.objects.create(user=instance)
 
+
 @receiver(user_logged_in)
 def save_ip(sender, request, user, *args, **kwargs):
     obj, created = IPAddress.objects.get_or_create(user=user,
-        IPAddress=request.META.get('X-Real-IP') or request.META.get('REMOTE_ADDR') or '127.0.0.1')
+                                                   IPAddress=request.META.get('X-Real-IP') or request.META.get(
+                                                       'REMOTE_ADDR') or '127.0.0.1')
     if not created:
         obj.last_login = datetime.now()
         obj.save()
@@ -251,6 +253,7 @@ def user_registered(sender, user, response, details, **kwargs):
 
     profile.points_amount += Member.rewards.associate
     profile.save()
+
 
 socialauth_registered.connect(user_registered, sender=twitter.TwitterBackend)
 socialauth_registered.connect(user_registered, sender=facebook.FacebookBackend)

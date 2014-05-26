@@ -17,9 +17,9 @@ from payments.models import Card
 from shipping.models import ShippingAddress
 from profiles.forms import DeleteForm
 
-
 from django.views.generic import CreateView
 from braces.views import LoginRequiredMixin, SetHeadlineMixin
+
 
 class AddressView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
     headline = "Select your shipping address"
@@ -41,6 +41,7 @@ class AddressView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
         instance.save()
         return redirect(self.request.path)
 
+
 class CardCreateView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
     model = Card
     headline = "Manage your plastic cards"
@@ -61,6 +62,7 @@ class CardCreateView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
         instance.save()
         return redirect(self.request.path)
 
+
 @login_required
 def auctions_won(request, template_name='profiles/auctions_won.html'):
     member = request.member
@@ -73,7 +75,10 @@ def auctions_won(request, template_name='profiles/auctions_won.html'):
     })
     return render_to_response(template_name, context_instance=c)
 
+
 from payments.models import AuctionOrder
+
+
 @login_required
 def auction_won(request, auction_id, template_name='profiles/auction_won.html'):
     member = request.member
@@ -85,7 +90,7 @@ def auction_won(request, auction_id, template_name='profiles/auction_won.html'):
             return HttpResponseRedirect('/accounts/profile/won/')
     c = RequestContext(request, {"a": auction,
                                  "member": member,
-                                 'shipping':request.user.shipping_addresses.all()[0],})
+                                 'shipping': request.user.shipping_addresses.all()[0], })
     return render_to_response(template_name, context_instance=c)
 
 
@@ -95,12 +100,12 @@ def order_pay(request, order_id):
     # import pdb
     # pdb.set_trace()
     order = get_object_or_404(AuctionOrder, id=order_id, winner=request.user, auction__status="m")
-    return render(request,'order_pay.html',{
-                "order": order,
-                "dalpay_form":None,
-                # "dalpay_form": auction_form(request, 'dalpay', order_id),
-            }
-        )
+    return render(request, 'order_pay.html', {
+        "order": order,
+        "dalpay_form": None,
+        # "dalpay_form": auction_form(request, 'dalpay', order_id),
+    }
+    )
 
 
 def member_bids(request):
@@ -108,7 +113,6 @@ def member_bids(request):
     if not request.user.is_authenticated():
         return HttpResponse("0")
     return HttpResponse(str(request.member.credits))
-
 
 
 ORDER_WAITING_PAYMENT = 'wp'
@@ -119,6 +123,7 @@ ORDER_DELIVERED = 'dl'
 ORDER_WAITING_TESTIMONIAL = 'wt'
 
 from shipping.constants import ORDER_WAITING_PAYMENT, ORDER_SHIPPING_FEE_REQUESTED, ORDER_SHIPPED, ORDER_PROCESSING
+
 
 @login_required
 @render_to('profiles/account.html')
@@ -138,15 +143,14 @@ def account(request):
     associated = list(request.user.social_auth.all())
     not_associated = available.difference(i.provider for i in associated)
     print request.session.keys()
-    return {'member':member,
+    return {'member': member,
             'auctions_waiting_payment': auctions_waiting_payment,
-            'auctions_processing':auctions_processing,
+            'auctions_processing': auctions_processing,
             'auctions_shipped': auctions_shipped,
-            'not_associated':not_associated,
-            'associated':[i.provider for i in associated],
-            'available_auth_backends':available,
+            'not_associated': not_associated,
+            'associated': [i.provider for i in associated],
+            'available_auth_backends': available,
     }
-
 
 
 @login_required
@@ -159,20 +163,21 @@ def manage_delete(request, model=ShippingAddress, redirect_url='account_shipping
             obj = model.objects.get(user=request.user, pk=form.cleaned_data['pk'])
             obj.deleted = True
             obj.save()
-        except:pass
+        except:
+            pass
     return redirect(reverse(redirect_url))
 
 
 @login_required
 def manage_edit(request, pk, model=ShippingAddress, form=MemberInfoFormUS,
-        redirect_url='account_shipping',template='profiles/manage_shipping.html'):
+                redirect_url='account_shipping', template='profiles/manage_shipping.html'):
     obj = get_object_or_404(model, pk=pk)
     form = form(request.POST or None, instance=obj)
     if form.is_valid():
         form.save()
         return redirect(redirect_url)
     return render(request, template,
-                  {'form':form, 'edit_form':True})
+                  {'form': form, 'edit_form': True})
 
 
 @login_required
@@ -187,8 +192,8 @@ def manage_payments(request, redirect_url='profile_account'):
         return HttpResponseRedirect(reverse('profile_account'))
 
     return {
-        'form':form,
-        'cards':objects,
+        'form': form,
+        'cards': objects,
     }
 
 

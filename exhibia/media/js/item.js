@@ -89,7 +89,7 @@ $(document).ready(function() {
     });
 
     var update_timers = function() {
-        $('#items').find('.showcase-timer').each(function() {
+        $('#items').find('.showcase-timer, .bid-refund-timer').each(function() {
             var self = $(this);
             var time_left = self.data('timeleft');
             if (time_left > 0) {
@@ -100,11 +100,16 @@ $(document).ready(function() {
             } else {
                 // auction has a bid
 //                if (self.is(':visible')) {
-                    var tr = self.closest('tr');
-                    tr.empty();
-                    tr.addClass('winner');
-                    tr.append('<td><div class="txt">Winner</div></td>');
-                    tr.closest('tbody').find('.item-timer').remove();
+                    if(self.hasClass('bid-refund-timer')){
+                        self.closest('.thumbnail').remove();
+                    }
+                    if(self.hasClass('showcase-timer')){
+                        var tr = self.closest('tr');
+                        tr.empty();
+                        tr.addClass('winner');
+                        tr.append('<td><div class="txt">Winner</div></td>');
+                        tr.closest('tbody').find('.item-timer').remove();
+                    }
 //                }
 //                else {
 //                    self.reset_timer();
