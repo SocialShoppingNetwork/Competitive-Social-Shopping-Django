@@ -1,46 +1,48 @@
 {% with auction as a %}
-<li data-timeleft="{{ a.time_left }}" data-bidtime="{{a.bidding_time}}" data-type="util" data-types="camera" class="span3 showcase" id="{{ a.id }}">
-	<div class="thumbnail">
-		<div class="h3 fund-title"><a href="{{auction.get_absolute_url}}">{{ a.item.name }}</a></div>
-        <div align="center">
-          	<a href="{{auction.get_absolute_url}}">
-    			<img class="product" src="{%if a.item.image.img %}{{ STATIC_URL }}{{ a.item.image.img }}{% endif %}"/>
-    		</a>
-        </div>
-        <div class="caption">
-        	<div class="h2 time" align="center" id="timer_{{ a.id }}">{{ a.time_left }} seconds</div>
-          	<h6 align="center">Tick time: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} seconds</span></h6>
-			<div class="h5 well bidder" align="center">
-                {% if a.last_bidder %}
-                    <img class="social" width="24" height="24" src="{{ STATIC_URL }}img/facebook-16x16.png" />
-                    <span style="font-size: 11px;" id="last_bidder_{{ a.id }}">{{ a.last_bidder }}</span>
-                {% else %}
-                    <img class="social" width="24" height="24" src="" style="display:none;"/>
-                    <span style="font-size: 11px;">Be the first bidder</span>
-                {% endif %}
-			</div>
-        </div>
-		<div class="panel">
-            {% if a.item.newbie %}
-                {% if request.user.profile.is_newbie or not request.user.is_authenticated %}
-                    <div class="btn-group fund-options">
-                        <a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#" >BID</a>
-                    </div>
-                {% else %}
-                    <div class="btn-group fund-options">
-                        <h6 align="center">Newbie exhibit</h6>
-                    </div>
-                {% endif %}
-            {% else %}
-                <div class="btn-group fund-options">
-				    <a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#" >BID</a>
-			    </div>
-            {% endif %}
+  <li data-timeleft="{{ a.time_left }}" data-bidtime="{{ a.bidding_time }}" data-type="util" data-types="camera"
+      class="span3 showcase" id="{{ a.id }}">
+    <div class="thumbnail">
+      <div class="h3 fund-title"><a href="{{ auction.get_absolute_url }}">{{ a.item.name }}</a></div>
+      <div align="center">
+        <a href="{{ auction.get_absolute_url }}">
+          <img class="product" src="{% if a.item.image.img %}{{ STATIC_URL }}{{ a.item.image.img }}{% endif %}"/>
+        </a>
+      </div>
+      <div class="caption">
+        <div class="h2 time" align="center" id="timer_{{ a.id }}">{{ a.time_left }} seconds</div>
+        <h6 align="center">Tick time: <span id="bidding_time_{{ a.id }}">{{ a.bidding_time }} seconds</span></h6>
 
-            {% if a.locked %}
-                <span style="font-size: 11px;">LOCKED ITEM</span>
-            {% endif %}
-		</div>
-	</div>
-</li>
+        <div class="h5 well bidder" align="center">
+          {% if a.last_bidder %}
+            <img class="social" width="24" height="24" src="{{ STATIC_URL }}img/facebook-16x16.png"/>
+            <span style="font-size: 11px;" id="last_bidder_{{ a.id }}">{{ a.last_bidder }}</span>
+          {% else %}
+            <img class="social" width="24" height="24" src="" style="display:none;"/>
+            <span style="font-size: 11px;">Be the first bidder</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="panel">
+        {% if a.item.newbie %}
+          {% if request.user.profile.is_newbie or not request.user.is_authenticated %}
+            <div class="btn-group fund-options">
+              <a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#">BID</a>
+            </div>
+          {% else %}
+            <div class="btn-group fund-options">
+              <h6 align="center">Newbie exhibit</h6>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="btn-group fund-options">
+            <a class="btn bid-btn" data-auctionid="{{ a.id }}" href="#">BID</a>
+          </div>
+        {% endif %}
+
+        {% if a.locked %}
+          <span style="font-size: 11px;">LOCKED ITEM</span>
+        {% endif %}
+      </div>
+    </div>
+  </li>
 {% endwith %}

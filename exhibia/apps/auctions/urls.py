@@ -12,4 +12,5 @@ urlpatterns = patterns("",
     url(r"^pledge/(\d+)/$", "auctions.views.pledge", name="auction_pledge"),
     url(r"^checkout/$", "auctions.views.checkout", name='auctions_checkout'),
     url(r"^append-funding-carousel/$", "auctions.views.append_funding_carousel", name="append_funding_carousel"),
+    url(r"^append_battle_modal/$", "auctions.views.append_battle_modal", name="append_battle_modal"),
 )

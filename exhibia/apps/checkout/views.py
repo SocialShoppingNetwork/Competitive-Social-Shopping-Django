@@ -422,7 +422,8 @@ def append_buy_now_form(request):
         auction = get_object_or_404(Auction, pk=request.POST.get('id'))
         # TODO check if user already bought this auction
         form = BuyNowForm(request.user, auction)
-        return render(request, 'checkout/modal_buy_now.html', {'auction': auction, 'form': form})
+        return render(request, 'checkout/modal_buy_now.html',
+                      {'auction': auction, 'form': form, 'shipping_fees': auction.item.shipping_fees.all()})
     else:
         # TODO change this to some 'only logged in users' , please log in
         return render(request, 'checkout/modal_registered_users_only.html',)

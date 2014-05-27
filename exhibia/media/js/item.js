@@ -78,6 +78,12 @@ $(document).ready(function() {
     });
     auction_socket.on('auction_bid', function(auction_pk, time_left, username, avatar) {
         // user made a bid on auction
+
+        var modal = $('#item_modal_'+ auction_pk);
+        modal.find('.showcase-timer').show();
+        modal.find('.showcase-timer').reset_timer();
+        // TODO insert new bidder photo to the list in the modal
+
         var block = $('#item_' + auction_pk);
         block.find('.item-bidder-foto').attr('src', avatar);
         block.find('.wrapper-foto').show();
@@ -89,7 +95,7 @@ $(document).ready(function() {
     });
 
     var update_timers = function() {
-        $('#items').find('.showcase-timer, .bid-refund-timer').each(function() {
+        $('body').find('.showcase-timer, .bid-refund-timer').each(function() {
             var self = $(this);
             var time_left = self.data('timeleft');
             if (time_left > 0) {
@@ -133,21 +139,49 @@ $(document).ready(function() {
         // initiate ajax call to get the right buy now form
         event.preventDefault();
         var id= $(this).data('id');
-        $.ajax({
-            type: "POST",
-            url: "/checkout/append_buy_now_form/",
-            data: {'id': id },
-            dataType: 'html',
-            success: function (data) {
-                if(data) {
-                    $('#ModalBuyNow').html(data);
-                    $('#ModalBuyNow').modal('show');
+        var exists = $('#modal_buy_now_'+id).length;
+        if(!exists){
+            $.ajax({
+                type: "POST",
+                url: "/checkout/append_buy_now_form/",
+                data: {'id': id },
+                dataType: 'html',
+                success: function (data) {
+                    if(data) {
+                        $('#ModalBuyNow').html(data);
+                        $('#ModalBuyNow').modal('show');
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            $('#ModalBuyNow').modal('show');
+        }
+    });
+    $('body').on('click', '.btn-battle', function(event) {
+        // initiate ajax call to get the right buy now form
+        event.preventDefault();
+        var id= $(this).data('id');
+        var exists = $('#item_modal_'+id).length;
+        if(!exists){
+            $.ajax({
+                type: "POST",
+                url: "/items/append_battle_modal/",
+                data: {'id': id },
+                dataType: 'html',
+                success: function (data) {
+                    if(data) {
+                        $('#ModalBattleView').html(data);
+                        $('#ModalBattleView').modal('show');
+                    }
+                }
+            });
+        }else{
+            $('#ModalBattleView').modal('show');
+        }
+
 
     });
-    $('#items').on('click', '.bid-btn', function(event){
+    $('body').on('click', '.bid-btn', function(event){
         var self = $(this);
         if (!self.hasClass('disabled')){
             auction_id = self.attr('data-auctionid');

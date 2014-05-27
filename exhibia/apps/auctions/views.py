@@ -13,12 +13,13 @@ from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 from annoying.decorators import render_to, ajax_request
 from utils import auction_to_dict, auctions_to_dict
-from apps.auctions.models import Auction, AuctionItem
-from apps.auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
-from apps.auctions.models import Category
-from apps.utils.mongo_connection import get_mongodb
+from auctions.models import Auction, AuctionItem, AuctionBid
+from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
+from auctions.models import Category
+from utils.mongo_connection import get_mongodb
 from payments.forms import PledgeForm
 from auctions.constants import AUCTION_FINISHED
+from django.views.decorators.http import require_POST
 from exhibia.settings import BID_REFUND_TIME
 
 
@@ -65,6 +66,9 @@ def index(request):
         .select_related('item', 'item__image')
     ) if request.user.is_authenticated() else None
 
+    if request.user.is_authenticated():
+        for order in request.user.orders.all():
+            print order.auction
 
     # auctions_with_bid_return = Auction.objects.raw("""
     #     SELECT a.id, COUNT(*) as bid_refund,
@@ -85,8 +89,8 @@ def index(request):
 
 
     # last 15 chat messages from mongo
-    # db = get_mongodb()
-    # chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(5))
+    db = get_mongodb()
+    chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(5))
 
     return {'auctions': auctions.filter(item__categories=Category.objects.all()[0]),
             'showcase': showcase,
@@ -178,7 +182,7 @@ def fund(request, auction_id):
     member.incr_credits(amount)
     if request.is_ajax():
         response = {'response': 'OK'}
-        return HttpResponse(cjson.encode(response));
+        return HttpResponse(cjson.encode(response))
     else:
         return HttpResponseRedirect('/')
 
@@ -221,3 +225,15 @@ def append_funding_carousel(request):
     if not auctions:
         return HttpResponse('')
     return render(request, 'auctions/funding_carousel_verstka.html', {'auctions': auctions})
+
+
+@csrf_exempt
+@require_POST
+def append_battle_modal(request):
+    try:
+        auction = (Auction.objects.select_related('item', 'item__image', 'bids', 'bids__bidder')
+                   .get(pk=request.POST.get('id')))
+    except Auction.DoesNotExist:
+        return HttpResponse('')
+    latest_bids = AuctionBid.objects.filter(auction=auction).order_by('-id')[:6]
+    return render(request, 'auctions/modal_battle.html', {'auction': auction, 'latest_bids': latest_bids})

@@ -18,11 +18,11 @@ from socketio.namespace import BaseNamespace
 
 from .decorators import login_required
 
-from apps.auctions.models import Auction
-from apps.auctions.exceptions import *
-from apps.auctions import constants
+from auctions.models import Auction
+from auctions.exceptions import *
+from auctions import constants
 from settings.apps_settings import TRANSITION_PHASE_1_TIME
-from apps.utils.mongo_connection import get_mongodb
+from utils.mongo_connection import get_mongodb
 
 
 redis_pool = redis.ConnectionPool(host=settings.REDIS['host'],

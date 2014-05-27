@@ -1,4 +1,4 @@
-      <div class="modal-dialog">
+      <div class="modal-dialog" id="modal_buy_now_{{ auction.pk }}">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title" id="myModalLabel">buy now</h1>
@@ -85,7 +85,7 @@
                           <tbody>
                             <tr>
                                 <td>Retail:</td>
-                                <td>${{ auction.item.price }}</td>
+                                <td>$<span id="buy-now-price">{{ auction.item.price }}</span></td>
                             </tr>
                           </tbody>
                         </table>
@@ -94,14 +94,14 @@
                           <tbody>
                             <tr>
                               <td>Shipping & handling:</td>
-                              <td>$<span id="shipping-price">10.00</span></td>
+                              <td>$<span id="shipping-price">{{ shipping_fees.0.price }}</span></td>
                             </tr>
                           </tbody>
                         </table>
                         {{ form.auction }}
                         <div><label for="{{ form.auction.auto_id }}" class="error"></label></div>
                         <div class="total-sum">
-                          Total:<span>$763.00</span>
+                          Total: $<span id="buy-now-total-sum" >{{ auction.item.price|add:shipping_fees.0.price }}</span>
                         </div>
                       </div>
                     </div>
@@ -118,3 +118,14 @@
           </form>
         </div>
       </div>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          $('form#buy-now-form').on('change', 'input[name="method"]', function(){
+            // TODO not the best solution btw
+            var shipping_price = Number($(this).parent().text().replace(/[^0-9\.]+/g,""));
+            var buy_now_price = $('span#buy-now-price').text();
+            $('span#shipping-price').text(shipping_price);
+            $('span#buy-now-total-sum').text(+shipping_price.toFixed(2) + +buy_now_price);
+          })
+        });
+      </script>

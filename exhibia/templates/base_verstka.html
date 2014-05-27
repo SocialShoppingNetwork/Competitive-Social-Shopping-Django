@@ -46,16 +46,17 @@
      <div class="container w-1300 header">
        <div class="row">
          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-           <nav class="navbar">
-              <div class="navbar-header">
-               <a class="navbar-brand" href=""><img class="img-responsive" src="{{ MEDIA_URL }}img/logo.png"/></a>
-               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-              </div>
+           <nav class="navbar " role="navigation">
+             <div class="navbar-header">
+               <a class="navbar-brand" href="index.html"><img class="img-responsive" src="{{ MEDIA_URL }}img/logo.png"/></a>
+               <button type="button" class="navbar-toggle" data-toggle="collapse"
+                       data-target="#bs-example-navbar-collapse-1">
+                 <span class="sr-only">Toggle navigation</span>
+                 <span class="icon-bar"></span>
+                 <span class="icon-bar"></span>
+                 <span class="icon-bar"></span>
+               </button>
+             </div>
              <!--  <div class="">
                 <form class="navbar-form navbar-left" role="search">
                   <div class="form-group has-feedback">
@@ -64,24 +65,32 @@
                   </div>
                 </form>
               </div> -->
-              <div class="navbar-right item-navbar">
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul class="nav navbar-nav">
-                    <li><a href="#">how it works</a></li>
-                    <li><a href="">faq</a></li>
+             <div class="navbar-right item-navbar">
+               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                 <ul class="nav navbar-nav">
+                   <li><a href="#">how it works</a></li>
+                   <li><a href="">faq</a></li>
 
-                  </ul>
-                </div>
-                <ul class="list-unstyled registr-btn">
-                  <li>
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
-                  </li>
-                  <li>
-                    <button type="button " class="btn btn-danger login">login</button>
-                  </li>
-                </ul>
-              </div>
-              <div class="clearfix"></div>
+                 </ul>
+               </div>
+               <ul class="list-unstyled registr-btn">
+                 <li>
+                   <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
+                 </li>
+                 <li>
+                   <button type="button " class="btn btn-danger login">login</button>
+                 </li>
+               </ul>
+             </div>
+             <div class="clearfix"></div>
+             <!-- <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
+                 </li>
+                 <li>
+                   <button type="button " class="btn btn-danger">login</button>
+                 </li>
+             </ul> -->
            </nav>
          </div>
          <div class="clearfix"></div>
@@ -189,21 +198,24 @@
     {% include "account/modal_wishlist.html"%}
     <!-- end modalWishList -->
 
+    <!-- ModalBattleView -->
+    <div class="modal fade" id="ModalBattleView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    </div>
+    <!-- END ModalBattleView -->
+
     <!-- ModalBuyNow -->
     <div class="modal fade" id="ModalBuyNow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
     </div>
-
     <!-- END ModalBuyNow -->
 
 
 
     <script type="text/javascript">
-      console.log("juu");
         $(window).scroll(function () {
           if ($(this).scrollTop() > 100) {
               $('#go-up').show();
-              ;
           } else {
               $('#go-up').hide();
           }

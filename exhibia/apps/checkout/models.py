@@ -10,7 +10,7 @@ ORDER_STATUS = (
 )
 
 class Order(models.Model):
-    user = models.ForeignKey("auth.User")
+    user = models.ForeignKey("auth.User", related_name="orders")
     auction = models.OneToOneField('auctions.Auction', unique=True) #TODO check this
     card = models.ForeignKey("payments.Card") #Replace it with paymentIPN
     tracking_number = models.CharField(max_length=25, blank=True, null=True)

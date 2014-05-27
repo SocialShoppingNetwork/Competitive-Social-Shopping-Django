@@ -1,0 +1,151 @@
+<div class="modal-dialog" id="item_modal_{{ auction.pk }}">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title" id="myModalLabel">item snapshot</h1>
+    </div>
+    <div class="modal-body ">
+      <div class="left-bar col-xs-12 col-sm-6 col-md-7 col-lg-7 p0">
+        <h4>{{ auction.item.name }}</h4>
+        <p>{{ auction.item.description|safe }}</p>
+        <div class="thumbnails">
+          {% for image in auction.item.images.all %}
+            <a href="#">
+              <img src="{{ image.img.url }}"  alt="Thumbnail">
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="right-bar col-xs-12 col-sm-6 col-md-5 col-lg-5 text-center p0">
+        <img src="{{ auction.item.image.img.url }}"  alt="Placeholder" class="placeholder">
+      </div>
+      <div class="clearfix"></div>
+      <div class="inner-table">
+        <table>
+          <tr>
+            <td><div class="item-timer">timer: <br><span id="bidding_time_{{ auction.id }}">{{ auction.bidding_time }} sec</span></div></td>
+            <td>
+              <button type="button" class="btn btn-pink bid-btn" data-auctionid="{{ auction.id }}">bid</button>
+            </td>
+            <td>
+              {% if auction.last_bidder %}
+                <div data-timeleft="{{ auction.time_left }}" data-bidtime="{{ auction.bidding_time }}"
+                     class="time showcase-timer">{{ auction.time_left }}</div>
+              {% else %}
+                <div class="color-blue start-message">Be the first bidder</div>
+                <div style="display:none;" data-timeleft="{{ auction.time_left }}" data-bidtime="{{ auction.bidding_time }}"
+                     class="time showcase-timer">{{ auction.time_left }}</div>
+              {% endif %}
+            </td>
+            <td>
+              <button data-id="{{ auction.pk }}" class="btn btn-buy pull-right">вuy</button>
+            </td>
+            <td>
+              <div>
+                Retail: ${{ auction.item.price }}<br>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="user-fotos">
+        {#          {% for bid in latest_bids %}#}
+        {#            {% if not forloop.last %}#}
+        {#              {% cycle  '<div class="small-foto">' '<div class="middle-foto">' '' '<div class="b-foto">' '' %}#}
+        {#              <a href="">#}
+        {#                <img src="{{ bid.bidder.img_url }}"/>#}
+        {#                <div class="bidder-name">{{ bid.bidder.user.username }}</div>#}
+        {#              </a>#}
+        {#              {% cycle  '</div>' '' '</div>' '' '</div>'  %}#}
+        {#            {% endif %}#}
+        {#          {% endfor %}#}
+
+        {% if latest_bids %}
+        <div class="user-fotos-c col-xs-12 col-sm-12 col-md-4 col-lg-4 p0 text-center">
+        {% for latest_bid in latest_bids %}
+          <div class="foto-c">
+            <a href="javascript:void(0)">
+              <img src="{{ latest_bid.bidder.img_url }}">
+              <div class="bidder-name">{{ latest_bid.bidder.user.username }}</div>
+            </a>
+          </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+
+{#        <div class="user-fotos-l col-xs-12 col-sm-12 col-md-4 col-lg-4 p0">#}
+{##}
+{#          <div class="small-foto">#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder_1.png"/>#}
+{#              <div class="bidder-name">Bidder 5</div>#}
+{#            </a>#}
+{#          </div>#}
+{#          <div class="middle-foto">#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder-2.png">#}
+{#              <div class="bidder-name">Bidder 3</div>#}
+{#            </a>#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder-2.png">#}
+{#              <div class="bidder-name">Bidder 4</div>#}
+{#            </a>#}
+{#          </div>#}
+{#          <div class="b-foto">#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder_3.png">#}
+{#              <div class="bidder-name">Bidder 2</div>#}
+{#            </a>#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder_3.png">#}
+{#              <div class="bidder-name">Bidder 3</div>#}
+{#            </a>#}
+{#          </div>#}
+{#        </div>#}
+{#        <div class="user-fotos-c col-xs-12 col-sm-12 col-md-4 col-lg-4 p0 text-center">#}
+{#          <div class="foto-c">#}
+{##}
+{#            <a href="javascript:void(0)">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder-winner.png">#}
+{#              <div class="bidder-name">Bidder 1</div>#}
+{#            </a>#}
+{#          </div>#}
+{#        </div>#}
+{#        <div class="user-fotos-r col-xs-12 col-sm-12 col-md-4 col-lg-4 p0">#}
+{#          <div class="b-foto">#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder_3.png">#}
+{#              <div class="bidder-name">Bidder 2</div>#}
+{#            </a>#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder_3.png"/>#}
+{#              <div class="bidder-name">Bidder 3</div>#}
+{#            </a>#}
+{#          </div>#}
+{#          <div class="middle-foto">#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder-2.png">#}
+{#              <div class="bidder-name">Bidder 3</div>#}
+{#            </a>#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder-2.png">#}
+{#              <div class="bidder-name">Bidder 4</div>#}
+{#            </a>#}
+{#          </div>#}
+{#          <div class="small-foto">#}
+{#            <a href="">#}
+{#              <img src="{{ MEDIA_URL }}img/bidders/bidder_1.png"/>#}
+{#              <div class="bidder-name">Bidder 5</div>#}
+{#            </a>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+
+        <div class="clearfix"></div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-black" data-dismiss="modal">close</button>
+    </div>
+  </div>
+</div>
