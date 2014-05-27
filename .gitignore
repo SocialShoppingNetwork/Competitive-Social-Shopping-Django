@@ -16,3 +16,7 @@ exhibia/settings/local_settings.py
 
 # coverage
 exhibia/.coverage
+
+# vagrant
+.vagrant
+
