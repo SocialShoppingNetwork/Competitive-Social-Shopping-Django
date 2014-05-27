@@ -16,7 +16,7 @@ from utils import auction_to_dict, auctions_to_dict
 from auctions.models import Auction, AuctionItem, AuctionBid
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 from auctions.models import Category
-from utils.mongo_connection import get_mongodb
+# from utils.mongo_connection import get_mongodb
 from payments.forms import PledgeForm
 from auctions.constants import AUCTION_FINISHED
 from django.views.decorators.http import require_POST
@@ -89,8 +89,8 @@ def index(request):
 
 
     # last 15 chat messages from mongo
-    db = get_mongodb()
-    chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(5))
+    # db = get_mongodb()
+    # chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(5))
 
     return {'auctions': auctions.filter(item__categories=Category.objects.all()[0]),
             'showcase': showcase,
