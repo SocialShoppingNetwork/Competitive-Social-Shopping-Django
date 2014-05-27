@@ -184,7 +184,7 @@
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse in" style="height: auto;">
                   <div class="panel-body all-bidder">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled chat-messages" style="height: 300px; overflow: auto">
                       {% for message in messages %}
                         <li>
                           <div class="foto"><img src="{{ message.avatar }}"/></div>
@@ -192,11 +192,17 @@
                             <table>
                               <tr>
                                 <td><a href="#">{{ message.username }}</a></td>
-                                {% if 1 %}
-                                  <td><i class="icon-ok-circled"></i></td>
+                                {% if message.twitter_verified %}
+                                  <td><i class="icon-twitter"></i></td>
                                 {% endif %}
-                                {% if 1 %}
-                                  <td><img src="{{ MEDIA_URL }}img/winner.png"/></td>
+                                {% if message.facebook_verified %}
+                                  <td><i class="icon-facebook"></i></td>
+                                {% endif %}
+                                {% if message.google_verified %}
+                                  <td><i class="icon-google"></i></td>
+                                {% endif %}
+                                {% if message.is_winner %}
+                                  <td><i class="icon">W</i></td>
                                 {% endif %}
                               </tr>
                             </table>
@@ -204,19 +210,19 @@
                           </div>
                         </li>
                       {% endfor %}
+                    </ul>
                       <!--<li>-->
                       <!--<div class="warning"><i class="icon-attention"></i> <span>Playstation 3 has opened for bidding</span></div>-->
                       <!--</li>-->
+                      <ul class="list-unstyled">
+                          <li>
+                            {% if not request.user.profile.is_banned %}
+                              <textarea id="chat-msg" class="form-control" rows="3" placeholder=""></textarea>
+                            {% endif %}
+                          </li>
+                      </ul>
 
-                      <li>
-                        {% if not request.user.profile.is_banned %}
-                          <textarea id="chat-msg" class="form-control" rows="3" placeholder=""></textarea>
-                        {% else %}
-                          <span id="chat-msg"></span>
-                        {% endif %}
-                      </li>
 
-                    </ul>
                   </div>
                   <div class="panel-footer">
                     <div class="inner-content">

@@ -125,10 +125,43 @@ $(document).ready(function() {
     };
     setInterval(update_timers, 1000);
 
+    $('body').on('keyup', '#custom_value', function(event) {
+        var amount = parseFloat($(this).val());
+
+        if (isNaN(amount)) {
+            amount = 0;
+        }
+        var full_amount = amount + amount * 0.2;
+
+        slotmachine($('#total-bids'), full_amount, true);
+        slotmachine($('#custom_bonus'), full_amount, true);
+    });
+
+    $('#is_custom_value').click(function() {
+        if ($(this).prop('checked')) {
+            $('#fund_form input[name=option5]:checked').prop('checked', false);
+            var amount = parseFloat($('#custom_value').val());
+            amount += amount * 0,2;
+            slotmachine($('#total-bids'), amount, true);
+
+        }
+    });
+
 	$('body').on('click', '#fund_item', function(event) {
         event.preventDefault();
-        var amount = $('input[name=option5]:checked', '#fund_form').attr('value');
-        // TODO later we'll add 'choose your value'
+        var amount = 0;
+
+        if ($('#is_custom_value').prop('checked')) {
+            amount = parseFloat($('#custom_value').val());
+            amount += amount * 0,2;
+        }
+        else {
+            amount = $('input[name=option5]:checked', '#fund_form').attr('value');
+        }
+
+        if(!amount) {
+            return;
+        }
         auction_socket.emit("fund", {amount:amount, auction_pk:auction_pk});
         $('#ModalFund').modal('hide');
         $('#fund_form input[name=option5]').prop('checked', '');
@@ -190,8 +223,10 @@ $(document).ready(function() {
         return false;
     });
     $('#fund_form input[name="option5"]').on('click', function(event){
-        var val = $(this).val()
+        $('#is_custom_value').prop('checked', false);
+        var val = $(this).val();
         slotmachine($('#total-bids'), val, true);
+
     });
 
 

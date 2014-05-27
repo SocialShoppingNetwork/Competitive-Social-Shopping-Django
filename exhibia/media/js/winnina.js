@@ -172,14 +172,17 @@ function ban_user(username){
 
 function insert_notification(text){
     if (text.length) {
-        var notification = $('<li />').hide();
-        notification.html(
-            '<div class="warning">' +
-            '<i class="icon-attention"></i>' +
-            '<span>' + text +'</span>' +
-            '</div>');
 
-        $('#chat-msg').closest('li').prepend(notification);
-        notification.slideDown();
+        var notification =
+            '<li>' +
+                '<div class="warning">' +
+                '<i class="icon-attention"></i>' +
+                '<span>' + text +'</span>' +
+                '</div>' +
+            '</li>';
+
+        var chat_messages = $('.chat-messages');
+        chat_messages.append(notification);
+        chat_messages.scrollTop(chat_messages.prop('scrollHeight'));
     }
 }

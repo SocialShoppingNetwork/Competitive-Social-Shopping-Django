@@ -112,7 +112,7 @@ class Member(models.Model):
 
         backends = self.user.social_auth.all()
         providers = set(i.provider for i in backends)
-        print providers
+
         if 'facebook' in providers:
             url = "http://graph.facebook.com/%s/picture?type=square" % (self.user.username)
         elif 'twitter' in providers:
@@ -154,6 +154,11 @@ class Member(models.Model):
     def is_newbie(self):
         return not Auction.objects.filter(last_bidder_member=self.user,
                                           ended_unixtime__isnull=False).exists()
+
+    def is_winner(self):
+        return not self.is_newbie()
+
+
 
     """
     def auctionorders_unpaid(self):
@@ -247,8 +252,8 @@ def save_ip(sender, request, user, *args, **kwargs):
 
 def user_registered(sender, user, response, details, **kwargs):
     profile = user.get_profile()
-    if not profile.verified:
-        profile.verified = True
+
+    profile.verified = True
         # this is a place to get an avatar for profile
 
     profile.points_amount += Member.rewards.associate

@@ -90,14 +90,15 @@ def index(request):
 
     # last 15 chat messages from mongo
     db = get_mongodb()
-    chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(5))
+    chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(15))
+    chat_messages.reverse()
 
     return {'auctions': auctions.filter(item__categories=Category.objects.all()[0]),
             'showcase': showcase,
             'items': showcase,
             'categories': categories,
             'auctions_with_bid_return': auctions_with_bid_return,
-            # 'messages': chat_messages,
+            'messages': chat_messages,
             'auctions_ended q': auctions_ended}
 
 
