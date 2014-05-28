@@ -93,6 +93,7 @@ def index(request):
     chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(15))
     chat_messages.reverse()
 
+
     return {'auctions': auctions.filter(item__categories=Category.objects.all()[0]),
             'showcase': showcase,
             'items': showcase,
