@@ -11,8 +11,12 @@ def bid_button(context, auction):
     In this template tag we should decide should we add bid button or not
     """
     user = context['user']
-    profile = user.get_profile()
     params = {'auction_id': auction.id, 'bid_allowed': False}
+    if not user.is_authenticated():
+        return params
+
+    profile = user.get_profile()
+
     if profile.is_on_win_limit:
         return params
     if auction.item.newbie:

@@ -16,7 +16,7 @@ from utils import auction_to_dict, auctions_to_dict
 from auctions.models import Auction, AuctionItem, AuctionBid
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 from auctions.models import Category
-# from utils.mongo_connection import get_mongodb
+from utils.mongo_connection import get_mongodb
 from payments.forms import PledgeForm
 from auctions.constants import AUCTION_FINISHED
 from django.views.decorators.http import require_POST
@@ -50,7 +50,7 @@ def bid_ajax(request, auction_id):
 @csrf_exempt
 @render_to('index_verstka.html')
 def index(request):
-    member = request.user.get_profile()
+
     # auctions = Auction.objects.waiting_pledge().filter(item__categories=Category.objects.all()[0])
     auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
     showcase = Auction.objects.live()
@@ -68,8 +68,8 @@ def index(request):
     ) if request.user.is_authenticated() else None
 
     win_limit_time_left = (
-        member.win_limit_time_left
-    ) if request.user.is_authenticated() and member.is_on_win_limit else None
+        request.user.get_profile().win_limit_time_left
+    ) if request.user.is_authenticated() and request.user.get_profile().is_on_win_limit else None
 
     auctions_ended = Auction.objects.finished().select_related('item', 'item__image')[:4]
     items = Auction.objects.public().order_by('created').select_related('item', 'item__image')

@@ -152,8 +152,9 @@ class Member(models.Model):
     def is_newbie(self):
         return not Auction.objects.filter(last_bidder_member=self.user,
                                           ended_unixtime__isnull=False).exists()
+
     def is_winner(self):
-        return not self.is_newbie()
+        return not self.is_newbie
         
     @property
     def recent_wins(self):
