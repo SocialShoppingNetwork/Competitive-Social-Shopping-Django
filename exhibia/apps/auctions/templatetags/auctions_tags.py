@@ -1,22 +1,28 @@
-import datetime
 import settings
 from django import template
-from django.core.urlresolvers import reverse
+from payments.views import create_gateway
 
-from annoying.functions import get_object_or_None
-from socials.models import LikeItem
 register = template.Library()
-@register.inclusion_tag('payments/credits_checkout.html',  takes_context=True)
-def credits_checkout(context):
-    from payments.views import create_gateway
+
+
+@register.inclusion_tag('auctions/auction_bid_button.html',  takes_context=True)
+def bid_button(context, auction):
+    """
+    In this template tag we should decide should we add bid button or not
+    """
     user = context['user']
-    gateway = create_gateway('dalpay',
-                             custom1=user.username,
-                             function='credits')
-    try:
-        member = user.get_profile()
-    except:
-        member = None
-    print 'Meeeeember %s' % member
-    params = {'gateway': gateway, 'member':member}
-    return params
+    profile = user.get_profile()
+    params = {'auction_id': auction.id, 'bid_allowed': False}
+    if profile.is_on_win_limit:
+        return params
+    if auction.item.newbie:
+        if profile.is_newbie or not user.is_authenticated():
+            params['bid_allowed'] = True
+            return params
+        else:
+            params['newbie'] = True
+            return params
+        
+    else:
+        params['bid_allowed'] = True
+        return params

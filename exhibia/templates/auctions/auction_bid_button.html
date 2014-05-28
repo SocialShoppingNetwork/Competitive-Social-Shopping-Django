@@ -1,0 +1,9 @@
+{% if bid_allowed %}
+  <button type="button" class="btn btn-pink bid-btn" data-auctionid="{{ auction_id }}">bid</button>
+{% else %}
+  {% if newbie %}
+    <h6 align="center">Newbie exhibit</h6>
+  {% else %}
+    <button type="button" class="btn btn-red">bid</button>
+  {% endif %}
+{% endif %}
