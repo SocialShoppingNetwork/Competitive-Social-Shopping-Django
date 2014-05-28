@@ -44,7 +44,7 @@ class ShippingFee(models.Model):
 
 class ShippingRequest(models.Model):
     user = models.ForeignKey("auth.User")
-    auction = models.OneToOneField('auctions.Auction') #TODO check this
+    auction = models.ForeignKey('auctions.Auction') #TODO check this
     first_name = models.CharField(_("First Name"), max_length=50)
     last_name = models.CharField(_("Last Name"), max_length=50)
     address1 = models.CharField(max_length=100)
@@ -58,30 +58,32 @@ class ShippingRequest(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together =('user', 'auction',)
+        unique_together = ('user', 'auction',)
 
     def __unicode__(self):
         return unicode(self.user)
+
 
 def create_billing_address(sender, instance, created, raw, **kwargs):
     if instance is None:
         return
     if not created or raw:
         return
-    # data = instance.__dict__
-    data = {'user':instance.user,
-            'first_name':instance.first_name,
-            'last_name':instance.last_name,
-            'city':instance.city,
-            'state':instance.state,
-            'country':instance.country,
-            'zip_code':instance.zip_code,
-            'phone':instance.phone,
-            'address1':instance.address1,
-            'address2':instance.address1,
-            'state':instance.state,
+        # data = instance.__dict__
+    data = {'user': instance.user,
+            'first_name': instance.first_name,
+            'last_name': instance.last_name,
+            'city': instance.city,
+            'state': instance.state,
+            'country': instance.country,
+            'zip_code': instance.zip_code,
+            'phone': instance.phone,
+            'address1': instance.address1,
+            'address2': instance.address1,
+            'state': instance.state,
             # 'shipping':instance
     }
     BillingAddress.objects.create(**data)
-post_save.connect(create_billing_address, sender=ShippingAddress)
+
+# post_save.connect(create_billing_address, sender=ShippingAddress)
 

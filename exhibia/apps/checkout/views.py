@@ -32,7 +32,8 @@ from exhibia.settings import BID_REFUND_TIME
 @login_required
 def view_order(request, order_pk):
     return render(request, 'checkout/view_order.html',
-                  {'order':get_object_or_404(Order, user=request.user, pk=order_pk)})
+                  {'order': get_object_or_404(Order, user=request.user, pk=order_pk)})
+
 
 @login_required
 def confirm_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
@@ -83,11 +84,10 @@ def confirm_order(request, auction_pk, shipping_pk, billing_pk, card_pk):
         )
         return redirect(reverse('profile_account'))
     return render(request, 'checkout/order_review.html',
-                  {'auction':auction,
-                  'card':card,
-                  'shipping':shipping,
-                  'billing':billing})
-
+                  {'auction': auction,
+                   'card': card,
+                   'shipping': shipping,
+                   'billing': billing})
 
 
 # TODO: remove rest of code as its not used anymore
@@ -123,7 +123,7 @@ def select_shipping_address(request, auction_id):
             return HttpResponseRedirect(reverse('checkout_request_fee', args=[auction_id]))
 
     if request.method == 'POST':
-        if action =='edit':
+        if action == 'edit':
             form = ShippingForm(initial=shipping.__dict__)
         else:
             form = ShippingForm(request.POST)
@@ -131,7 +131,7 @@ def select_shipping_address(request, auction_id):
                 data = form.cleaned_data
                 if shipping:
                     #Update and Select
-                    shipping.first_name =  data['first_name']
+                    shipping.first_name = data['first_name']
                     shipping.last_name = data['last_name']
                     shipping.address1 = data['address1']
                     shipping.address2 = data['address2']
@@ -154,12 +154,13 @@ def select_shipping_address(request, auction_id):
         form = ShippingForm()
 
     return {
-        'next_url':next_url,
-        'auction':auction,
-        'form':form,
-        'shipping_profiles':shipping_profiles,
-        'shipping':shipping
+        'next_url': next_url,
+        'auction': auction,
+        'form': form,
+        'shipping_profiles': shipping_profiles,
+        'shipping': shipping
     }
+
 
 @login_required
 @render_to('checkout/select_payment.html')
@@ -193,12 +194,11 @@ def select_payment(request, auction_id):
         form = CardForm()
 
     return {
-        'auction':auction,
-        'form':form,
-        'cards':cards,
-        'card':card
+        'auction': auction,
+        'form': form,
+        'cards': cards,
+        'card': card
     }
-
 
 
 # @login_required
@@ -305,10 +305,11 @@ def request_shipping_fee(request, auction_id):
             phone=shipping.phone,
         )
     return {
-        'auction':auction,
-        'shipping':shipping,
-        'shipping_request':shipping_request,
+        'auction': auction,
+        'shipping': shipping,
+        'shipping_request': shipping_request,
     }
+
 
 @login_required
 @render_to('checkout/select_shipping.html')
@@ -336,11 +337,12 @@ def select_shipping(request, auction_id):
             redirect_url = reverse('checkout_select_payment', args=[auction_id])
         return HttpResponseRedirect(redirect_url)
     return {
-        'next_url':next_url,
-        'auction':auction,
-        'shipping_options':shipping_options,
-        'shipping':shipping,
+        'next_url': next_url,
+        'auction': auction,
+        'shipping_options': shipping_options,
+        'shipping': shipping,
     }
+
 
 @login_required
 @render_to('checkout/select_billing_address.html')
@@ -367,7 +369,7 @@ def select_billing(request, auction_id):
         return HttpResponseRedirect(reverse('checkout_review', args=[auction.id]))
 
     if request.method == 'POST':
-        if action =='edit':
+        if action == 'edit':
             form = BillingForm(initial=billing.__dict__)
         else:
             form = BillingForm(request.POST)
@@ -398,11 +400,11 @@ def select_billing(request, auction_id):
         form = BillingForm()
 
     return {
-        'next_url':next_url,
-        'auction':auction,
-        'form':form,
-        'billing_profiles':billing_profiles,
-        'billing':billing,
+        'next_url': next_url,
+        'auction': auction,
+        'form': form,
+        'billing_profiles': billing_profiles,
+        'billing': billing,
     }
 
 # @login_required
@@ -420,13 +422,14 @@ def select_billing(request, auction_id):
 def append_buy_now_form(request):
     if request.user.is_authenticated():
         auction = get_object_or_404(Auction, pk=request.POST.get('id'))
-        # TODO check if user already bought this auction
-        form = BuyNowForm(request.user, auction)
-        return render(request, 'checkout/modal_buy_now.html',
-                      {'auction': auction, 'form': form, 'shipping_fees': auction.item.shipping_fees.all()})
+        if auction.pk not in [order.auction_id for order in request.user.orders.all()]:
+            form = BuyNowForm(request.user, auction)
+            return render(request, 'checkout/modal_buy_now.html',
+                          {'auction': auction, 'form': form, 'shipping_fees': auction.item.shipping_fees.all()})
+        else:
+            return render(request, 'checkout/modal_already_ordered.html', )
     else:
-        # TODO change this to some 'only logged in users' , please log in
-        return render(request, 'checkout/modal_registered_users_only.html',)
+        return render(request, 'checkout/modal_registered_users_only.html', )
 
 
 @require_POST
@@ -439,7 +442,7 @@ def buy_now(request):
             #  check if user bided for this auction, if he did we'll show him that he can return his bids
             if auction.status == AUCTION_FINISHED:
                 bid_refund_auction = (
-                    Auction.objects.filter(pk=auction.id, bids__bidder=request.user,)
+                    Auction.objects.filter(pk=auction.id, bids__bidder=request.user, )
                     .exclude(last_bidder_member=request.user)
                     .annotate(bid_refund=Count('id'))
                     .extra(where=['UNIX_TIMESTAMP() - ended_unixtime < {}'.format(BID_REFUND_TIME)])
@@ -492,7 +495,7 @@ def buy_now(request):
                 billing_zip_code=billing.zip_code,
                 billing_phone=billing.phone,
             )
-            return HttpResponse(json.dumps({'result': 'success',  'next': '/checkout/review/{}/'.format(order.id)}))
+            return HttpResponse(json.dumps({'result': 'success', 'next': '/checkout/review/{}/'.format(order.id)}))
         else:
             response = {}
             for k in form.errors:

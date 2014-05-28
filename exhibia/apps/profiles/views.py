@@ -118,7 +118,7 @@ def member_bids(request):
 ORDER_WAITING_PAYMENT = 'wp'
 ORDER_SHIPPING_FEE_REQUESTED = 'rf'
 ORDER_PROCESSING_ORDER = 'op'
-ORDER_PAID = 'pd' # Processing Order
+ORDER_PAID = 'pd'  # Processing Order
 ORDER_DELIVERED = 'dl'
 ORDER_WAITING_TESTIMONIAL = 'wt'
 
@@ -132,11 +132,14 @@ def account(request):
     #auctions_waiting_payment = member.items_won.filter(Q(shippingorder=None) |
     #                                            Q(shippingorder__status=ORDER_WAITING_PAYMENT) |
     #                                            Q(shippingorder__status=ORDER_SHIPPING_FEE_REQUESTED))
-    auctions_waiting_payment = request.user.items_won.all()#.filter(order=None)
-
+    auctions_waiting_payment = request.user.items_won.all()  # .filter(order=None)
 
     #orders processing and shipped
     auctions_processing = request.user.items_won.filter(order__status=ORDER_PROCESSING)
+
+    # TODO we should show buy now auctions
+
+
 
     auctions_shipped = request.user.items_won.filter(order__status=ORDER_SHIPPED)
     available = set(get_backends().keys())
