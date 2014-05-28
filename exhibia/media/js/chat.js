@@ -10,8 +10,13 @@ $(document).ready(function(){
         }
     });
 
+
+
     chat_socket.on('user_message', function(username, message, picture, twitter_verified,
                                             google_verified, facebook_verified, is_winner) {
+
+         message = $('<div class="comment"></div>').text(message).html();
+
          var chat_msg =
              '<li>' +
                 '<div class="foto"><img src="' + picture + '"/></div>' +
@@ -38,9 +43,7 @@ $(document).ready(function(){
          chat_msg +=
                  '</tr>' +
                     '</table>' +
-                    '<div class="comment">' +
                         message +
-                    '</div>' +
                 '</div></li>';
 
         var chat_messages = $('.chat-messages');
