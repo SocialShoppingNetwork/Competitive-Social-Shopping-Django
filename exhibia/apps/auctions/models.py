@@ -272,6 +272,8 @@ class Auction(models.Model):
     deadline_time = models.FloatField(db_index=True)
     bidding_time = models.PositiveSmallIntegerField()
     last_bidder = models.CharField(max_length=30, default='', db_index=True, blank=True)
+    # TODO this items_won relation is incorrect , we'll get auction in items_won
+    # TODO even if its still running we should change that ASAP
     last_bidder_member = models.ForeignKey('auth.User', blank=True, null=True, related_name='items_won')  #winner
 
     last_bid_type = models.CharField(max_length=1, default='n', choices=BID_TYPE_CHOICES, blank=True,

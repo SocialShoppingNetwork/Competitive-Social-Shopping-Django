@@ -72,9 +72,11 @@
         </div>
       </div>
     </div>
-    <div class="panel-footer">
-        <div class="time-limit">Win Limit: <span class="txt-pink">23:59:59</span></div>
-    </div>
+    {% if win_limit_time_left %}
+      <div class="panel-footer">
+          <div class="time-limit">Win Limit: <span class="txt-pink timer win-limit-timer" data-timeleft="{{ win_limit_time_left }}" id="win_limit_counter">{{ win_limit_time_left }}</span></div>
+      </div>
+    {% endif %}
   </div>
 </div>
 {% endwith %}

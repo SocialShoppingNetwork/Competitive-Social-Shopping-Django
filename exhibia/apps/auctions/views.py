@@ -16,11 +16,11 @@ from utils import auction_to_dict, auctions_to_dict
 from auctions.models import Auction, AuctionItem, AuctionBid
 from auctions.exceptions import AlreadyHighestBid, AuctionExpired, AuctionIsNotReadyYet, NotEnoughCredits
 from auctions.models import Category
-from utils.mongo_connection import get_mongodb
+# from utils.mongo_connection import get_mongodb
 from payments.forms import PledgeForm
 from auctions.constants import AUCTION_FINISHED
 from django.views.decorators.http import require_POST
-from exhibia.settings import BID_REFUND_TIME
+from exhibia.settings import BID_REFUND_TIME, WIN_LIMIT_TIME
 
 
 @csrf_exempt
@@ -50,15 +50,16 @@ def bid_ajax(request, auction_id):
 @csrf_exempt
 @render_to('index_verstka.html')
 def index(request):
+    member = request.user.get_profile()
     # auctions = Auction.objects.waiting_pledge().filter(item__categories=Category.objects.all()[0])
     auctions = Auction.objects.waiting_pledge() | Auction.objects.transition_phase_1()
     showcase = Auction.objects.live()
-
     # here we'll be storing those auctions in which user lost, but he still can get his bids back
     auctions_with_bid_return = (
         Auction.objects.finished()
         .filter(bids__bidder=request.user)
         .exclude(last_bidder_member=request.user)
+        .exclude(id__in=[order.auction_id for order in request.user.orders.all()])
         .annotate(bid_refund=Count('id'))
         .extra(select={'refund_time_left': 'FLOOR({}-(UNIX_TIMESTAMP()-ended_unixtime))'.format(BID_REFUND_TIME)})
         .extra(where=['UNIX_TIMESTAMP() - ended_unixtime < {}'.format(BID_REFUND_TIME)])
@@ -66,28 +67,13 @@ def index(request):
         .select_related('item', 'item__image')
     ) if request.user.is_authenticated() else None
 
-    if request.user.is_authenticated():
-        for order in request.user.orders.all():
-            print order.auction
-
-    # auctions_with_bid_return = Auction.objects.raw("""
-    #     SELECT a.id, COUNT(*) as bid_refund,
-    #     FLOOR({bid_refund_time}-(UNIX_TIMESTAMP()-a.ended_unixtime)) as refund_time_left
-    #     FROM auctions_auction a
-    #     INNER JOIN auctions_auctionbid b ON b.auction_id=a.id
-    #     INNER JOIN auth_user u ON b.bidder_id=u.id
-    #     WHERE a.status = {status!r} AND u.id = {user_id} AND a.last_bidder_member_id <> {user_id}
-    #     AND UNIX_TIMESTAMP() - a.ended_unixtime < {bid_refund_time}
-    #     GROUP BY a.id
-    # """.format(status=AUCTION_FINISHED, user_id=request.user.pk,
-    #            bid_refund_time=BID_REFUND_TIME)) if request.user.is_authenticated() else None
+    win_limit_time_left = (
+        member.win_limit_time_left
+    ) if request.user.is_authenticated() and member.is_on_win_limit else None
 
     auctions_ended = Auction.objects.finished().select_related('item', 'item__image')[:4]
     items = Auction.objects.public().order_by('created').select_related('item', 'item__image')
-
     categories = Category.objects.all()
-
-
     # last 15 chat messages from mongo
     db = get_mongodb()
     chat_messages = list(db.chat.find().sort("date", pymongo.DESCENDING).limit(15))
@@ -100,6 +86,7 @@ def index(request):
             'categories': categories,
             'auctions_with_bid_return': auctions_with_bid_return,
             'messages': chat_messages,
+            'win_limit_time_left': win_limit_time_left,
             'auctions_ended q': auctions_ended}
 
 

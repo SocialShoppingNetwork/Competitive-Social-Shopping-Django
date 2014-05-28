@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-
 import hashlib
 from datetime import datetime
 import urllib
 import urllib2
 from urlparse import urlparse
-
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
@@ -17,14 +15,13 @@ from django.core.urlresolvers import reverse
 from time import time
 from django_countries import CountryField
 import dbsettings
-
 from auctions.models import AuctionItem, Auction
-
+from auctions.constants import *
 from social_auth.signals import socialauth_registered
 from social_auth.backends import twitter, facebook, google
+from exhibia.settings import BID_REFUND_TIME, SOCIAL_ACCOUNTS, WIN_LIMIT_TIME, WIN_LIMIT
 from socials.models import LikeItem
 from referrals.models import ReferralLink
-from settings.api_settings import SOCIAL_ACCOUNTS
 
 
 class RewardPoints(dbsettings.Group):
@@ -151,16 +148,36 @@ class Member(models.Model):
         else:
             pass
 
+    @property
     def is_newbie(self):
         return not Auction.objects.filter(last_bidder_member=self.user,
                                           ended_unixtime__isnull=False).exists()
-
     def is_winner(self):
         return not self.is_newbie()
+        
+    @property
+    def recent_wins(self):
+        return (Auction.objects
+                .filter(status=AUCTION_FINISHED, last_bidder_member=self)
+                .extra(select={'win_limit_time_left': 'FLOOR({}-(UNIX_TIMESTAMP()-ended_unixtime))'.format(WIN_LIMIT_TIME)})
+                .extra(where=['UNIX_TIMESTAMP() - ended_unixtime < {}'.format(WIN_LIMIT_TIME)])
+                .order_by('-ended_unixtime')
+                )
+
+    @property
+    def recent_wins_count(self):
+        return self.recent_wins.count()
+
+    @property
+    def is_on_win_limit(self):
+        return self.recent_wins_count >= WIN_LIMIT
+
+    @property
+    def win_limit_time_left(self):
+        return self.recent_wins[0].win_limit_time_left
 
 
-
-    """
+"""
     def auctionorders_unpaid(self):
         return AuctionOrder.objects.filter(auction__status="m", winner=self)
 

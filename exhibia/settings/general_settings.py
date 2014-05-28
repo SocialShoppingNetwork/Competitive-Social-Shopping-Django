@@ -301,10 +301,10 @@ BASIC_WWW_AUTHENTICATION_PASSWORD = "admin"
 BASIC_WWW_AUTHENTICATION = False
 
 
-BID_REFUND_TIME = 60 * 60 * 2  # if you lost , you can get your bids back if you buy
+BID_REFUND_TIME = 60 * 60 * 0.1  # if you lost , you can get your bids back if you buy
                                # item at full price for this amount of time
-WIN_LIMIT = 2
-WIN_LIMIT_TIME = 60 * 60 * 1
+WIN_LIMIT = 1
+WIN_LIMIT_TIME = 60 * 60 * 24
 
 
 try:

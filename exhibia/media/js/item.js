@@ -50,15 +50,15 @@ $(document).ready(function() {
        alert('Auction was locked');
     });
     auction_socket.on('auction_funded', function(auction_pk, amount_pleged, backers, funded){
-        console.log(auction_pk, amount_pleged, backers, funded);
         // item have been funded but not at full price yet
         var div = $("div#auction-"+auction_pk);
         div.find('.bakers').text(backers);
-//        div.find('.funded').text(funded);
         div.find('.progress-bar').attr('style', 'width: ' + funded + '%;');
+        if(funded >= 100){
+            funded = 99
+        }
         slotmachine(div.find('.funded'), funded, true);
         insert_notification(div.find('.item-name h6').text() + ' has been funded');
-//        li.find('.amount_pleged').text('$' + amount_pleged);
     });
     auction_socket.on('auction_fund_ended', function(auction_pk, time_left, html){
         var div = $("div#auction-"+auction_pk);
@@ -82,6 +82,7 @@ $(document).ready(function() {
         var modal = $('#item_modal_'+ auction_pk);
         modal.find('.showcase-timer').show();
         modal.find('.showcase-timer').reset_timer();
+        modal.find('.start-message').hide();
         // TODO insert new bidder photo to the list in the modal
 
         var block = $('#item_' + auction_pk);
@@ -95,7 +96,7 @@ $(document).ready(function() {
     });
 
     var update_timers = function() {
-        $('body').find('.showcase-timer, .bid-refund-timer').each(function() {
+        $('body').find('.timer').each(function() {
             var self = $(this);
             var time_left = self.data('timeleft');
             if (time_left > 0) {
@@ -115,6 +116,10 @@ $(document).ready(function() {
                         tr.addClass('winner');
                         tr.append('<td><div class="txt">Winner</div></td>');
                         tr.closest('tbody').find('.item-timer').remove();
+                    }
+                    if(self.hasClass('win-limit-timer')){
+                        self.closest('.panel-footer').remove();
+                        // TODO send signal and revive those buttons that we need
                     }
 //                }
 //                else {

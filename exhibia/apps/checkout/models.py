@@ -11,7 +11,7 @@ ORDER_STATUS = (
 
 class Order(models.Model):
     user = models.ForeignKey("auth.User", related_name="orders")
-    auction = models.OneToOneField('auctions.Auction', unique=True) #TODO check this
+    auction = models.ForeignKey('auctions.Auction') #TODO check this
     card = models.ForeignKey("payments.Card") #Replace it with paymentIPN
     tracking_number = models.CharField(max_length=25, blank=True, null=True)
     shipping_company = models.CharField(max_length=5, choices=SHIPPING_COMPANIES, blank=True, default=True)
@@ -26,7 +26,6 @@ class Order(models.Model):
     shipping_country = CountryField()
     shipping_zip_code = models.CharField(max_length=10)
     shipping_phone = models.CharField(max_length=30)
-
     billing_first_name = models.CharField(_("First Name"), max_length=50)
     billing_last_name = models.CharField(_("Last Name"), max_length=50)
     billing_address1 = models.CharField(max_length=100)
@@ -36,8 +35,10 @@ class Order(models.Model):
     billing_country = CountryField()
     billing_zip_code = models.CharField(max_length=10)
     billing_phone = models.CharField(max_length=30)
-
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'auction',)
 
     @property
     def shipping_company_name(self):

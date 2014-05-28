@@ -1,3 +1,4 @@
+{% load auctions_tags %}
 {% with auction as a %}
 <div class="col-xs-6 col-sm-2 col-md-3 col-lg-2 w-193">
     <div class="thumbnail" id="item_{{ a.id }}">
@@ -33,14 +34,14 @@
               <tr>
                 <td>
                   {% if a.last_bidder %}
-                    <div data-timeleft="{{ a.time_left }}" data-bidtime="{{ a.bidding_time }}" class="time showcase-timer">{{ a.time_left }}</div>
+                    <div data-timeleft="{{ a.time_left }}" data-bidtime="{{ a.bidding_time }}" class="time timer showcase-timer">{{ a.time_left }}</div>
                   {% else %}
                     <div class="color-blue start-message">Be the first bidder</div>
-                    <div style="display:none;" data-timeleft="{{ a.time_left }}" data-bidtime="{{a.bidding_time}}" class="time showcase-timer">{{ a.time_left }}</div>
+                    <div style="display:none;" data-timeleft="{{ a.time_left }}" data-bidtime="{{a.bidding_time}}" class="time timer showcase-timer">{{ a.time_left }}</div>
                   {% endif %}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-pink bid-btn" data-auctionid="{{ a.id }}">bid</button>
+                  {% bid_button a %}
                 </td>
               </tr>
             </tbody>

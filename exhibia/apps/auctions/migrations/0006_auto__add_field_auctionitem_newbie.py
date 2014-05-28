@@ -8,16 +8,49 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'AuctionItem.newbie'
-        db.add_column('auctions_auctionitem', 'newbie',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
+
+        # Adding model 'Order'
+        db.create_table('checkout_order', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='orders', to=orm['auth.User'])),
+            ('auction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.Auction'])),
+            ('card', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['payments.Card'])),
+            ('tracking_number', self.gf('django.db.models.fields.CharField')(max_length=25, null=True, blank=True)),
+            ('shipping_company', self.gf('django.db.models.fields.CharField')(default=True, max_length=5, blank=True)),
+            ('shipping_fee', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['shipping.ShippingFee'])),
+            ('status', self.gf('django.db.models.fields.CharField')(default='op', max_length=2)),
+            ('shipping_first_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('shipping_last_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('shipping_address1', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('shipping_address2', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('shipping_city', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('shipping_state', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('shipping_country', self.gf('django_countries.fields.CountryField')(max_length=2)),
+            ('shipping_zip_code', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('shipping_phone', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('billing_first_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('billing_last_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('billing_address1', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('billing_address2', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('billing_city', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('billing_state', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('billing_country', self.gf('django_countries.fields.CountryField')(max_length=2)),
+            ('billing_zip_code', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('billing_phone', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal('checkout', ['Order'])
+
+        # Adding unique constraint on 'Order', fields ['user', 'auction']
+        db.create_unique('checkout_order', ['user_id', 'auction_id'])
 
 
     def backwards(self, orm):
-        # Deleting field 'AuctionItem.newbie'
-        db.delete_column('auctions_auctionitem', 'newbie')
+        # Removing unique constraint on 'Order', fields ['user', 'auction']
+        db.delete_unique('checkout_order', ['user_id', 'auction_id'])
 
+        # Deleting model 'Order'
+        db.delete_table('checkout_order')
 
     models = {
         'auctions.auction': {

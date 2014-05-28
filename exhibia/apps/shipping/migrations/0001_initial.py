@@ -8,42 +8,44 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Order'
-        db.create_table('checkout_order', (
+        # Adding model 'ShippingAddress'
+
+
+        # Adding model 'ShippingRequest'
+        db.create_table('shipping_shippingrequest', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('auction', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auctions.Auction'], unique=True)),
-            ('card', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['payments.Card'])),
-            ('tracking_number', self.gf('django.db.models.fields.CharField')(max_length=25, null=True, blank=True)),
-            ('shipping_company', self.gf('django.db.models.fields.CharField')(default=True, max_length=5, blank=True)),
-            ('shipping_fee', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['shipping.ShippingFee'])),
-            ('status', self.gf('django.db.models.fields.CharField')(default='op', max_length=2)),
-            ('shipping_first_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('shipping_last_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('shipping_address1', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('shipping_address2', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-            ('shipping_city', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('shipping_state', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('shipping_country', self.gf('django_countries.fields.CountryField')(max_length=2)),
-            ('shipping_zip_code', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('shipping_phone', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('billing_first_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('billing_last_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('billing_address1', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('billing_address2', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-            ('billing_city', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('billing_state', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('billing_country', self.gf('django_countries.fields.CountryField')(max_length=2)),
-            ('billing_zip_code', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('billing_phone', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('auction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auctions.Auction'])),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('address1', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('address2', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('city', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('state', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('country', self.gf('django_countries.fields.CountryField')(max_length=2)),
+            ('zip_code', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('waiting', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
-        db.send_create_signal('checkout', ['Order'])
+        db.send_create_signal('shipping', ['ShippingRequest'])
+
+        # Adding unique constraint on 'ShippingRequest', fields ['user', 'auction']
+        db.create_unique('shipping_shippingrequest', ['user_id', 'auction_id'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Order'
-        db.delete_table('checkout_order')
+        # Removing unique constraint on 'ShippingRequest', fields ['user', 'auction']
+        db.delete_unique('shipping_shippingrequest', ['user_id', 'auction_id'])
+
+        # Deleting model 'ShippingAddress'
+        db.delete_table('shipping_shippingaddress')
+
+        # Deleting model 'ShippingFee'
+        db.delete_table('shipping_shippingfee')
+
+        # Deleting model 'ShippingRequest'
+        db.delete_table('shipping_shippingrequest')
 
 
     models = {
@@ -137,36 +139,6 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'checkout.order': {
-            'Meta': {'object_name': 'Order'},
-            'auction': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auctions.Auction']", 'unique': 'True'}),
-            'billing_address1': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'billing_address2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'billing_city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'billing_country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
-            'billing_first_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'billing_last_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'billing_phone': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'billing_state': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'billing_zip_code': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'card': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['payments.Card']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'shipping_address1': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'shipping_address2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            'shipping_city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'shipping_company': ('django.db.models.fields.CharField', [], {'default': 'True', 'max_length': '5', 'blank': 'True'}),
-            'shipping_country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
-            'shipping_fee': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shipping.ShippingFee']"}),
-            'shipping_first_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'shipping_last_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'shipping_phone': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'shipping_state': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'shipping_zip_code': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'status': ('django.db.models.fields.CharField', [], {'default': "'op'", 'max_length': '2'}),
-            'tracking_number': ('django.db.models.fields.CharField', [], {'max_length': '25', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -174,16 +146,21 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'payments.card': {
-            'Meta': {'object_name': 'Card'},
+        'shipping.shippingaddress': {
+            'Meta': {'object_name': 'ShippingAddress'},
+            'address1': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'address2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'expiration_month': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'expiration_year': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'holder_name': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'number': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'state': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'shipping_addresses'", 'to': "orm['auth.User']"}),
+            'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         },
         'shipping.shippingfee': {
             'Meta': {'object_name': 'ShippingFee'},
@@ -193,7 +170,24 @@ class Migration(SchemaMigration):
             'item': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'shipping_fees'", 'to': "orm['auctions.AuctionItem']"}),
             'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '7', 'decimal_places': '2'}),
             'shipping': ('django.db.models.fields.CharField', [], {'max_length': '3'})
+        },
+        'shipping.shippingrequest': {
+            'Meta': {'unique_together': "(('user', 'auction'),)", 'object_name': 'ShippingRequest'},
+            'address1': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'address2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
+            'auction': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auctions.Auction']"}),
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'state': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'waiting': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         }
     }
 
-    complete_apps = ['checkout']
+    complete_apps = ['shipping']
