@@ -1,24 +1,26 @@
-<div class="col-xs-4 col-sm-4 col-md-2 col-lg-2" id="auction-{{ auction.pk }}">
+<div class="itemFund col-lg-12" id="auction-{{ auction.pk }}">
   <div class="thumbnail">
     <div class="item-name">
       <h6>{{ auction.item.name }}</h6>
     </div>
     <div class="item-foto">
-      <img src="{{ auction.item.image.img.url }}" alt="">
+      <a class="itemLink" data-toggle="modal" data-target="#ModalFund" data-pk="{{ auction.pk }}" style="background-image: url({{ auction.item.image.img.url }})"></a>
     </div>
     <div class="alert alert-info">
       <table>
-        <tr>
-          <td >
-            <button type="btn" data-toggle="modal" data-target="#ModalWishList">
-                <span class="glyphicon glyphicon-star star-blue"></span>
-            </button>
-          </td>
-          <td rowspan="2" class="percent"><span class="funded">{{ auction.funded|floatformat:0 }}</span>%</td>
-        </tr>
-        <tr>
-          <td><strong class="bakers">{{ auction.backers }}</strong><span class="text-blue">backers</span></td>
-        </tr>
+          <tbody>
+            <tr>
+              <td >
+                <button type="btn" data-toggle="modal" data-target="#ModalWishList">
+                    <span class="glyphicon glyphicon-star star-blue"></span>
+                </button>
+              </td>
+              <td rowspan="2" class="percent"><span class="funded">{{ auction.funded|floatformat:0 }}</span>%</td>
+            </tr>
+            <tr>
+              <td><strong class="bakers">{{ auction.backers }}</strong><span class="text-blue">backers</span></td>
+            </tr>
+          </tbody>
       </table>
       <!-- progress-bar -->
       <div class="progress">
@@ -30,7 +32,7 @@
       <!-- end progress-bar -->
     </div>
     <div class="modal-btn">
-      <button data-toggle="modal" data-target="#ModalFund" class="btn fund btn-info" data-pk="{{ auction.pk }}" > fund</button>
+      <button data-toggle="modal" data-target="#ModalFund" class="btn fund btn-info" data-pk="{{ auction.pk }}"> fund</button>
     </div>
   </div>
 </div>

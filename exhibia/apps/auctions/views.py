@@ -225,7 +225,7 @@ def append_funding_carousel(request):
     auctions = auctions.filter(item__categories=category_id)
     if not auctions:
         return HttpResponse('')
-    return render(request, 'auctions/funding_carousel_verstka.html', {'auctions': auctions})
+    return render(request, 'auctions/funding_carousel_verstka.html', {'auctions': auctions, 'category_id': category_id})
 
 
 @csrf_exempt

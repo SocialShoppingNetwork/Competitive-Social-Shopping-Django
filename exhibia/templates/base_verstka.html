@@ -2,15 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="">
+    <meta name="viewport" content="width=device-width">
     <title>{% block title %}{{SITE_NAME}}{% endblock title %}</title>
 
     {% block stylesheets_head %}
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jcarousel.responsive.css">
+{#        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jcarousel.responsive.css">#}
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/fontello.css">
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/animation.css">
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/style.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/owl.carousel.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/owl.theme.css">
     {% endblock stylesheets_head %}
 
     {% block javascripts_head %}
@@ -18,7 +20,8 @@
         <script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-scrollto.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.form.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}jquery.jcarousel.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-scrollto.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/owl.carousel.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/application.js"></script>
         <!--[if lt IE 9]>
         <script src="{{ MEDIA_URL }}js/html5shiv.js"></script>

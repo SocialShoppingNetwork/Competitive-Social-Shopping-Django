@@ -85,7 +85,7 @@
 
           <!--END ONE BIDDDD ROW-->
 
-          <div class="row block-2">
+          <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="header">
                 <h2>funding exhibits</h2>
@@ -93,10 +93,9 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="header pull-right">
-                <h3>get bids by funding items</h3>
+                <h2>get bids by funding items</h2>
               </div>
             </div>
-            <div class="clearfix"></div>
           </div>
 
           <!-- tab -->
@@ -123,7 +122,7 @@
                   {% for category in categories %}
                     <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ category.slug }}">
                       {% if forloop.first %}
-                        {% include 'auctions/funding_carousel_verstka.html' %}
+                        {% include 'auctions/funding_carousel_verstka.html' with category_id=category.id %}
                       {% endif %}
                     </div>
                   {% endfor %}

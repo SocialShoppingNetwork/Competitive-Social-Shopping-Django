@@ -141,7 +141,12 @@ $(document).ready(function() {
         if ($(this).prop('checked')) {
             $('#fund_form input[name=option5]:checked').prop('checked', false);
             var amount = parseFloat($('#custom_value').val());
-            amount += amount * 0,2;
+
+            if (isNaN(amount)) {
+                amount = 0;
+            }
+
+            amount += amount * 0.2;
             slotmachine($('#total-bids'), amount, true);
 
         }

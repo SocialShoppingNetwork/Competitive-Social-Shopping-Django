@@ -1,20 +1,22 @@
-<div class="wrapper">
-  <div class="jcarousel-wrapper">
-      <div class="row">
-          <div class="jcarousel">
-            <div class="row">
-              {% for auction in auctions %}
-                    {% include 'auctions/auction_box_verstka.html' %}
-              {% endfor %}
-            </div>
-          </div>
-        <div class="clearfix"></div>
-      </div>
-
-      <a href="#" class="jcarousel-control-prev">&lsaquo;</a>
-      <a href="#" class="jcarousel-control-next">&rsaquo;</a>
-  </div>
+<div class="owl" id="owl-category-{{ category_id }}">
+  {% for auction in auctions %}
+        {% include 'auctions/auction_box_verstka.html' %}
+  {% endfor %}
 </div>
-<div class="controls"></div>
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jcarousel.responsive.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+      $("#owl-category-{{ category_id }}").owlCarousel({
+        lazyLoad : true,
+        navigation : false,
+        rewindNav : true,
+        scrollPerPage : true,
+        pagination : true,
+        items : 5,
+        itemsDesktop : [1070,4],
+        itemsDesktopSmall : [992,3],
+        itemsTablet: [768,3],
+        itemsMobile : [480,2]
+      });
+    });
+</script>
