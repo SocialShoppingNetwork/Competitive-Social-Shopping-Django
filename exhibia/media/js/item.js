@@ -173,6 +173,8 @@ $(document).ready(function() {
             return;
         }
         auction_socket.emit("fund", {amount:amount, auction_pk:auction_pk});
+
+
         $('#ModalFund').modal('hide');
         $('#fund_form input[name=option5]').prop('checked', '');
         $('#total-bids').text(0);

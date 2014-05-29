@@ -32,7 +32,11 @@
       <!-- end progress-bar -->
     </div>
     <div class="modal-btn">
-      <button data-toggle="modal" data-target="#ModalFund" class="btn fund btn-info" data-pk="{{ auction.pk }}"> fund</button>
+            {% if user.is_authenticated %}
+              <button data-toggle="modal" data-target="#ModalFund" class="btn fund btn-info" data-pk="{{ auction.pk }}" > fund</button>
+            {% else %}
+              <button class="btn fund btn-info" onclick="window.location.href='{% url acct_login %}'" data-pk="{{ auction.pk }}" > fund</button>
+            {% endif %}
     </div>
   </div>
 </div>

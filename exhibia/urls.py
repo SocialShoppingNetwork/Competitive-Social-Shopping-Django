@@ -63,6 +63,7 @@ urlpatterns += patterns("",
 
 
     url(r"^items/", include("auctions.urls")),
+    url(r"^payment/", include("payments.urls")),
 
     #url(r"^testimonials/", include("testimonials.urls")),
 

@@ -33,7 +33,7 @@
              <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <!--OLD -->
     {% endblock javascripts_head %}
-
+  
         <!--OLD-->
         <script>
             var selected_item = null;
@@ -82,7 +82,11 @@
                    <button class="btn btn-danger" data-toggle="modal" data-target="#ModalSignIn">sign up</button>
                  </li>
                  <li>
-                   <button type="button " class="btn btn-danger login">login</button>
+                   {% if user.is_authenticated %}
+                     <a class="btn btn-danger login" href="{% url  acct_logout %}">logout</a>
+                   {% else %}
+                      <a class="btn btn-danger login" href="{% url  acct_login %}">login</a>
+                   {% endif %}
                  </li>
                </ul>
              </div>
@@ -194,10 +198,11 @@
     {% include "account/signup_verstka.html" %}
     <!-- END  ModalSignIn-->
 
-    <!-- MODAL fUNDiTEMS -->
-    {% include "auctions/modal_funding.html"%}
-    <!-- END MODAL fUNDiTEMS -->
-
+    {% if user.is_authenticated %}
+      <!-- MODAL fUNDiTEMS -->
+      {% include "auctions/modal_funding.html" %}
+      <!-- END MODAL fUNDiTEMS -->
+    {% endif %}
     <!-- modalWishList -->
     {% include "account/modal_wishlist.html"%}
     <!-- end modalWishList -->

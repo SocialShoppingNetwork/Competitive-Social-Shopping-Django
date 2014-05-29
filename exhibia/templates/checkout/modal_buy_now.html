@@ -113,7 +113,14 @@
             </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-black" data-dismiss="modal">cancel</button>
-                <button type="button" id="buy-now" class="btn btn-info ajax-submit">place your order</button>
+                <button type="button" id="buy-now" class="btn btn-info ajax-submit">
+                  <div class="item-loader">
+                    <span class="loader">
+                      <img src="{{ MEDIA_URL }}img/loader.gif"/>
+                    </span>
+                  </div>
+                  place your order
+                </button>
               </div>
           </form>
         </div>

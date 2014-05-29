@@ -12,21 +12,22 @@ def bid_button(context, auction):
     """
     user = context['user']
     params = {'auction_id': auction.id, 'bid_allowed': False}
-    if not user.is_authenticated():
-        return params
+    if user.is_authenticated():
+        profile = user.get_profile()
+        if profile.is_on_win_limit:
 
-    profile = user.get_profile()
+            return params
+        if auction.item.newbie:
+            if profile.is_newbie or not user.is_authenticated():
+                params['bid_allowed'] = True
+                return params
+            else:
+                params['newbie'] = True
+                return params
 
-    if profile.is_on_win_limit:
-        return params
-    if auction.item.newbie:
-        if profile.is_newbie or not user.is_authenticated():
+        else:
             params['bid_allowed'] = True
             return params
-        else:
-            params['newbie'] = True
-            return params
-        
     else:
         params['bid_allowed'] = True
         return params

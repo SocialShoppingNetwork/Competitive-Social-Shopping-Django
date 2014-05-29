@@ -2,22 +2,34 @@
 
 #payments
 TEST_MODE = True
-PLIMUS_CALL_URL='https://%s.plimus.com/jsp/buynow.jsp' % (TEST_MODE and 'sandbox' or 'www')
+PLIMUS_CALL_URL = 'https://%s.plimus.com/jsp/buynow.jsp' % (TEST_MODE and 'sandbox' or 'www')
 PAYMENTS_LOG = True
 PAYMENTS_GATEWAY = ('plimus', 'dalpay')
 
 DALPAY_CALL_URL = 'https://secure.dalpay.is/cgi-bin/order2/processorder1.pl'
 DALPAY_MERCHANT_ID = '120205'
 
-TWITTER_CONSUMER_KEY         = 'y2vUwX1Bsamx9X8wYmM9g'
-TWITTER_CONSUMER_SECRET      = 'LvavS6nKMrzG8wMm6feah84lnMxOXb6e9mKVrf09Pg'
+
+PAYPAL_TEST_ACCOUNT = 'info-facilitator@socialshoppingnetwork.org'
+PAYPAL_END_POINT = 'api.sandbox.paypal.com'
+PAYPAL_MODE = 'sandbox'
+PAYPAL_CLIENT_ID = 'AYnIYhDEQq2-z978cVmP1M-g-36FCxesF-EDr-S_-lXo5j4OoQFNIpJEfEkJ'
+PAYPAL_SECRET = 'EOG4thBiGcHYgHuPA1TEu18azpvlNL25EIkVtYpphZ85guqva_o_07CYSiwt'
+PAYPAL_BUY_NOW_RETURN_URL = "http://localhost:8000/payment/paypal_buy_now?success=true"
+PAYPAL_BUY_NOW_CANCEL_URL = "http://localhost:8000/payment/paypal_buy_now?cancel=true"
+PAYPAL_BUY_BIDS_RETURN_URL = "http://localhost:8000/payment/paypal_buy_bids?success=true"
+PAYPAL_BUY_BIDS_CANCEL_URL = "http://localhost:8000/payment/paypal_buy_bids?cancel=true"
+
+
+TWITTER_CONSUMER_KEY = 'y2vUwX1Bsamx9X8wYmM9g'
+TWITTER_CONSUMER_SECRET = 'LvavS6nKMrzG8wMm6feah84lnMxOXb6e9mKVrf09Pg'
 TWITTER_ACCESS_TOKEN = ''
 TWITTER_TOKEN_SECRET = ''
 TWITTER_HASH_TAGS = ['exhibia']
 
-LOGIN_URL          = '/account/login/'
+LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGIN_ERROR_URL    = '/login-error/'
+LOGIN_ERROR_URL = '/login-error/'
 
 
 #GOOGLE_OAUTH2_CLIENT_KEY     = '33411447270.apps.googleusercontent.com'
@@ -29,7 +41,7 @@ LOGIN_ERROR_URL    = '/login-error/'
 VIDEO_MANAGER_CONFIG = {
     'DEVELOPER_KEY': 'AI39si4mlBv42cQbZOPyMaFtMBu-X2M1Uikq_pyoST-Wf1L32jll00nkVq9hXWhZIJNt6ZqoZlBfEBUnwU_Z7RUTkki-3RSH2g',
     'CLIENT_ID': 'Bidstick',
-    'SOURCE':'django_video_rec',
+    'SOURCE': 'django_video_rec',
     'VIDEO_PATH': 'videos',
     'VIDEO_SAVE_FN': 'testimonials.views.video_save_fn',
     'VIDEO_SNAPSHOT_FN': 'testimonials.views.video_snapshot_fn',
@@ -43,7 +55,7 @@ SOCIAL_ACCOUNTS = {
     'youtube': {
         'DEVELOPER_KEY': 'AI39si4mlBv42cQbZOPyMaFtMBu-X2M1Uikq_pyoST-Wf1L32jll00nkVq9hXWhZIJNt6ZqoZlBfEBUnwU_Z7RUTkki-3RSH2g',
         'CLIENT_ID': 'Bidstick',
-        'SOURCE':'django_video_rec',
+        'SOURCE': 'django_video_rec',
         'USERNAME': 'xtealc@gmail.com',
         'PASSWORD': ''
     },
@@ -69,8 +81,8 @@ FACEBOOK_LIKE_ITEM_FREEBIDS = 1
 # endSocial
 
 
-FACEBOOK_APP_ID              = '129299757101755'
-FACEBOOK_API_SECRET          = '6b2f92a905b24bbc762c20c37c7cd7df'
+FACEBOOK_APP_ID = '129299757101755'
+FACEBOOK_API_SECRET = '6b2f92a905b24bbc762c20c37c7cd7df'
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
 GOOGLE_OAUTH2_CLIENT_ID = '313089854027-tfljmmcdf9bt0b07bqo23dj9o7q231d2.apps.googleusercontent.com'
