@@ -33,7 +33,7 @@
              <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <!--OLD -->
     {% endblock javascripts_head %}
-
+  
         <!--OLD-->
         <script>
             var selected_item = null;
@@ -194,10 +194,11 @@
     {% include "account/signup_verstka.html" %}
     <!-- END  ModalSignIn-->
 
-    <!-- MODAL fUNDiTEMS -->
-    {% include "auctions/modal_funding.html"%}
-    <!-- END MODAL fUNDiTEMS -->
-
+    {% if user.is_authenticated %}
+      <!-- MODAL fUNDiTEMS -->
+      {% include "auctions/modal_funding.html" %}
+      <!-- END MODAL fUNDiTEMS -->
+    {% endif %}
     <!-- modalWishList -->
     {% include "account/modal_wishlist.html"%}
     <!-- end modalWishList -->

@@ -1,3 +1,5 @@
+from auctions.constants import ORDER_PAID
+from checkout.models import Order
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
@@ -13,10 +15,14 @@ from annoying.decorators import render_to, ajax_request
 from django.views.decorators.csrf import csrf_exempt
 
 #from payments.gateways.plimus import PlimusGateway
+from exhibia.settings import PAYPAL_MODE, PAYPAL_CLIENT_ID, PAYPAL_SECRET
+from payments.constants import CREDITS, CONFIRMED, AUCTION, ORDER_SUSPENDED
 from payments.gateways.dalpay import DalpayGateway
 
 from payments.models import CreditPackageOrder
-from payments.constants import *
+# from payments.constants import *
+
+import paypalrestsdk
 from profiles.models import Member
 
 import settings
@@ -114,10 +120,69 @@ def auction_dalpay_handler(request, data, pn, extra):
         #raise DoesNotFindOrder
         pass
 
+
 @csrf_exempt
 def package_order_dalpay(request):
     return order_dalpay(request, CREDITS, credits_dalpay_handler)
 
+
 @csrf_exempt
 def auction_order_dalpay(request):
     return order_dalpay(request, AUCTION, auction_dalpay_handler)
+
+
+@login_required
+def paypal_buy_now(request):
+    cancel = request.GET.get('cancel', False)
+    if cancel == 'true':
+        return HttpResponseRedirect('/ass')
+    order = get_object_or_404(Order, pk=request.session["order_id"])
+    payment_id = request.session["payment_id"]
+    success = request.GET.get('success', False)
+    if success == 'true':
+        payer_id = request.GET.get('PayerID', False)
+        paypalrestsdk.configure({
+            'mode': PAYPAL_MODE,
+            'client_id': PAYPAL_CLIENT_ID,
+            'client_secret': PAYPAL_SECRET
+        })
+        payment = paypalrestsdk.Payment.find(payment_id)
+        if payment.execute({"payer_id": payer_id}):
+            order.status = ORDER_PAID
+            order.save()
+            print("Payment[%s] execute successfully" % payment.id)
+            return HttpResponseRedirect(reverse('checkout_review_order', args=[order.id]))
+        else:
+            print(payment.error)
+    else:
+        return HttpResponse('')
+
+
+
+
+
+
+@login_required
+def paypal_buy_bids(request):
+    cancel = request.GET.get('cancel', False)
+    if cancel == 'true':
+        return HttpResponseRedirect('/ass')
+    order = get_object_or_404(Order, pk=request.session["order_id"])
+    payment_id = request.session["payment_id"]
+    success = request.GET.get('success', False)
+    if success == 'true':
+        payer_id = request.GET.get('PayerID', False)
+        paypalrestsdk.configure({
+            'mode': PAYPAL_MODE,
+            'client_id': PAYPAL_CLIENT_ID,
+            'client_secret': PAYPAL_SECRET
+        })
+        payment = paypalrestsdk.Payment.find(payment_id)
+        if payment.execute({"payer_id": payer_id}):
+            order.status = ORDER_PAID
+            order.save()
+            print("Payment[%s] execute successfully" % payment.id)
+        else:
+            print(payment.error)
+    else:
+        return HttpResponse('')
