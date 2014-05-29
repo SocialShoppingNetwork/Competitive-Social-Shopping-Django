@@ -1071,8 +1071,8 @@
 			display: block;
 			vertical-align: middle;
 			text-align: center;
-}
 		}
+
 	#ModalBattleView .user-fotos-r{
 
 	}
@@ -1247,7 +1247,7 @@
 			#ModalBidderProfile .social-bidder li{
 				margin-bottom: 15px;
 			}
-		#ModalBidderProfile .bidder-profile{
+		.bidder-profile{
 			background: url(../img/sprite-bidder.png);
 			width: 21px;
 			height: 21px;
@@ -1255,24 +1255,24 @@
 			float: left;
 			margin-right: 10px;
 		}
-			#ModalBidderProfile .bidder-profile.bid-fb{
+			.bidder-profile.bid-fb{
 				background-position: 0px 0px;
 			}
-			#ModalBidderProfile .bidder-profile.bid-tw{
+			.bidder-profile.bid-tw{
 				background-position: 0px -36px;
 			}
-			#ModalBidderProfile .bidder-profile.bid-google{
+			.bidder-profile.bid-google{
 				background-position: 0px 22px;
 			}
-			#ModalBidderProfile .bidder-profile.bid-instagram{
+			.bidder-profile.bid-instagram{
 				background-position: 23px 0px;
 			}
-			#ModalBidderProfile .bidder-profile.bid-nw{
+			.bidder-profile.bid-nw{
 				background-position: 25px 59px;
 				width: 25px;
 				height: 25px;
 			}
-			#ModalBidderProfile .bidder-profile.bid-premium{
+			.bidder-profile.bid-premium{
 				background-position: 23px 23px;
 			}
 		#ModalBidderProfile .modal-footer{
@@ -1320,15 +1320,16 @@
 		font-size: 17px;
 		margin: 30px 0px;
 	}
-	#ModalFund  .checkbox{
+	#ModalFund  .radio{
 		margin-top: 0px;
 		margin-bottom: 0px;
 	}
 	#ModalFund .bonus{
 		font-size: 17px;
 	}
-	#ModalFund .checkbox input{
+	#ModalFund .radio input{
 		margin-left: 0px;
+		float: left;
 		display: table-cell;
 		vertical-align: middle;
 		height: 86px;
@@ -1347,13 +1348,13 @@
 		#ModalFund .fund-item.item10{
 			background-position: 0px -1px;
 		}
-	#ModalFund .checkbox table{
+	#ModalFund .radio table{
 		float: left;
 		margin: 0px 15px;
 		height: 86px;
 		vertical-align: middle;
 	}
-	#ModalFund .checkbox table tr td{
+	#ModalFund .radio table tr td{
 		font-weight: bold;
 		text-align: center;
 	}
@@ -1363,7 +1364,7 @@
 		margin-top: 20px;
 		font-weight: bold;
 	}
-	#ModalFund .checkbox .glyphicon-plus{
+	#ModalFund .radio .glyphicon-plus{
 		color: #737373;
 		margin: 0px 10px;
 		font-weight: 600;
@@ -1391,7 +1392,7 @@
 		color: #5a0180;
 	}
 	#ModalFund .euro{
-		width: 65px;
+		width: 136px;
 		height: 83px;
 		padding: 2px 0px;
 		background: url(../img/sprite-fund.png);

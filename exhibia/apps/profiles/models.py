@@ -148,6 +148,15 @@ class Member(models.Model):
         else:
             pass
 
+    def is_facebook_verificated(self):
+        return self.user.social_auth.filter(provider='facebook').exists()
+
+    def is_twitter_verificated(self):
+        return self.user.social_auth.filter(provider='twitter').exists()
+
+    def is_google_verificated(self):
+        return self.user.social_auth.filter(provider='google').exists()
+
     @property
     def is_newbie(self):
         return not Auction.objects.filter(last_bidder_member=self.user,

@@ -24,9 +24,8 @@ class AuctionItemAdmin(admin.ModelAdmin):
     inlines = [AuctionItemImagesInline, ]
 
     def save_model(self, request, obj, form, change):
-        created = obj.pk
         super(AuctionItemAdmin, self).save_model(request, obj, form, change)
-        if not created:
+        if not change:
             Auction.objects.create_from_item(obj)
 
 

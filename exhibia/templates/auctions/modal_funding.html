@@ -9,10 +9,10 @@
               <form role="form" id="fund_form">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                   <div class="item-border">
-                    <div class="checkbox">
+                    <div class="radio">
                       <label>
                         <!--<input type="checkbox">-->
-                        <input type="radio" name="option5" value="10">
+                        <input type="radio" name="option5" value="10" data-bids="10">
                           <div class="euro euro10"></div>
                           <table>
                            <tbody>
@@ -31,10 +31,10 @@
                     </div>
                   </div>
                   <div class="item-border">
-                    <div class="checkbox">
+                    <div class="radio">
                       <label>
-                        <!--<input type="checkbox">-->
-                          <input type="radio" name="option5" value="22" >
+                        <!--<input type="radio">-->
+                          <input type="radio" name="option5" value="20" data-bids="22" >
                           <div class="euro euro20"></div>
                           <table>
                            <tbody>
@@ -53,10 +53,10 @@
                     </div>
                   </div>
                   <div class="item-border">
-                    <div class="checkbox">
+                    <div class="radio">
                       <label>
-                        <!--<input type="checkbox">-->
-                          <input type="radio" name="option5" value="55" >
+                        <!--<input type="radio">-->
+                          <input type="radio" name="option5" value="50" data-bids="55" >
                           <div class="euro euro50"></div>
                           <table>
                            <tbody>
@@ -77,10 +77,10 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                   <div class="item-border">
-                    <div class="checkbox">
+                    <div class="radio">
                       <label>
-                        <!--<input type="checkbox">-->
-                          <input type="radio" name="option5" value="112" >
+                        <!--<input type="radio">-->
+                          <input type="radio" name="option5" value="100" data-bids="112">
                           <div class="euro euro100"></div>
                           <table>
                            <tbody>
@@ -99,10 +99,10 @@
                     </div>
                   </div>
                   <div class="item-border">
-                    <div class="checkbox">
+                    <div class="radio">
                       <label>
-                        <!--<input type="checkbox">-->
-                          <input type="radio" name="option5" value="224" >
+                        <!--<input type="radio">-->
+                          <input type="radio" name="option5" value="200" data-bids="224">
                           <div class="euro euro200"></div>
                           <table>
                            <tbody>
@@ -121,10 +121,10 @@
                     </div>
                   </div>
                   <div class="item-border">
-                    <div class="checkbox">
+                    <div class="radio">
                       <label>
-                        <!--<input type="checkbox">-->
-                          <input type="radio" name="option5" value="600" >
+                        <!--<input type="radio">-->
+                          <input type="radio" name="option5" value="500" data-bids="600">
                           <div class="euro euro500"></div>
                           <table>
                            <tbody>
@@ -144,32 +144,32 @@
                   </div>
                 </div>
                 <div class="clearfix"></div>
-                <div class="item-border ml">
-                  <div class="checkbox">
-                    <label>
-                      <input id="is_custom_value" type="checkbox">
-                      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <div class="item-label">Choose your value</div>
-                      </div>
-                      <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 pull-right">
-                        <table class="sum-bid">
-                          <tr>
-                            <td>
-                              <div class="form-group">
-                                <input id="custom_value" type="text" class="form-control" id="i" placeholder="$0">
-                              </div>
-                            </td>
-                            <td><span class="glyphicon glyphicon-plus"></span></td>
-                            <td><span class="bonus">20%</span><br>Bonus</td>
-                            <td class="percent"><span id="custom_bonus">0</span><br>Bids</td>
-                          </tr>
-                        </table>
-
-                      </div>
-                      <div class="clearfix"></div>
-                    </label>
-                  </div>
-                </div>
+{#                <div class="item-border ml">#}
+{#                  <div class="radio">#}
+{#                    <label>#}
+{#                      <input id="is_custom_value" type="checkbox">#}
+{#                      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">#}
+{#                        <div class="item-label">Choose your value</div>#}
+{#                      </div>#}
+{#                      <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 pull-right">#}
+{#                        <table class="sum-bid">#}
+{#                          <tr>#}
+{#                            <td>#}
+{#                              <div class="form-group">#}
+{#                                <input id="custom_value" type="text" class="form-control" id="i" placeholder="$0">#}
+{#                              </div>#}
+{#                            </td>#}
+{#                            <td><span class="glyphicon glyphicon-plus"></span></td>#}
+{#                            <td><span class="bonus">20%</span><br>Bonus</td>#}
+{#                            <td class="percent"><span id="custom_bonus">0</span><br>Bids</td>#}
+{#                          </tr>#}
+{#                        </table>#}
+{##}
+{#                      </div>#}
+{#                      <div class="clearfix"></div>#}
+{#                    </label>#}
+{#                  </div>#}
+{#                </div>#}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                   <div class="total-price pull-right">
                     Total: $ <span id="total-bids">0</span>

@@ -1,0 +1,11 @@
+<div class="social-bidder user_description_{{ user.id }}" id="user_description_{{ user.id }}" style="display: none;">
+  {% if user.profile.is_facebook_verificated %}
+    <span class="bidder-profile bid-fb"></span>
+  {% endif %}
+  {% if user.profile.is_google_verificated %}
+    <span class="bidder-profile bid-google"></span>
+  {% endif %}
+  {% if user.profile.is_twitter_verificated %}
+    <span class="bidder-profile bid-tw"></span>
+  {% endif %}
+</div>

@@ -19,6 +19,8 @@ from profiles.forms import DeleteForm
 
 from django.views.generic import CreateView
 from braces.views import LoginRequiredMixin, SetHeadlineMixin
+from django.contrib.auth.models import User
+
 
 
 class AddressView(LoginRequiredMixin, SetHeadlineMixin, CreateView):
@@ -106,7 +108,6 @@ def order_pay(request, order_id):
         # "dalpay_form": auction_form(request, 'dalpay', order_id),
     }
     )
-
 
 def member_bids(request):
     """ returns the number of bid of the current user """
@@ -198,5 +199,15 @@ def manage_payments(request, redirect_url='profile_account'):
         'form': form,
         'cards': objects,
     }
+
+
+def append_description_box(request):
+
+    user = User.objects.get(pk=request.GET.get('user_id'))
+
+    if not user:
+        return HttpResponse('')
+
+    return render(request, 'profiles/popup_profile.html', {'user': user})
 
 

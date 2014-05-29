@@ -193,19 +193,9 @@
                           <div class="description">
                             <table>
                               <tr>
-                                <td><a href="#">{{ message.username }}</a></td>
-                                {% if message.twitter_verified %}
-                                  <td><i class="icon-twitter"></i></td>
-                                {% endif %}
-                                {% if message.facebook_verified %}
-                                  <td><i class="icon-facebook"></i></td>
-                                {% endif %}
-                                {% if message.google_verified %}
-                                  <td><i class="icon-google"></i></td>
-                                {% endif %}
-                                {% if message.is_winner %}
-                                  <td><i class="icon">W</i></td>
-                                {% endif %}
+                                <td class="user-description-box" data-user-id="{{ message.user_id }}">
+                                    <a href="#" >{{ message.username }}</a>
+                                </td>
                               </tr>
                             </table>
                             <div class="comment">{{ message.message }}</div>

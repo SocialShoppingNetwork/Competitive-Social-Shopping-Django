@@ -1,5 +1,5 @@
 chat_socket = io.connect('/chat');
-$(document).ready(function(){
+$(document).ready(function() {
     // User hits enter
     $('#chat-msg').keyup(function(e){
         var code = e.which;
@@ -12,8 +12,7 @@ $(document).ready(function(){
 
 
 
-    chat_socket.on('user_message', function(username, message, picture, twitter_verified,
-                                            google_verified, facebook_verified, is_winner) {
+    chat_socket.on('user_message', function(username, message, picture, user_id) {
 
          message = $('<div class="comment"></div>').text(message).html();
 
@@ -23,36 +22,51 @@ $(document).ready(function(){
                 '<div class="description">' +
                     '<table>' +
                         '<tr>' +
-                            '<td>' +
+                            '<td class="user-description-box" data-user-id="' + user_id + '">' +
                                 '<a href="#">' + username + '</a>' +
-                            '</td>';
-
-         if (twitter_verified) {
-            chat_msg += '<td><i class="icon-twitter"></i></td>'
-         }
-         if (google_verified) {
-             chat_msg += '<td><i class="icon-google"></i></td>'
-         }
-         if (facebook_verified) {
-             chat_msg += '<td><i class="icon-facebook"></i></td>'
-         }
-         if (is_winner) {
-             chat_msg += '<td><i class="icon">W</i></td>'
-         }
-
-         chat_msg +=
-                 '</tr>' +
+                            '</td>' +
+                        '</tr>' +
                     '</table>' +
-                        message +
-                '</div></li>';
+                    message +
+                '</div>' +
+             '</li>';
 
         var chat_messages = $('.chat-messages');
         chat_messages.append(chat_msg);
         chat_messages.scrollTop(chat_messages.prop('scrollHeight'));
 
     });
+
     chat_socket.on('notification', function (msg) {
         insert_notification(msg);
+    });
+
+    $('body').on('mouseenter', '.user-description-box', function(event) {
+        var user_id = $(this).attr('data-user-id');
+
+        if (!user_id) {
+            return;
+        }
+
+        var _this = this;
+
+        $.ajax({
+            type: "GET",
+            url: "/account/append_description_box/",
+            data: {'user_id': user_id },
+            dataType: 'html',
+            success: function (data) {
+                if(data) {
+                    $('#user_description_' + user_id).remove();
+                    $(data).appendTo(_this).show('100');
+                }
+            }
+        });
+    });
+
+    $('body').on('mouseleave', '.user-description-box', function(event) {
+        var user_id = $(this).attr('data-user-id');
+        $('#user_description_' + user_id).remove();
     });
 
 });

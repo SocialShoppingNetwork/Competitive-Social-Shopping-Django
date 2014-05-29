@@ -138,7 +138,7 @@ $(document).ready(function() {
         }
         var full_amount = amount + amount * 0.2;
 
-        slotmachine($('#total-bids'), full_amount, true);
+        slotmachine($('#total-bids'), amount, true);
         slotmachine($('#custom_bonus'), full_amount, true);
     });
 
@@ -151,7 +151,7 @@ $(document).ready(function() {
                 amount = 0;
             }
 
-            amount += amount * 0.2;
+//            amount += amount * 0.2;
             slotmachine($('#total-bids'), amount, true);
 
         }
@@ -159,20 +159,31 @@ $(document).ready(function() {
 
 	$('body').on('click', '#fund_item', function(event) {
         event.preventDefault();
-        var amount = 0;
 
-        if ($('#is_custom_value').prop('checked')) {
-            amount = parseFloat($('#custom_value').val());
-            amount += amount * 0,2;
-        }
-        else {
-            amount = $('input[name=option5]:checked', '#fund_form').attr('value');
-        }
+        var choosen_fund = $('input[name=option5]:checked', '#fund_form');
+        var amount_pay = choosen_fund.attr('value');
+        var amount_bid = choosen_fund.attr('data-bids');
 
-        if(!amount) {
-            return;
-        }
-        auction_socket.emit("fund", {amount:amount, auction_pk:auction_pk});
+        /* <= custom value for bid not yet fully implemented */
+
+        //        if ($('#is_custom_value').prop('checked')) {
+        //            amount = parseFloat($('#custom_value').val());
+        //            bonus = amount * 0.2;
+        //        }
+        //        else {
+        //            amount = $('input[name=option5]:checked', '#fund_form').attr('value');
+        //            amount = $('input[name=option5]:checked', '#fund_form').attr('value');
+        //            bonus = amount * 0.2;
+        //        }
+        //        if(!amount) {
+        //            return;
+        //        }
+
+        /* custom value for bid not yet fully implemented => */
+
+
+        auction_socket.emit("fund", {amount_pay:amount_pay, amount_bid:amount_bid, auction_pk:auction_pk});
+
         $('#ModalFund').modal('hide');
         $('#fund_form input[name=option5]').prop('checked', '');
         $('#total-bids').text(0);
@@ -232,6 +243,7 @@ $(document).ready(function() {
         }
         return false;
     });
+
     $('#fund_form input[name="option5"]').on('click', function(event){
         $('#is_custom_value').prop('checked', false);
         var val = $(this).val();

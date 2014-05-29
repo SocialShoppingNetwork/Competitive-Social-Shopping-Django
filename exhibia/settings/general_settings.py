@@ -303,7 +303,10 @@ BASIC_WWW_AUTHENTICATION = False
 
 BID_REFUND_TIME = 60 * 60 * 0.1  # if you lost , you can get your bids back if you buy
                                # item at full price for this amount of time
-WIN_LIMIT = 1
+
+##### temporary unable win limit functional #####
+WIN_LIMIT = 1000000
+##### temporary unable win limit functional #####
 WIN_LIMIT_TIME = 60 * 60 * 24
 
 

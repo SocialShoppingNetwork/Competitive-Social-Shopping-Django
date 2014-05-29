@@ -9,7 +9,7 @@ from social_auth.views import auth, complete, disconnect
 from payments.models import Card
 from shipping.forms import MemberInfoFormUS
 from .forms import DeleteForm, BillingForm
-from .views import manage_delete, manage_edit, AddressView, CardCreateView
+from .views import manage_delete, manage_edit, AddressView, CardCreateView, append_description_box
 from .models import BillingAddress
 
 urlpatterns = patterns("profiles.views",
@@ -28,6 +28,7 @@ urlpatterns = patterns("profiles.views",
     url(r'^billing/delete/$', partial(manage_delete, model=BillingAddress, redirect_url='account_billing'),
                               name="account_billing_delete"),
     url(r'^payments/$', CardCreateView.as_view(), name="account_payments"),
+    url(r'^append_description_box/$', append_description_box, name="append_description_box"),
     url(r'^payments/delete_card/$', partial(manage_delete, model=Card, redirect_url='account_payments'),
       name="account_delete_card"),
 )

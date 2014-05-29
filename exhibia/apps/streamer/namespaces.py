@@ -114,36 +114,13 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
             self.session['username'] = self.request.user.username
             self.session['user_id'] = self.request.user.id
             self.session['avatar'] = self.request.user.profile.img_url
-
-            twitter_verified = False
-            google_verified = False
-            facebook_verified = False
-            is_winner = False
-
-            providers = set(i.provider for i in self.request.user.social_auth.all())
-
-            if 'facebook' in providers:
-                facebook_verified = True
-            if 'google' in providers:
-                google_verified = True
-            if 'twitter' in providers:
-                twitter_verified = True
-
-            self.session['twitter_verified'] = twitter_verified
-            self.session['google_verified'] = google_verified
-            self.session['facebook_verified'] = facebook_verified
-            self.session['is_winner'] = self.request.user.profile.is_winner()
         else:
             self.session['username'] = u'guest'
-            self.session['avatar'] = '' # pick default avatar
             self.session['user_id'] = ''
-            self.session['twitter_verified'] = False
-            self.session['google_verified'] = False
-            self.session['facebook_verified'] = False
-            self.session['is_winner'] = False
+            self.session['avatar'] = '' # pick default avatar
 
     def on_send_chat_message(self, msg):
-        r = redis.Redis(connection_pool=redis_pool)
+        # r = redis.Redis(connection_pool=redis_pool)
         # if r.sinter('banned_users', self.session['username']):
         #     return
         # check if user is not banned
@@ -151,11 +128,10 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
         #     return
 
         message = [self.session['username'],
-                   msg[:200], self.session['avatar'],
-                   self.session['twitter_verified'],
-                   self.session['google_verified'],
-                   self.session['facebook_verified'],
-                   self.session['is_winner']]
+                   msg[:200],
+                   self.session['avatar'],
+                   self.session['user_id']
+                   ]
 
         # first publish
         self.publish('user_message',  *message)
@@ -166,10 +142,6 @@ class ChatNamespace(RedisBroadcast, BaseNamespace):
                       "avatar": self.session['avatar'],
                       "message": msg[:200],
                       "date": datetime.datetime.utcnow(),
-                      "twitter_verified": self.session['twitter_verified'],
-                      "google_verified": self.session['google_verified'],
-                      "facebook_verified": self.session['facebook_verified'],
-                      "is_winner": self.session['is_winner'],
                       })
 
 
@@ -185,10 +157,12 @@ class AuctionNamespace(RedisBroadcast, BaseNamespace):
         except Auction.DoesNotExist:
             return
         member = self.request.user.profile
-        print message
-        amount = Decimal(message['amount'])
-        member.pledge(auction, amount)
-        member.incr_credits(amount)
+
+        amount_pay = Decimal(message['amount_pay'])
+        amount_bid = Decimal(message['amount_bid'])
+
+        member.pledge(auction, amount_bid)
+        member.incr_credits(amount_pay)
 
         if auction.amount_pleged < auction.item.price:
             self.publish("auction_funded", auction.pk, '%.1f' % auction.amount_pleged,

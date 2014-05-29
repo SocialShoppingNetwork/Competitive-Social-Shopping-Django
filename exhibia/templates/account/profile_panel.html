@@ -19,9 +19,9 @@
           <div class="description">
              <table>
                <tr>
-                 <td><a href="javascript:void(0)" data-toggle="modal" data-target="#ModalBidderProfile">{{ user.username }}</a></td>
-                 <td><i class="icon-ok-circled"></i></td>
-                 <td><img src="{{ MEDIA_URL }}img/winner.png"/></td>
+                 <td class="user-description-box" data-user-id="{{ user.id }}">
+                    <a href="#" >{{ user.username }}</a>
+                 </td>
                </tr>
              </table>
                 <div class="comment">since {{ user.date_joined|date:"M Y" }}</div>
