@@ -25,11 +25,13 @@ jQuery(document).ready(function($) {
 
     $('body').on('click', '.ajax-submit', function () {
         var id = $(this).attr('id');
+        $(this).find('.loader').show();
         $('#' + id + '-form').ajaxSubmit({
             success: function (data, statusText, xhr, $form) {
                 // Удаляем ошибки если были
                 $form.find('.error').empty().hide();
                 if (data['result'] == 'success') {
+                    $(this).find('.loader').hide();
                     if (data.hasOwnProperty('next')) {
                         next = data['next'];
                         window.location.href = next;

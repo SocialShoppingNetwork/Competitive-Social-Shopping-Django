@@ -19,14 +19,14 @@ from shipping.forms import ShippingForm, get_shipping_form
 
 from payments.models import Card
 from payments.forms import CardForm
-
+import paypalrestsdk
 from profiles.forms import BillingForm
 from profiles.models import BillingAddress
 from django.views.decorators.http import require_POST
 from checkout.forms import BuyNowForm
 from checkout.models import Order
 from auctions.constants import AUCTION_FINISHED
-from exhibia.settings import BID_REFUND_TIME
+from exhibia.settings import BID_REFUND_TIME, PAYPAL_SECRET, PAYPAL_CLIENT_ID, PAYPAL_MODE, PAYPAL_BUY_NOW_CANCEL_URL, PAYPAL_BUY_NOW_RETURN_URL
 
 
 @login_required
@@ -439,7 +439,8 @@ def buy_now(request):
         auction = get_object_or_404(Auction, pk=request.POST.get('auction'))
         form = BuyNowForm(request.user, auction, data=request.POST)
         if form.is_valid():
-            #  check if user bided for this auction, if he did we'll show him that he can return his bids
+            # TODO get this to payment/paypal
+            # check if user bided for this auction, if he did we'll show him that he can return his bids
             if auction.status == AUCTION_FINISHED:
                 bid_refund_auction = (
                     Auction.objects.filter(pk=auction.id, bids__bidder=request.user, )
@@ -456,6 +457,7 @@ def buy_now(request):
                     # TODO maybe some notification
             shipping = form.cleaned_data['shipping']
             billing = form.cleaned_data['billing']
+            method = form.cleaned_data['method']
 
             ShippingRequest.objects.create(
                 auction=auction,
@@ -475,7 +477,7 @@ def buy_now(request):
                 user=request.user,
                 auction=auction,
                 card=form.cleaned_data['payment'],
-                shipping_fee=form.cleaned_data['method'],
+                shipping_fee=method,
                 shipping_first_name=shipping.first_name,
                 shipping_last_name=shipping.last_name,
                 shipping_address1=shipping.address1,
@@ -495,7 +497,76 @@ def buy_now(request):
                 billing_zip_code=billing.zip_code,
                 billing_phone=billing.phone,
             )
-            return HttpResponse(json.dumps({'result': 'success', 'next': '/checkout/review/{}/'.format(order.id)}))
+
+            paypalrestsdk.configure({
+                'mode': PAYPAL_MODE,
+                'client_id': PAYPAL_CLIENT_ID,
+                'client_secret': PAYPAL_SECRET
+            })
+            payment = paypalrestsdk.Payment({
+                "intent": "sale",
+                "redirect_urls": {
+                    "return_url": PAYPAL_BUY_NOW_RETURN_URL,
+                    "cancel_url": PAYPAL_BUY_NOW_CANCEL_URL
+                },
+
+                "payer": {
+                    "payment_method": "paypal",
+                    # "funding_instruments": [{
+                    #   # A resource representing a credit card that can be
+                    #   # used to fund a payment.
+                    #   "credit_card": {
+                    #     "type": "visa",
+                    #     "number": "4417119669820331",
+                    #     "expire_month": "11",
+                    #     "expire_year": "2018",
+                    #     "cvv2": "874",
+                    #     "first_name": "Joe",
+                    #     "last_name": "Shopper",
+                    #
+                    #     # ###Address
+                    #     # Base Address used as shipping or billing
+                    #     # address in a payment. [Optional]
+                    #     "billing_address": {
+                    #       "line1": "52 N Main ST",
+                    #       "city": "Johnstown",
+                    #       "state": "OH",
+                    #       "postal_code": "43210",
+                    #       "country_code": "US" }}}]
+                },
+                "transactions": [{
+                                     "item_list": {
+                                         "items": [{
+                                                       "name": auction.item.name,
+                                                       "sku": auction.item.code,
+                                                       "price": str(auction.item.price),
+                                                       "currency": "USD",
+                                                       "quantity": 1},
+                                                   {
+                                                       "name": "Shipping",
+                                                       "sku": method.shipping,
+                                                       "price": str(method.price),
+                                                       "currency": "USD",
+                                                       "quantity": 1},
+                                         ]
+                                     },
+                                     "amount": {
+                                         "total": str(method.price + auction.item.price),
+                                         "currency": "USD"},
+                                     "description": "This is the payment transaction description."}]})
+
+            if payment.create():
+                print("Payment %s created successfully" % payment.id)
+                for link in payment.links:
+                    if link.method == "REDIRECT":
+                        redirect_url = link.href
+                        print("Redirect for approval: %s" % redirect_url)
+                        request.session["payment_id"] = payment.id
+                        request.session["order_id"] = order.id
+                        return HttpResponse(json.dumps({'result': 'success', 'next': redirect_url}))
+            else:
+                print(payment.error)
+            # return HttpResponse(json.dumps({'result': 'success', 'next': '/checkout/review/{}/'.format(order.id)}))
         else:
             response = {}
             for k in form.errors:

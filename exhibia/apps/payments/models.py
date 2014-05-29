@@ -17,6 +17,8 @@ PAYMENT_METHOD = (
     (DALPAY, 'DalPay'),
     (FACEBOOK_CREDITS, 'Facebook Credits')
 )
+
+
 class PaymentNotification(models.Model):
     token = models.CharField(max_length=255)
     type = models.CharField(max_length=25)
@@ -39,36 +41,41 @@ class PaymentNotification(models.Model):
     class Meta:
         ordering = ['-created']
 
+
 class CreditPackageOrder(models.Model):
     buyer = models.ForeignKey('auth.User', editable=False)
     item = models.ForeignKey('auctions.AuctionItem', blank=True, null=True)
     amount_paid = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal(0))
     pn = models.ForeignKey(PaymentNotification)
     created = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         ordering = ['-id']
 
     def __unicode__(self):
         return '%s - %s' % (self.buyer, self.paid)
 
+
 class OnlyFinishedAuctionCanCreateOrder(Exception):
     pass
+
 
 class AuctionOrderManager(models.Manager):
     def create_order(self, auction, user, method=PLIMUS):
         print auction.status, AUCTION_FINISHED
         if auction.status == AUCTION_FINISHED and auction.last_bidder_member == user:
-            created, order =  self.get_query_set().get_or_create(auction=auction,
-                winner=user)
+            created, order = self.get_query_set().get_or_create(auction=auction,
+                                                                winner=user)
             if created:
-                order.status=ORDER_NOT_PAID,
-                order.amount_paid=auction.item.price+auction.item.shipping_fee,
-                order.method=method
+                order.status = ORDER_NOT_PAID,
+                order.amount_paid = auction.item.price + auction.item.shipping_fee,
+                order.method = method
                 auction.status = AUCTION_WAITING_PAYMENT
                 auction.save()
             return order
         else:
             raise OnlyFinishedAuctionCanCreateOrder
+
 
 class AuctionOrder(models.Model):
     AUCTION_ORDER_STATUS = (
@@ -98,6 +105,7 @@ class AuctionOrder(models.Model):
     class Meta:
         ordering = ["-id"]
 
+
 class Card(models.Model):
     user = models.ForeignKey("auth.User")
     number = models.CharField(max_length=30)
@@ -106,5 +114,6 @@ class Card(models.Model):
     expiration_year = models.PositiveSmallIntegerField()
     deleted = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+
     def __unicode__(self):
         return u"%s" % (self.number)
